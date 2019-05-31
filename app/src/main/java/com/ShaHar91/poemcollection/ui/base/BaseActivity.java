@@ -15,7 +15,12 @@ import com.ShaHar91.poemcollection.R;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseActivity extends AppCompatActivity {
+@SuppressWarnings("unused")
+public abstract class BaseActivity<VM extends BaseViewModel, C extends BaseComponent<VM>> extends AppCompatActivity {
+    protected VM viewModel;
+    protected C component;
+
+    protected abstract C createComponent();
 
     private CompositeDisposable compositeDisposable;
 
@@ -29,6 +34,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         compositeDisposable = new CompositeDisposable();
+
+        component = createComponent();
     }
 
     protected void configureToolbar(Toolbar toolbar, boolean showBackIcon) {
