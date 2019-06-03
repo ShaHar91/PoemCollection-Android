@@ -1,7 +1,6 @@
 package com.ShaHar91.poemcollection.ui.base;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
@@ -16,31 +15,19 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 @SuppressWarnings("unused")
-public abstract class BaseActivity<VM extends BaseViewModel, C extends BaseComponent<VM>> extends AppCompatActivity {
-    protected VM viewModel;
-    protected C component;
-
-    protected abstract C createComponent();
+public abstract class BaseActivity extends AppCompatActivity {
 
     private CompositeDisposable compositeDisposable;
 
-    /**
-     * return true if the Search Menu Icon should be shown on this page,
-     * without checking if the Search feature is enabled. This is done separately.
-     */
-    protected abstract boolean showSearchMenuItem();
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         compositeDisposable = new CompositeDisposable();
-
-        component = createComponent();
     }
 
     protected void configureToolbar(Toolbar toolbar, boolean showBackIcon) {
         setSupportActionBar(toolbar);
-        if (showBackIcon && getSupportActionBar() != null) {
+        if (showBackIcon) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
             toolbar.setNavigationOnClickListener(v -> finish());
@@ -48,13 +35,16 @@ public abstract class BaseActivity<VM extends BaseViewModel, C extends BaseCompo
     }
 
     protected void configureToolbar(Toolbar toolbar, boolean showBackIcon, @StringRes int toolbarTitleRes) {
-        configureToolbar(toolbar, showBackIcon);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(toolbarTitleRes);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(toolbarTitleRes);
+        if (showBackIcon) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
+            toolbar.setNavigationOnClickListener(v -> onToolbarNavigationIconClicked());
         }
     }
 
-    protected void onToolbarNavigationClicked() {
+    protected void onToolbarNavigationIconClicked() {
         onBackPressed();
     }
 
