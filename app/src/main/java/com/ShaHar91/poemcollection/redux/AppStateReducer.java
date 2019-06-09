@@ -7,25 +7,23 @@ import com.yheriatovych.reductor.Reducer;
 
 @AutoValue
 public abstract class AppStateReducer implements Reducer<AppState> {
-//    abstract Reducer<ErrorState> errorStateReducer();
+    abstract Reducer<ErrorState> errorStateReducer();
 
     @Override
     public AppState reduce(AppState state, Action action) {
-//        ErrorState errorState = null;
-//
-//        if (state != null && !action.type.equals(AppStateActions.RESET)){
-//            errorState = state.errorState();
-//        }
-//
-//        ErrorState errorStateNext = errorStateReducer().reduce(errorState, action);
-//
-//        if (state != null && errorState == errorStateNext){
-//            return state;
-//        }else{
-//            return new AutoValue_AppState(errorStateNext);
-//        }
+        ErrorState errorState = null;
 
-        return state;
+        if (state != null && !action.type.equals(AppStateActions.RESET)){
+            errorState = state.errorState();
+        }
+
+        ErrorState errorStateNext = errorStateReducer().reduce(errorState, action);
+
+        if (state != null && errorState == errorStateNext){
+            return state;
+        }else{
+            return new AutoValue_AppState(errorStateNext);
+        }
     }
 
     public static Builder builder() {
@@ -34,7 +32,7 @@ public abstract class AppStateReducer implements Reducer<AppState> {
 
     @AutoValue.Builder
     public abstract static class Builder{
-//        public abstract Builder errorStateReducer(Reducer<ErrorState> errorStateReducer);
+        public abstract Builder errorStateReducer(Reducer<ErrorState> errorStateReducer);
 
         public abstract AppStateReducer build();
     }

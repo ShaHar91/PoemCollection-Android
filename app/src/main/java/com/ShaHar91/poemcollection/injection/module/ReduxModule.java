@@ -2,6 +2,7 @@ package com.shahar91.poemcollection.injection.module;
 
 import android.util.Log;
 
+import com.shahar91.poemcollection.redux.reducers.ErrorReducer;
 import com.yheriatovych.reductor.Store;
 
 import com.shahar91.poemcollection.injection.scope.ApplicationScope;
@@ -15,7 +16,7 @@ public class ReduxModule {
     public static AppStateReducer getAppStateReducer(){
         Log.d("REDUX_STUFF", "getAppStateReducer: ");
         return AppStateReducer.builder()
-//                .errorStateReducer(ErrorReducer.create())
+                .errorStateReducer(ErrorReducer.create())
                 .build();
     }
 

@@ -5,5 +5,5 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class AppState {
-//    public abstract ErrorState errorState();
+    public abstract ErrorState errorState();
 }
