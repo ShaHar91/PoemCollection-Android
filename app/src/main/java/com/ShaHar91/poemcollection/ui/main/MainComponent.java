@@ -1,8 +1,8 @@
-package com.ShaHar91.poemcollection.ui.main;
+package com.shahar91.poemcollection.ui.main;
 
-import com.ShaHar91.poemcollection.injection.ApplicationComponent;
-import com.ShaHar91.poemcollection.injection.scope.ActivityScope;
-import com.ShaHar91.poemcollection.ui.base.normal.BaseGoogleComponent;
+import com.shahar91.poemcollection.injection.ApplicationComponent;
+import com.shahar91.poemcollection.injection.scope.ActivityScope;
+import com.shahar91.poemcollection.ui.base.normal.BaseGoogleComponent;
 
 import dagger.Component;
 

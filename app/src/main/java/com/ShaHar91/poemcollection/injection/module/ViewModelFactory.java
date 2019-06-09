@@ -1,15 +1,15 @@
-package com.ShaHar91.poemcollection.injection.module;
+package com.shahar91.poemcollection.injection.module;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ShaHar91.poemcollection.injection.scope.ApplicationScope;
-
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import com.shahar91.poemcollection.injection.scope.ApplicationScope;
 
 @ApplicationScope
 public class ViewModelFactory implements ViewModelProvider.Factory {

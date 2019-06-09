@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection;
+package com.shahar91.poemcollection;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.ShaHar91.poemcollection", appContext.getPackageName());
+        assertEquals("com.shahar91.poemcollection", appContext.getPackageName());
     }
 }

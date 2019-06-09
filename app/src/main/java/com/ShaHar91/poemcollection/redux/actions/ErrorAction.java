@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.redux.actions;
+package com.shahar91.poemcollection.redux.actions;
 
 public interface ErrorAction {
 }

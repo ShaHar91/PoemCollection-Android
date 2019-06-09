@@ -1,10 +1,10 @@
-package com.ShaHar91.poemcollection.injection.module;
+package com.shahar91.poemcollection.injection.module;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ShaHar91.poemcollection.injection.scope.ApplicationScope;
-import com.ShaHar91.poemcollection.ui.main.MainViewModel;
+import com.shahar91.poemcollection.injection.scope.ApplicationScope;
+import com.shahar91.poemcollection.ui.main.MainViewModel;
 
 import dagger.Module;
 import dagger.Provides;

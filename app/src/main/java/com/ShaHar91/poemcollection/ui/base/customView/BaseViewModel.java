@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.ui.base.customView;
+package com.shahar91.poemcollection.ui.base.customView;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;

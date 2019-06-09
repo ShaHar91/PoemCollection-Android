@@ -1,11 +1,10 @@
-package com.ShaHar91.poemcollection.injection.module;
+package com.shahar91.poemcollection.injection.module;
 
 import android.content.Context;
 
-import com.ShaHar91.poemcollection.MyApp;
-import com.ShaHar91.poemcollection.injection.qualifier.ApplicationContext;
-import com.ShaHar91.poemcollection.injection.scope.ApplicationScope;
-
+import com.shahar91.poemcollection.MyApp;
+import com.shahar91.poemcollection.injection.qualifier.ApplicationContext;
+import com.shahar91.poemcollection.injection.scope.ApplicationScope;
 import dagger.Module;
 import dagger.Provides;
 

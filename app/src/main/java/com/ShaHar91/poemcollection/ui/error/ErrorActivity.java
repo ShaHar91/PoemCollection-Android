@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.ui.error;
+package com.shahar91.poemcollection.ui.error;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ShaHar91.poemcollection.R;
+import com.shahar91.poemcollection.R;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import cat.ereza.customactivityoncrash.config.CaocConfig;

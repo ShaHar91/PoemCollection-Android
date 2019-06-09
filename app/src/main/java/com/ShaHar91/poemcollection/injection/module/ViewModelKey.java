@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.injection.module;
+package com.shahar91.poemcollection.injection.module;
 
 import androidx.lifecycle.ViewModel;
 

@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.ui.base.normal;
+package com.shahar91.poemcollection.ui.base.normal;
 
 import androidx.lifecycle.ViewModel;
 

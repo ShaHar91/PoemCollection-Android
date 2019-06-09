@@ -1,11 +1,11 @@
-package com.ShaHar91.poemcollection;
+package com.shahar91.poemcollection;
 
 import android.app.Application;
 
-import com.ShaHar91.poemcollection.injection.ApplicationComponent;
-import com.ShaHar91.poemcollection.injection.DaggerApplicationComponent;
-import com.ShaHar91.poemcollection.injection.module.ApplicationModule;
-import com.ShaHar91.poemcollection.ui.error.ErrorActivity;
+import com.shahar91.poemcollection.injection.ApplicationComponent;
+import com.shahar91.poemcollection.injection.DaggerApplicationComponent;
+import com.shahar91.poemcollection.injection.module.ApplicationModule;
+import com.shahar91.poemcollection.ui.error.ErrorActivity;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 

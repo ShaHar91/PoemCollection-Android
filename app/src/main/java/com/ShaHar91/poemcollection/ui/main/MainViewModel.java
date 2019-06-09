@@ -1,8 +1,8 @@
-package com.ShaHar91.poemcollection.ui.main;
+package com.shahar91.poemcollection.ui.main;
 
 import android.util.Log;
 
-import com.ShaHar91.poemcollection.ui.base.normal.BaseGoogleViewModel;
+import com.shahar91.poemcollection.ui.base.normal.BaseGoogleViewModel;
 
 import javax.inject.Inject;
 

@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.injection.qualifier;
+package com.shahar91.poemcollection.injection.qualifier;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection;
+package com.shahar91.poemcollection;
 
 import org.junit.Test;
 

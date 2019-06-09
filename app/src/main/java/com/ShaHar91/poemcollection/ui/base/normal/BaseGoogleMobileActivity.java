@@ -1,8 +1,8 @@
-package com.ShaHar91.poemcollection.ui.base.normal;
+package com.shahar91.poemcollection.ui.base.normal;
 
 import android.os.Bundle;
 
-import com.ShaHar91.poemcollection.ui.base.BaseActivity;
+import com.shahar91.poemcollection.ui.base.BaseActivity;
 
 /**
  * Default BaseActivity that will be used for most of the Activities.

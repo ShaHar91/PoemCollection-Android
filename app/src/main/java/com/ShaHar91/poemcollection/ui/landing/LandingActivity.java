@@ -1,11 +1,11 @@
-package com.ShaHar91.poemcollection.ui.landing;
+package com.shahar91.poemcollection.ui.landing;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ShaHar91.poemcollection.R;
-import com.ShaHar91.poemcollection.ui.main.MainActivity;
+import com.shahar91.poemcollection.R;
+import com.shahar91.poemcollection.ui.main.MainActivity;
 
 public class LandingActivity extends AppCompatActivity {
 

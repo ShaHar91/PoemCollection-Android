@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.data.models;
+package com.shahar91.poemcollection.data.models;
 
 public class Poem {
 }

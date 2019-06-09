@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.ui.main;
+package com.shahar91.poemcollection.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +7,9 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.ShaHar91.poemcollection.MyApp;
-import com.ShaHar91.poemcollection.R;
-import com.ShaHar91.poemcollection.ui.base.normal.BaseGoogleMobileActivity;
+import com.shahar91.poemcollection.MyApp;
+import com.shahar91.poemcollection.R;
+import com.shahar91.poemcollection.ui.base.normal.BaseGoogleMobileActivity;
 
 import javax.inject.Inject;
 

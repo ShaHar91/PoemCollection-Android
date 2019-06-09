@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.ui.base.normal;
+package com.shahar91.poemcollection.ui.base.normal;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,10 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-import com.ShaHar91.poemcollection.MyApp;
-import com.ShaHar91.poemcollection.R;
-import com.ShaHar91.poemcollection.injection.ApplicationComponent;
-import com.ShaHar91.poemcollection.ui.base.BaseFragment;
+import com.shahar91.poemcollection.MyApp;
+import com.shahar91.poemcollection.R;
+import com.shahar91.poemcollection.injection.ApplicationComponent;
+import com.shahar91.poemcollection.ui.base.BaseFragment;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;

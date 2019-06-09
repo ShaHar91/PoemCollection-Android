@@ -1,4 +1,4 @@
-package com.ShaHar91.poemcollection.ui.base;
+package com.shahar91.poemcollection.ui.base;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.ShaHar91.poemcollection.R;
+import com.shahar91.poemcollection.R;
 
 import io.reactivex.disposables.CompositeDisposable;
 
