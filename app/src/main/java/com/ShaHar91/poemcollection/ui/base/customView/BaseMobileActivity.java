@@ -1,9 +1,11 @@
-package com.ShaHar91.poemcollection.ui.base;
+package com.ShaHar91.poemcollection.ui.base.customView;
 
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
+import com.ShaHar91.poemcollection.ui.base.BaseActivity;
 //TODO: check if there is a 'javax' variant
 
 public abstract class BaseMobileActivity<VM extends BaseViewModel, C extends BaseComponent<VM>>

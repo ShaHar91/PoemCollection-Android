@@ -14,6 +14,9 @@ import com.ShaHar91.poemcollection.R;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * The most basic use of the Activity which will extend from.
+ */
 @SuppressWarnings("unused")
 public abstract class BaseActivity extends AppCompatActivity {
 

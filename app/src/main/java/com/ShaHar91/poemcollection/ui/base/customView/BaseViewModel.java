@@ -1,8 +1,11 @@
-package com.ShaHar91.poemcollection.ui.base;
+package com.ShaHar91.poemcollection.ui.base.customView;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * This will primarily be used for custom views, I think? O.o
+ */
 public abstract class BaseViewModel {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();

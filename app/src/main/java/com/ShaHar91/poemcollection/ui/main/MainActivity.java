@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.ShaHar91.poemcollection.MyApp;
 import com.ShaHar91.poemcollection.R;
-import com.ShaHar91.poemcollection.ui.base.BaseGoogleMobileActivity;
+import com.ShaHar91.poemcollection.ui.base.normal.BaseGoogleMobileActivity;
 
 import javax.inject.Inject;
 
