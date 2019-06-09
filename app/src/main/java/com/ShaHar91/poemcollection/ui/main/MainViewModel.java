@@ -9,7 +9,7 @@ import javax.inject.Inject;
 public class MainViewModel extends BaseGoogleViewModel {
 
     @Inject
-    public MainViewModel(){
+    MainViewModel(){
         Log.d("TESTING_SOMETHING", "MainViewModel: ");
     }
 }

@@ -4,20 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.shahar91.poemcollection.MyApp;
 import com.shahar91.poemcollection.R;
 import com.shahar91.poemcollection.ui.base.normal.BaseGoogleMobileActivity;
 
-import javax.inject.Inject;
-
 public class MainActivity extends BaseGoogleMobileActivity<MainViewModel, MainComponent> {
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
-
-    public static void start(Context context){
+    public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
@@ -25,7 +18,7 @@ public class MainActivity extends BaseGoogleMobileActivity<MainViewModel, MainCo
     @Override
     protected MainComponent createComponent() {
         return DaggerMainComponent.builder()
-                .applicationComponent(((MyApp) getApplication()).getAppComponent())
+                .applicationComponent(getAppComponent())
                 .build();
     }
 

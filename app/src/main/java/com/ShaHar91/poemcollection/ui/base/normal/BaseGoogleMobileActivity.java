@@ -2,7 +2,13 @@ package com.shahar91.poemcollection.ui.base.normal;
 
 import android.os.Bundle;
 
+import androidx.lifecycle.ViewModelProvider;
+
+import com.shahar91.poemcollection.MyApp;
+import com.shahar91.poemcollection.injection.ApplicationComponent;
 import com.shahar91.poemcollection.ui.base.BaseActivity;
+
+import javax.inject.Inject;
 
 /**
  * Default BaseActivity that will be used for most of the Activities.
@@ -12,6 +18,8 @@ import com.shahar91.poemcollection.ui.base.BaseActivity;
  */
 public abstract class BaseGoogleMobileActivity<VM extends BaseGoogleViewModel, C extends BaseGoogleComponent<VM>>
         extends BaseActivity {
+    @Inject
+    public ViewModelProvider.Factory viewModelFactory;
 
     protected VM viewModel;
     protected C component;
@@ -22,5 +30,9 @@ public abstract class BaseGoogleMobileActivity<VM extends BaseGoogleViewModel, C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         component = createComponent();
+    }
+
+    public ApplicationComponent getAppComponent(){
+        return ((MyApp) getApplication()).getAppComponent();
     }
 }
