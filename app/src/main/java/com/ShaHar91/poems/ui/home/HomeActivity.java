@@ -1,4 +1,4 @@
-package com.shahar91.poems.ui.main;
+package com.shahar91.poems.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +9,15 @@ import androidx.lifecycle.ViewModelProviders;
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
 
-public class MainActivity extends BaseGoogleMobileActivity<MainViewModel, MainComponent> {
+public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeComponent> {
     public static void start(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, HomeActivity.class);
         context.startActivity(intent);
     }
 
     @Override
-    protected MainComponent createComponent() {
-        return DaggerMainComponent.builder()
+    protected HomeComponent createComponent() {
+        return DaggerHomeComponent.builder()
                 .applicationComponent(getAppComponent())
                 .build();
     }
@@ -25,10 +25,10 @@ public class MainActivity extends BaseGoogleMobileActivity<MainViewModel, MainCo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         component.inject(this);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
 
         //TODO: show a list of all subjects
         //TODO: show a list of all poems for that subject

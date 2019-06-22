@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.injection.scope.ApplicationScope;
+import com.shahar91.poems.ui.home.HomeViewModel;
 import com.shahar91.poems.ui.landing.LandingViewModel;
-import com.shahar91.poems.ui.main.MainViewModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,9 +21,9 @@ public class ViewModelModule {
 
     @Provides
     @IntoMap
-    @ViewModelKey(MainViewModel.class)
-    ViewModel bindMainViewModel(MainViewModel mainViewModel) {
-        return mainViewModel;
+    @ViewModelKey(HomeViewModel.class)
+    ViewModel bindMainViewModel(HomeViewModel homeViewModel) {
+        return homeViewModel;
     }
 
     @Provides

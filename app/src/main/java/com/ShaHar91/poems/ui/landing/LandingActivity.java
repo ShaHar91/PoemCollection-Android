@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
-import com.shahar91.poems.ui.main.MainActivity;
+import com.shahar91.poems.ui.home.HomeActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,7 +37,7 @@ public class LandingActivity extends BaseGoogleMobileActivity<LandingViewModel, 
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                MainActivity.start(LandingActivity.this);
+                HomeActivity.start(LandingActivity.this);
             }
         }, 2000L);
     }
