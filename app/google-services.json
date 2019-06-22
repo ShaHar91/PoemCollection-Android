@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1005597013056",
+    "firebase_url": "https://poems-b8cea.firebaseio.com",
+    "project_id": "poems-b8cea",
+    "storage_bucket": "poems-b8cea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005597013056:android:93be6554f23a0921",
+        "android_client_info": {
+          "package_name": "com.shahar91.poems"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005597013056-5on9dja4p7kdetqsgt5qcikhs558igdm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC3Zk8S6UJpe6gSHNaJewqCPoKefuRstY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005597013056-5on9dja4p7kdetqsgt5qcikhs558igdm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
