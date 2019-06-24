@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.injection.scope.ApplicationScope;
 import com.shahar91.poems.ui.home.HomeViewModel;
+import com.shahar91.poems.ui.home.categories.CategoryViewModel;
 import com.shahar91.poems.ui.landing.LandingViewModel;
 
 import dagger.Module;
@@ -31,5 +32,12 @@ public class ViewModelModule {
     @ViewModelKey(LandingViewModel.class)
     ViewModel bindLandingViewModel(LandingViewModel landingViewModel) {
         return landingViewModel;
+    }
+
+    @Provides
+    @IntoMap
+    @ViewModelKey(CategoryViewModel.class)
+    ViewModel bindCategoryViewModel(CategoryViewModel categoryViewModel) {
+        return categoryViewModel;
     }
 }

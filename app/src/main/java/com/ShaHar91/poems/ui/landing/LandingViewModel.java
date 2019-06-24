@@ -9,6 +9,5 @@ import javax.inject.Inject;
 public class LandingViewModel  extends BaseGoogleViewModel {
     @Inject
     LandingViewModel(){
-        Log.d("TESTING_SOMETHING", "LandingViewModel");
     }
 }

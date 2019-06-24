@@ -21,6 +21,7 @@ import io.reactivex.disposables.Disposable;
 public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C extends BaseGoogleComponent<VM>> extends BaseFragment {
     protected VM viewModel;
     protected C component;
+    private AppCompatActivity parentActivity;
 
     public static final String SHOW_BACK_ICON = "SHOW_BACK_ICON";
     private CompositeDisposable compositeDisposable;
@@ -32,6 +33,8 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
         super.onCreate(savedInstanceState);
         compositeDisposable = new CompositeDisposable();
         component = createComponent();
+
+        parentActivity = (AppCompatActivity) getActivity();
     }
 
     @Override
@@ -42,13 +45,15 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
 
 
     protected void configureToolbar(Toolbar toolbar, View toolbarIcon) {
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        parentActivity.setSupportActionBar(toolbar);
 
         boolean showBackIcon = getArguments() != null && getArguments().getBoolean(SHOW_BACK_ICON);
         if (showBackIcon) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
-            toolbar.setNavigationOnClickListener(v -> getActivity().finish());
+            if (parentActivity.getSupportActionBar() != null) {
+                parentActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                parentActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
+            }
+            toolbar.setNavigationOnClickListener(v -> parentActivity.finish());
         }
 
         if (toolbarIcon != null) {

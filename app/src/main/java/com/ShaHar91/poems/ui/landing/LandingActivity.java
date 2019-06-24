@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.shahar91.poems.R;
@@ -13,7 +14,12 @@ import com.shahar91.poems.ui.home.HomeActivity;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.inject.Inject;
+
 public class LandingActivity extends BaseGoogleMobileActivity<LandingViewModel, LandingComponent> {
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+
     public static void start(Context context) {
         Intent intent = new Intent(context, LandingActivity.class);
         context.startActivity(intent);
@@ -38,6 +44,7 @@ public class LandingActivity extends BaseGoogleMobileActivity<LandingViewModel, 
             @Override
             public void run() {
                 HomeActivity.start(LandingActivity.this);
+                finish();
             }
         }, 2000L);
     }
