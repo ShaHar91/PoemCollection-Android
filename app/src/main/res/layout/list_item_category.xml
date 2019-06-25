@@ -14,7 +14,7 @@
     android:paddingBottom="10dp">
 
     <TextView
-        android:id="@+id/categoryTxt"
+        android:id="@+id/categoryTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"

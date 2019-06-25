@@ -12,11 +12,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment;
+import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +39,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-//        private SeeMoreViewPagerAdapter adapter;
+    private CategoryAdapter adapter;
 
     @Override
     protected CategoryComponent createComponent() {
@@ -84,5 +86,19 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
         //toolbar
         toolbar.setTitle("Categories");
         configureToolbar(toolbar, null);
+
+        adapter = new CategoryAdapter(getActivity(), this::handleClick);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        rvCategories.setLayoutManager(linearLayoutManager);
+//        rvCategories.addItemDecoration();
+        rvCategories.setAdapter(adapter);
+
+//        List<Category> categoryList = new ArrayList<>();
+//        categoryList.add(new Category(1, "Text"));
+//        adapter.setItems(categoryList);
+    }
+
+    private void handleClick(int categoryId) {
+
     }
 }
