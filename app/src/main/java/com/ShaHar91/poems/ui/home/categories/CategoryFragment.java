@@ -2,6 +2,7 @@ package com.shahar91.poems.ui.home.categories;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +13,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
+import com.shahar91.poems.data.models.Category;
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment;
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,14 +78,20 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-
-        initViews();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
+
+        initViews();
+
+        addDisposable(viewModel.getCategories().subscribe(this::showCategories));
+    }
+
+    private void showCategories(List<Category> categoryList) {
+        adapter.setItems(categoryList);
     }
 
     private void initViews() {
@@ -90,15 +102,27 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
         adapter = new CategoryAdapter(getActivity(), this::handleClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvCategories.setLayoutManager(linearLayoutManager);
-//        rvCategories.addItemDecoration();
-        rvCategories.setAdapter(adapter);
+        rvCategories.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-//        List<Category> categoryList = new ArrayList<>();
-//        categoryList.add(new Category(1, "Text"));
-//        adapter.setItems(categoryList);
+        rvCategories.setAdapter(adapter);
     }
 
     private void handleClick(int categoryId) {
 
+        Timber.d("some Click: " + categoryId);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        viewModel.registerCategoryQuery();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        viewModel.stopListeningForChangesInBackend();
     }
 }

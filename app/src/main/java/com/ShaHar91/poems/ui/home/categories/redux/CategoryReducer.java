@@ -4,6 +4,7 @@ import com.shahar91.poems.data.models.Category;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AutoReducer
@@ -11,7 +12,7 @@ public abstract class CategoryReducer implements Reducer<CategoryState> {
     @AutoReducer.InitialState
     CategoryState initialState() {
         return CategoryState.builder()
-                .setCategoryList(null).build();
+                .setCategoryList(new ArrayList<>()).build();
     }
 
     @AutoReducer.Action(value = CategoryActions.RESET, from = CategoryActions.class)

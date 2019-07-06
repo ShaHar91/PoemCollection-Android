@@ -21,7 +21,11 @@ public class CategoryViewHolder extends BaseViewHolder<Category, BaseInteraction
     }
 
     @Override
-    public void bind(int position, Category item, BaseInteractionListener listener) {
+    public void bind(int position, Category item, BaseInteractionListener baseInteractionListener) {
+        CategoryInteractionListener listener = (CategoryInteractionListener) baseInteractionListener;
+
         categoryTv.setText(item.getName());
+
+        itemView.setOnClickListener(view -> listener.onCategoryClicked(item.getId()));
     }
 }
