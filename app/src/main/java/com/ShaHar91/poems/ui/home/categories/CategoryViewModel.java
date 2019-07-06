@@ -20,7 +20,6 @@ import io.reactivex.Observable;
 
 public class CategoryViewModel extends BaseGoogleViewModel {
     private final DataManager dataManager;
-    private ListenerRegistration registration;
 
     @Inject
     public CategoryViewModel(Store<AppState> store,
@@ -42,9 +41,5 @@ public class CategoryViewModel extends BaseGoogleViewModel {
                 .map(ViewState::categoryState)
                 .map(CategoryState::categoryList)
                 .distinctUntilChanged();
-    }
-
-    public void stopListeningForChangesInBackend() {
-        registration.remove();
     }
 }

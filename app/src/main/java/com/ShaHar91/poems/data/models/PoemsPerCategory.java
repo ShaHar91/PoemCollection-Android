@@ -1,11 +1,11 @@
 package com.shahar91.poems.data.models;
 
-public class PerCategory {
+public class PoemsPerCategory {
     private int id;
     private String title;
     private String writer;
 
-    public PerCategory() {
+    public PoemsPerCategory() {
     }
 
     public int getId() {

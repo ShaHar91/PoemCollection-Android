@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.categories;
 
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,9 +32,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, CategoryComponent> {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
