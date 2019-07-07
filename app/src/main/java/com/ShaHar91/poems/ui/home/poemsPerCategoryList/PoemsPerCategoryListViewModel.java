@@ -1,17 +1,21 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList;
 
-import com.google.firebase.firestore.ListenerRegistration;
 import com.shahar91.poems.data.DataManager;
 import com.shahar91.poems.data.models.PoemsPerCategory;
 import com.shahar91.poems.redux.AppState;
+import com.shahar91.poems.redux.state.ViewState;
 import com.shahar91.poems.ui.base.normal.BaseGoogleViewModel;
 import com.shahar91.poems.ui.home.poemsPerCategoryList.redux.PoemsPerCategoryListActions;
+import com.shahar91.poems.ui.home.poemsPerCategoryList.redux.PoemsPerCategoryListState;
 import com.yheriatovych.reductor.Actions;
 import com.yheriatovych.reductor.Store;
+import com.yheriatovych.reductor.rxjava2.RxStore;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
     private final DataManager dataManager;
@@ -27,5 +31,18 @@ public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
             PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
             store.dispatch(poemsPerCategoryListActions.setPoemsPerCategoryList(querySnapshots.toObjects(PoemsPerCategory.class)));
         }));
+    }
+
+    public Observable<List<PoemsPerCategory>> getPoemsPerCategory() {
+        Observable<AppState> store = RxStore.asObservable(this.store);
+        return store.map(AppState::viewState)
+                .map(ViewState::poemsPerCategoryListState)
+                .map(PoemsPerCategoryListState::poemsPerCategoryList)
+                .distinctUntilChanged();
+    }
+
+    public void resetPoemsPerCategoryList() {
+        PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
+        store.dispatch(poemsPerCategoryListActions.reset());
     }
 }

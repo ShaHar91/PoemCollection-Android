@@ -26,6 +26,6 @@ public class CategoryViewHolder extends BaseViewHolder<Category, BaseInteraction
 
         categoryTv.setText(item.getName());
 
-        itemView.setOnClickListener(view -> listener.onCategoryClicked(item.getId()));
+        itemView.setOnClickListener(view -> listener.onCategoryClicked(item));
     }
 }

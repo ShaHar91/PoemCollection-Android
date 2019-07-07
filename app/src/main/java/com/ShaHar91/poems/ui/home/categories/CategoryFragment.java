@@ -1,7 +1,6 @@
 package com.shahar91.poems.ui.home.categories;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -19,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Category;
+import com.shahar91.poems.ui.base.BaseActivity;
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment;
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter;
+import com.shahar91.poems.ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, CategoryComponent> {
     @BindView(R.id.toolbar)
@@ -103,9 +102,10 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
         rvCategories.setAdapter(adapter);
     }
 
-    private void handleClick(int categoryId) {
+    private void handleClick(Category category) {
+        PoemsPerCategoryListFragment poemsPerCategoryListFragment = PoemsPerCategoryListFragment.newInstance(true, category);
 
-        Timber.d("some Click: " + categoryId);
+        ((BaseActivity) getActivity()).replaceFragment(R.id.flHomeContainer, poemsPerCategoryListFragment, "someTag", true);
     }
 
     @Override

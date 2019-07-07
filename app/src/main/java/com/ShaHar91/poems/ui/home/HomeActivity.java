@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
 import com.shahar91.poems.ui.home.categories.CategoryFragment;
-
-import javax.inject.Inject;
 
 public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeComponent> {
     private static final String TAG_CATEGORIES = "TagCategories";
@@ -44,7 +41,7 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
     private void showCategoryFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             categoryFragment = CategoryFragment.newInstance(false);
-            replaceFragment(R.id.flHomeContainer, categoryFragment, TAG_CATEGORIES);
+            replaceFragment(R.id.flHomeContainer, categoryFragment, TAG_CATEGORIES, false);
         } else {
             categoryFragment = (CategoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_CATEGORIES);
         }

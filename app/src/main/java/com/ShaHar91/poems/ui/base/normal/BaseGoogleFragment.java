@@ -53,7 +53,7 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
                 parentActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 parentActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
             }
-            toolbar.setNavigationOnClickListener(v -> parentActivity.finish());
+            toolbar.setNavigationOnClickListener(v -> parentActivity.onBackPressed());
         }
 
         if (toolbarIcon != null) {

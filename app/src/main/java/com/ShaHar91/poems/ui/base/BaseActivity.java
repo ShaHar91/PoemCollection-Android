@@ -8,6 +8,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.shahar91.poems.R;
 
@@ -61,14 +62,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         compositeDisposable.add(disposable);
     }
 
-    protected void replaceFragment(@IdRes int containerViewId, Fragment fragment) {
-        replaceFragment(containerViewId, fragment, null);
+    public void replaceFragment(@IdRes int containerViewId, Fragment fragment, boolean addToBackstack) {
+        replaceFragment(containerViewId, fragment, null, addToBackstack);
     }
 
-    protected void replaceFragment(@IdRes int containerViewId, Fragment fragment, String tag) {
-        getSupportFragmentManager()
+    public void replaceFragment(@IdRes int containerViewId, Fragment fragment, String tag, boolean addToBackstack) {
+        FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(containerViewId, fragment, tag)
-                .commit();
+                .replace(containerViewId, fragment, tag);
+
+        if (addToBackstack) {
+            transaction.addToBackStack(tag);
+        }
+
+        transaction.commit();
     }
 }
