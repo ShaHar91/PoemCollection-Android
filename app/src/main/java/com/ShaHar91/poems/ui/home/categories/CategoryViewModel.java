@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.categories;
 
-import com.google.firebase.firestore.ListenerRegistration;
 import com.shahar91.poems.data.DataManager;
 import com.shahar91.poems.data.models.Category;
 import com.shahar91.poems.redux.AppState;
@@ -29,7 +28,7 @@ public class CategoryViewModel extends BaseGoogleViewModel {
     }
 
     public void registerCategoryQuery() {
-        registration = dataManager.getCategoriesByReference().addSnapshotListener((querySnapshot, exception) -> {
+        registration = dataManager.getCategoriesQuery().addSnapshotListener((querySnapshot, exception) -> {
             CategoryActions categoryActions = Actions.from(CategoryActions.class);
             store.dispatch(categoryActions.setCategoryList(querySnapshot.toObjects(Category.class)));
         });

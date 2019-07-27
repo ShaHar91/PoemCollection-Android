@@ -92,7 +92,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     private void initViews() {
         //toolbar
         toolbar.setTitle("Categories");
-        configureToolbar(toolbar, null);
+        configureToolbar(toolbar, null, null);
 
         adapter = new CategoryAdapter(getActivity(), this::handleClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

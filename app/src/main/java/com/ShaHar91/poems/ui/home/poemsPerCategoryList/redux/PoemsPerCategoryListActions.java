@@ -1,6 +1,6 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList.redux;
 
-import com.shahar91.poems.data.models.PoemsPerCategory;
+import com.shahar91.poems.data.models.Poem;
 import com.yheriatovych.reductor.Action;
 import com.yheriatovych.reductor.annotations.ActionCreator;
 
@@ -15,5 +15,5 @@ public interface PoemsPerCategoryListActions {
     Action reset();
 
     @ActionCreator.Action(SET_POEM_LIST)
-    Action setPoemsPerCategoryList(List<PoemsPerCategory> poemsPerCategoryList);
+    Action setPoemsPerCategoryList(List<Poem> poemsPerCategoryList);
 }

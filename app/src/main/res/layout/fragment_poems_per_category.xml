@@ -23,7 +23,6 @@
         android:id="@+id/rvPoemsPerCategory"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ablPoemsPerCategory"
         tools:listitem="@layout/list_item_poem_per_category" />

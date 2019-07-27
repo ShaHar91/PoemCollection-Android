@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Category;
-import com.shahar91.poems.data.models.PoemsPerCategory;
+import com.shahar91.poems.data.models.Poem;
+import com.shahar91.poems.ui.base.BaseActivity;
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment;
+import com.shahar91.poems.ui.home.poem.PoemFragment;
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter;
 
 import java.util.List;
@@ -29,7 +31,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCategoryListViewModel, PoemsPerCategoryListComponent> {
     private static final String CATEGORY = "CATEGORY";
@@ -89,7 +90,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         addDisposable(viewModel.getPoemsPerCategory().subscribe(this::showPoemsPerCategory));
     }
 
-    private void showPoemsPerCategory(List<PoemsPerCategory> poemsPerCategories) {
+    private void showPoemsPerCategory(List<Poem> poemsPerCategories) {
         adapter.setItems(poemsPerCategories);
     }
 
@@ -98,8 +99,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
 
         //toolbar
         toolbar.setTitle(category.getName());
-        configureToolbar(toolbar, null);
-        toolbar.getNavigationIcon().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorWhite), PorterDuff.Mode.SRC_IN);
+        configureToolbar(toolbar, null, ContextCompat.getColor(getActivity(), R.color.colorWhite));
 
         adapter = new PoemsPerCategoryListAdapter(getActivity(), this::handleClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -109,8 +109,10 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         rvPoemsPerCategory.setAdapter(adapter);
     }
 
-    private void handleClick(int poemId) {
-        Timber.d("some Click: " + poemId);
+    private void handleClick(String poemId) {
+        PoemFragment poemFragment = PoemFragment.newInstance(true, poemId);
+
+        ((BaseActivity) getActivity()).replaceFragment(R.id.flHomeContainer, poemFragment, "someTag", true);
     }
 
     @Override

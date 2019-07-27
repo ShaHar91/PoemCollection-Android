@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager;
-import com.shahar91.poems.data.models.PoemsPerCategory;
+import com.shahar91.poems.data.models.Poem;
 import com.shahar91.poems.ui.base.list.BaseAdapter;
 import com.shahar91.poems.ui.base.list.BaseInteractionListener;
 import com.shahar91.poems.ui.base.list.BaseViewHolder;
 
-public class PoemsPerCategoryListAdapter extends BaseAdapter<PoemsPerCategory, BaseInteractionListener, BaseViewHolder<PoemsPerCategory, BaseInteractionListener>> {
-    private AdapterDelegatesManager<PoemsPerCategory> delegatesManager;
+public class PoemsPerCategoryListAdapter extends BaseAdapter<Poem, BaseInteractionListener, BaseViewHolder<Poem, BaseInteractionListener>> {
+    private AdapterDelegatesManager<Poem> delegatesManager;
 
     public PoemsPerCategoryListAdapter(Context context, PoemsPerCategoryListInteractionListener listener) {
         super(context);
@@ -29,7 +29,7 @@ public class PoemsPerCategoryListAdapter extends BaseAdapter<PoemsPerCategory, B
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder<PoemsPerCategory, BaseInteractionListener> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<Poem, BaseInteractionListener> holder, int position) {
         delegatesManager.onBindViewHolder(getItem(position), position, holder);
     }
 

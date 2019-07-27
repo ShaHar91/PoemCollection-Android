@@ -1,5 +1,6 @@
 package com.shahar91.poems.ui.base.normal;
 
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -44,7 +45,7 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
     }
 
 
-    protected void configureToolbar(Toolbar toolbar, View toolbarIcon) {
+    protected void configureToolbar(Toolbar toolbar, View toolbarIcon, Integer color) {
         parentActivity.setSupportActionBar(toolbar);
 
         boolean showBackIcon = getArguments() != null && getArguments().getBoolean(SHOW_BACK_ICON);
@@ -52,6 +53,10 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
             if (parentActivity.getSupportActionBar() != null) {
                 parentActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 parentActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
+
+                if (color != null) {
+                    toolbar.getNavigationIcon().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                }
             }
             toolbar.setNavigationOnClickListener(v -> parentActivity.onBackPressed());
         }

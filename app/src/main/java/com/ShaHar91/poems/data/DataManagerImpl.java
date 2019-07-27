@@ -1,11 +1,19 @@
 package com.shahar91.poems.data;
 
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.shahar91.poems.data.models.Category;
+import com.shahar91.poems.data.models.Poem;
 
 import javax.inject.Inject;
 
 public class DataManagerImpl implements DataManager {
+    public static final String BASE_CATEGORIES = "categories";
+    public static final String BASE_POEMS = "poems";
+
+
+    private static final String TAG = "Tag";
     private final FirebaseFirestore db;
 
     @Inject
@@ -14,16 +22,34 @@ public class DataManagerImpl implements DataManager {
     }
 
 
-    // Categories
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //// Categories
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public CollectionReference getCategoriesByReference() {
-        return db.collection("categories");
+    public Query getCategoriesQuery() {
+        return db.collection(BASE_CATEGORIES).orderBy(Category.NAME);
     }
 
 
-    // PoemsPerCategory
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //// PoemsPerCategory
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public CollectionReference getPoemsPerCategoryByReference(int categoryId) {
-        return db.collection("per_category/" + categoryId + "/poems");
+    public DocumentReference getCategoryReference(String categoryId) {
+        return db.collection(BASE_CATEGORIES).document(categoryId);
+    }
+
+    @Override
+    public Query getPoemsPerCategoryQuery(DocumentReference documentReference) {
+        return db.collectionGroup(BASE_POEMS).whereArrayContains("categories", documentReference).orderBy(Poem.TITLE);
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //// Poem
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public DocumentReference getPoemByReference(String poemId) {
+        return db.collection(BASE_POEMS).document(poemId);
     }
 }

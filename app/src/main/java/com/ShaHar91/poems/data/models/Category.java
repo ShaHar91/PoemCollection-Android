@@ -5,17 +5,20 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 public class Category implements Serializable {
-    private int id;
+    public static final String ID = "id";
+    public static final String NAME = "name";
+
+    private String id;
     private String name;
 
     public Category() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

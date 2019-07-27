@@ -1,6 +1,6 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList.redux;
 
-import com.shahar91.poems.data.models.PoemsPerCategory;
+import com.shahar91.poems.data.models.Poem;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 
@@ -20,7 +20,7 @@ public abstract class PoemsPerCategoryListReducer implements Reducer<PoemsPerCat
     }
 
     @AutoReducer.Action(value = PoemsPerCategoryListActions.SET_POEM_LIST, from = PoemsPerCategoryListActions.class)
-    PoemsPerCategoryListState setPoemsPerCategoryList(PoemsPerCategoryListState state, List<PoemsPerCategory> poemsPerCategoryList) {
+    PoemsPerCategoryListState setPoemsPerCategoryList(PoemsPerCategoryListState state, List<Poem> poemsPerCategoryList) {
         return state.toBuilder().setPoemsPerCategoryList(poemsPerCategoryList).build();
     }
 
