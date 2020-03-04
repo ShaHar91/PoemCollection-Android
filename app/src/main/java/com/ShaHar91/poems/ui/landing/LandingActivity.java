@@ -20,11 +20,6 @@ public class LandingActivity extends BaseGoogleMobileActivity<LandingViewModel, 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public static void start(Context context) {
-        Intent intent = new Intent(context, LandingActivity.class);
-        context.startActivity(intent);
-    }
-
     @Override
     protected LandingComponent createComponent() {
         return DaggerLandingComponent.builder()
