@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
@@ -33,7 +33,8 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
         setContentView(R.layout.activity_home);
 
         component.inject(this);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
+
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(HomeViewModel.class);
 
         showCategoryFragment(savedInstanceState);
     }

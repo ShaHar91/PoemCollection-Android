@@ -104,7 +104,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         adapter = new PoemsPerCategoryListAdapter(getActivity(), this::handleClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvPoemsPerCategory.setLayoutManager(linearLayoutManager);
-        rvPoemsPerCategory.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+//        rvPoemsPerCategory.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         rvPoemsPerCategory.setAdapter(adapter);
     }

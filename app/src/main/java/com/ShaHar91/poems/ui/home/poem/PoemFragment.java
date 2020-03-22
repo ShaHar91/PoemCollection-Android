@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,14 +12,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Poem;
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment;
+import com.shahar91.poems.ui.home.poem.adapter.PoemDetailAdapterController;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -35,23 +38,24 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.poemTitleTv)
-    TextView poemTitleTv;
-    @BindView(R.id.poemTv)
-    TextView poemTv;
-    @BindView(R.id.writerTv)
-    TextView writerTv;
-    @BindView(R.id.categoryTv)
-    TextView categoryTv;
+    //    @BindView(R.id.poemTitleTv)
+//    TextView poemTitleTv;
+//    @BindView(R.id.poemTv)
+//    TextView poemTv;
+//    @BindView(R.id.writerTv)
+//    TextView writerTv;
+    @BindView(R.id.rvPoemDetails)
+    RecyclerView rvPoemDetails;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+    private PoemDetailAdapterController controller;
 
     @Override
     protected PoemComponent createComponent() {
         return DaggerPoemComponent.builder()
-                .applicationComponent(((MyApp) getActivity().getApplication()).getAppComponent())
+                .applicationComponent(((MyApp) requireActivity().getApplication()).getAppComponent())
                 .build();
     }
 
@@ -85,7 +89,7 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PoemViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(PoemViewModel.class);
 
         initViews();
 
@@ -94,21 +98,22 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
 
     private void initViews() {
         //toolbar
-        configureToolbar(toolbar, null, ContextCompat.getColor(getActivity(), R.color.colorWhite));
+        configureToolbar(toolbar, null, ContextCompat.getColor(requireContext(), R.color.colorWhite));
+
+        controller = new PoemDetailAdapterController(requireContext(), poemDetailAdapterControllerListener);
+        rvPoemDetails.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rvPoemDetails.setAdapter(controller.getAdapter());
     }
 
     private void showPoem(Poem poem) {
-        toolbar.setTitle(poem.getTitle());
-        poemTitleTv.setText(poem.getTitle());
-        poemTv.setText(poem.getPoem());
-        writerTv.setText(poem.getWriter());
+        controller.setData(poem, null, "", Collections.emptyList());
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        viewModel.registerPoemQuery(getArguments().getString(POEM_ID, ""));
+        viewModel.registerPoemQuery(requireArguments().getString(POEM_ID, ""));
     }
 
     @Override
@@ -118,4 +123,16 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         viewModel.stopListeningForChangesInBackend();
         viewModel.resetPoem();
     }
+
+    private final PoemDetailAdapterController.Listener poemDetailAdapterControllerListener = new PoemDetailAdapterController.Listener() {
+        @Override
+        public void onRatingBarTouched(float rating) {
+
+        }
+
+        @Override
+        public void onOwnRatingClicked() {
+
+        }
+    };
 }

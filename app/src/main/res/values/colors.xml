@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F44336</color>
-    <color name="colorPrimaryDark">#D32F2F</color>
-    <color name="colorAccent">#448AFF</color>
+    <color name="colorPrimary">#0288D1</color>
+    <color name="colorPrimaryDark">#0277BD</color>
+    <color name="colorAccent">#0288D1</color>
 
-    <color name="colorPrimaryTransparent">#85F44336</color>
+    <color name="general_background">#F6FFFE</color>
+
+
 
 
     <color name="buttonDisableOverlay">#99ffffff</color>

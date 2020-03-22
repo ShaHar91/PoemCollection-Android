@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/general_background"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,87 +18,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPoemDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="96dp" />
 
-        <LinearLayout
-            android:id="@+id/mainLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp">
-
-            <TextView
-                android:id="@+id/poemTitleTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:gravity="center_horizontal"
-                tools:text="Poem Title"
-                android:textColor="@color/colorGrey_700"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/poemTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="20dp"
-                android:gravity="center_horizontal"
-                tools:text="hello category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category category " />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="20dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Written by: "
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/writerTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Christiano"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Category: "
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/categoryTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="category"
-                    android:textSize="15sp" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+    <!--    <include layout="@layout/list_item_poem_detail" />-->
 </LinearLayout>

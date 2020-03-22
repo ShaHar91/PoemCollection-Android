@@ -97,7 +97,6 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
         adapter = new CategoryAdapter(getActivity(), this::handleClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvCategories.setLayoutManager(linearLayoutManager);
-        rvCategories.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         rvCategories.setAdapter(adapter);
     }

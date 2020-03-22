@@ -1,41 +1,58 @@
 package com.shahar91.poems.ui.home.categories.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager;
+import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Category;
 import com.shahar91.poems.ui.base.list.BaseAdapter;
 import com.shahar91.poems.ui.base.list.BaseInteractionListener;
 import com.shahar91.poems.ui.base.list.BaseViewHolder;
 
+import butterknife.BindView;
+
 
 public class CategoryAdapter extends BaseAdapter<Category, BaseInteractionListener, BaseViewHolder<Category, BaseInteractionListener>> {
-    private AdapterDelegatesManager<Category> delegatesManager;
+    private final CategoryInteractionListener listener;
 
     public CategoryAdapter(Context context, CategoryInteractionListener listener) {
         super(context);
 
-        //Delegates
-        delegatesManager = new AdapterDelegatesManager<>();
-        delegatesManager.addDelegate(new CategoryListDelegate(context, listener));
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return (BaseViewHolder) delegatesManager.onCreateViewHolder(parent, viewType);
+    public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new CategoryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_category, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder<Category, BaseInteractionListener> holder, int position) {
-        delegatesManager.onBindViewHolder(getItem(position), position, holder);
+        holder.bind(position, getItem(position), listener);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return delegatesManager.getItemViewType(getItem(position), position);
+    static class CategoryViewHolder extends BaseViewHolder<Category, BaseInteractionListener> {
+        @BindView(R.id.categoryTv)
+        TextView categoryTv;
+
+        CategoryViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        public void bind(int position, Category item, BaseInteractionListener baseInteractionListener) {
+            CategoryInteractionListener listener = (CategoryInteractionListener) baseInteractionListener;
+
+            categoryTv.setText(item.getName());
+
+            itemView.setOnClickListener(view -> listener.onCategoryClicked(item));
+        }
     }
+
 }
