@@ -25,9 +25,9 @@ public class PoemViewModel extends BaseGoogleViewModel {
     }
 
     public void registerPoemQuery(String poemId) {
-        registration = dataManager.getPoemByReference(poemId).addSnapshotListener(((querySnapshots, exception) -> {
+        addDisposable(dataManager.getPoem(poemId).subscribe(poem -> {
             PoemActions poemActions = Actions.from(PoemActions.class);
-            store.dispatch(poemActions.setPoem(querySnapshots.toObject(Poem.class)));
+            store.dispatch(poemActions.setPoem(poem));
         }));
     }
 

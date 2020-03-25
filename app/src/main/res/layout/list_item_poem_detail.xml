@@ -4,11 +4,11 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.home.poem.PoemFragment"
     android:layout_marginStart="14dp"
     android:layout_marginTop="12dp"
     android:layout_marginEnd="14dp"
-    android:layout_marginBottom="12dp">
+    android:layout_marginBottom="12dp"
+    tools:context=".ui.home.poem.PoemFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,8 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="20dp"
             android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textColor="?android:textColorSecondary"
             tools:text="hello category category category category category category\ncategory category category category category category\ncategory category category category category category category\ncategory category category category category\ncategory category category category \ncategory category category category category \ncategory category category category category \ncategory category category category category \ncategory category category category \ncategory category category category category \ncategory category category category category \ncategory category category category category category category category category category " />
 
         <LinearLayout

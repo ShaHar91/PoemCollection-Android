@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="1px"
+        app:layout_constraintDimensionRatio="1:1"/>
+
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/ivCircle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:foreground="@drawable/ic_circular_image_border"
+        tools:src="@drawable/ic_circular_image_color"
+        android:padding="1px"
+        app:layout_constraintDimensionRatio="1:1"/>
+
+    <TextView
+        android:id="@+id/tvInitials"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:text="JV"
+        android:textSize="12sp"
+        android:textColor="@color/colorWhite"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

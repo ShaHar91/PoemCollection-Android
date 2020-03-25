@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,12 +39,6 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    //    @BindView(R.id.poemTitleTv)
-//    TextView poemTitleTv;
-//    @BindView(R.id.poemTv)
-//    TextView poemTv;
-//    @BindView(R.id.writerTv)
-//    TextView writerTv;
     @BindView(R.id.rvPoemDetails)
     RecyclerView rvPoemDetails;
 
@@ -127,12 +122,14 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
     private final PoemDetailAdapterController.Listener poemDetailAdapterControllerListener = new PoemDetailAdapterController.Listener() {
         @Override
         public void onRatingBarTouched(float rating) {
-
+            //TODO: show review dialog!!
+            Timber.d("onRatingBarTouched %f", rating);
         }
 
         @Override
-        public void onOwnRatingClicked() {
-
+        public void onOwnReviewClicked(String review) {
+            //TODO: show review dialog to edit!!
+            Timber.d("onOwnReviewClicked %s", review);
         }
     };
 }

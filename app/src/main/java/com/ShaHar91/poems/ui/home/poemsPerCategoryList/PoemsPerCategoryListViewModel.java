@@ -27,12 +27,10 @@ public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
     }
 
     public void registerPoemsPerCategoryQuery(String categoryId) {
-        dataManager.getCategoryReference(categoryId).get().addOnSuccessListener(documentSnapshot -> {
-            registration = dataManager.getPoemsPerCategoryQuery(documentSnapshot.getReference()).addSnapshotListener((querySnapshots, exception) -> {
-                PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
-                store.dispatch(poemsPerCategoryListActions.setPoemsPerCategoryList(querySnapshots.toObjects(Poem.class)));
-            });
-        });
+        addDisposable(dataManager.getPoemsPerCategories(categoryId).subscribe(poems -> {
+            PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
+            store.dispatch(poemsPerCategoryListActions.setPoemsPerCategoryList(poems));
+        }));
     }
 
     public Observable<List<Poem>> getPoemsPerCategory() {

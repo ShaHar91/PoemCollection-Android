@@ -10,19 +10,21 @@ import com.shahar91.poems.data.models.Poem;
 
 import java.util.List;
 
-public class PoemDetailAdapterController extends Typed4EpoxyController<Poem, String, String, List<String>> implements PoemNoReviewModel.Listener{
+import javax.annotation.Nonnull;
+
+public class PoemDetailAdapterController extends Typed4EpoxyController<Poem, String, String, List<String>> implements PoemNoReviewModel.Listener, PoemOwnReviewModel.Listener {
     public interface Listener {
         void onRatingBarTouched(float rating);
 
-        void onOwnRatingClicked();
+        void onOwnReviewClicked(String review);
     }
 
     @AutoModel
     PoemDetailDataModel_ poemDetail;
     @AutoModel
     PoemNoReviewModel_ poemNoReviewModel;
-//    @AutoModel
-//    PoemOwnReviewModel_ poemOwnReviewModel;
+    @AutoModel
+    PoemOwnReviewModel_ poemOwnReviewModel;
 
     private final Context context;
     private final Listener listener;
@@ -32,18 +34,31 @@ public class PoemDetailAdapterController extends Typed4EpoxyController<Poem, Str
         this.listener = listener;
     }
 
+    //TODO: Nu.. In uw geval gaat ExpressJS (NodeJS Express) + MongoDB in combinatie met MongoDB Atlas wel het makkelijkste en snelste zijn. Met MongoDB kunt ge ook een goeie ORM gebruiken. Zeker doen voor XSS attacks :slightly_smiling_face:
+    // Ik gebruik Sequelize, maar MongoDB heeft andere goeie ook :slightly_smiling_face:
+
+
+
+    // TODO: not all parameters are needed, they are all inside of the poem object, just extract them and add the correct views to the list!!!
     @Override
-    protected void buildModels(Poem poem, @Nullable String currentUserReview, String totalReviews, List<String> reviews) {
+    protected void buildModels(@Nonnull Poem poem, @Nullable String currentUserReview, @Nonnull String totalReviews, @Nonnull List<String> reviews) {
         poemDetail.poem(poem)
                 .addTo(this);
 
-        poemNoReviewModel.addIf(currentUserReview == null, this);
+        poemNoReviewModel.listener(this).addIf(currentUserReview == null, this);
 
-//        poemOwnReviewModel.review(currentUserReview).addIf(currentUserReview != null, this);
+        if (currentUserReview != null) {
+            poemOwnReviewModel.review(currentUserReview).listener(this).addTo(this);
+        }
     }
 
     @Override
     public void onRatingBarTouched(float rating) {
         listener.onRatingBarTouched(rating);
+    }
+
+    @Override
+    public void onOwnReviewClicked(String review) {
+        listener.onOwnReviewClicked(review);
     }
 }

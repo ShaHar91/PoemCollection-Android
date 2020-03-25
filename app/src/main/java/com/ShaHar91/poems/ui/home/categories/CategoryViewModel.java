@@ -28,10 +28,11 @@ public class CategoryViewModel extends BaseGoogleViewModel {
     }
 
     public void registerCategoryQuery() {
-        registration = dataManager.getCategoriesQuery().addSnapshotListener((querySnapshot, exception) -> {
-            CategoryActions categoryActions = Actions.from(CategoryActions.class);
-            store.dispatch(categoryActions.setCategoryList(querySnapshot.toObjects(Category.class)));
-        });
+        addDisposable(dataManager.getCategories()
+                .subscribe(categories -> {
+                    CategoryActions categoryActions = Actions.from(CategoryActions.class);
+                    store.dispatch(categoryActions.setCategoryList(categories));
+                }));
     }
 
     public Observable<List<Category>> getCategories() {

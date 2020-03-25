@@ -1,16 +1,16 @@
 package com.shahar91.poems.data;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
+import com.shahar91.poems.data.models.Category;
+import com.shahar91.poems.data.models.Poem;
+
+import java.util.List;
+
+import io.reactivex.Observable;
 
 public interface DataManager {
-    Query getCategoriesQuery();
+    Observable<List<Category>> getCategories();
 
-    DocumentReference getPoemByReference(String poemId);
+    Observable<Poem> getPoem(String poemId);
 
-    Query getPoemsPerCategoryQuery(DocumentReference categoryReference);
-
-    DocumentReference getCategoryReference(String categoryId);
+    Observable<List<Poem>> getPoemsPerCategories(String categoryId);
 }

@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,7 +43,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     @Override
     protected CategoryComponent createComponent() {
         return DaggerCategoryComponent.builder()
-                .applicationComponent(((MyApp) getActivity().getApplication()).getAppComponent())
+                .applicationComponent(((MyApp) requireActivity().getApplication()).getAppComponent())
                 .build();
     }
 
@@ -78,7 +76,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(CategoryViewModel.class);
 
         initViews();
 
@@ -104,7 +102,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     private void handleClick(Category category) {
         PoemsPerCategoryListFragment poemsPerCategoryListFragment = PoemsPerCategoryListFragment.newInstance(true, category);
 
-        ((BaseActivity) getActivity()).replaceFragment(R.id.flHomeContainer, poemsPerCategoryListFragment, "someTag", true);
+        ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemsPerCategoryListFragment, "someTag", true);
     }
 
     @Override
