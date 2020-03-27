@@ -1,8 +1,10 @@
 package com.shahar91.poems.data.models;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class New_Poem {
+public class New_Poem extends RealmObject {
     public static final String ID = "id";
     public static final String TITLE = "title";
     public static final String BODY = "body";
@@ -10,14 +12,24 @@ public class New_Poem {
     public static final String REVIEWS = "reviews";
     public static final String CATEGORIES = "categories";
 
+    @PrimaryKey
     private int poemId;
     private String title;
     private String body;
     private New_User writer;
-    private List<New_Review> reviews;
-    private List<New_Category> categories;
+    private RealmList<New_Review> reviews;
+    private RealmList<New_Category> categories;
 
     public New_Poem() {
+    }
+
+    public New_Poem(int poemId, String title, String body, New_User writer, RealmList<New_Review> reviews, RealmList<New_Category> categories) {
+        this.poemId = poemId;
+        this.title = title;
+        this.body = body;
+        this.writer = writer;
+        this.reviews = reviews;
+        this.categories = categories;
     }
 
     public int getPoemId() {
@@ -52,19 +64,19 @@ public class New_Poem {
         this.writer = writer;
     }
 
-    public List<New_Review> getReviews() {
+    public RealmList<New_Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<New_Review> reviews) {
+    public void setReviews(RealmList<New_Review> reviews) {
         this.reviews = reviews;
     }
 
-    public List<New_Category> getCategories() {
+    public RealmList<New_Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<New_Category> categories) {
+    public void setCategories(RealmList<New_Category> categories) {
         this.categories = categories;
     }
 }

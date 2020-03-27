@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import com.shahar91.poems.data.InitialRealmData;
 import com.shahar91.poems.injection.ApplicationComponent;
 import com.shahar91.poems.injection.DaggerApplicationComponent;
 import com.shahar91.poems.injection.module.ApplicationModule;
@@ -11,6 +12,8 @@ import com.shahar91.poems.ui.error.ErrorActivity;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.reactivex.plugins.RxJavaPlugins;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
 public class MyApp extends Application {
@@ -41,6 +44,13 @@ public class MyApp extends Application {
         if (BuildConfig.DEBUG){
             Timber.plant(new Timber.DebugTree());
         }
+
+        Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .initialData(new InitialRealmData())
+                .build();
+        Realm.setDefaultConfiguration(config);
 
         // Catch Unhandled RxJava Exceptions
         // https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling

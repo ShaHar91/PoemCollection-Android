@@ -7,8 +7,11 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.R;
+import com.shahar91.poems.data.models.New_Poem;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
 import com.shahar91.poems.ui.home.categories.CategoryFragment;
+
+import io.realm.Realm;
 
 public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeComponent> {
     private static final String TAG_CATEGORIES = "TagCategories";
@@ -31,6 +34,8 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        String json = Realm.getDefaultInstance().where(New_Poem.class).findAll().asJSON();
 
         component.inject(this);
 
