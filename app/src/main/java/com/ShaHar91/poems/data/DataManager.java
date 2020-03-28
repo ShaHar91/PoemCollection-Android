@@ -10,7 +10,7 @@ import io.reactivex.Observable;
 public interface DataManager {
     Observable<List<Category>> getCategories();
 
-    Observable<Poem> getPoem(String poemId);
+    Observable<Poem> getPoem(int poemId);
 
-    Observable<List<Poem>> getPoemsPerCategories(String categoryId);
+    Observable<List<Poem>> getPoemsPerCategories(int categoryId);
 }

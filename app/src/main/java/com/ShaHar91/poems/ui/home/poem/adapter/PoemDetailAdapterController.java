@@ -2,17 +2,15 @@ package com.shahar91.poems.ui.home.poem.adapter;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
-
 import com.airbnb.epoxy.AutoModel;
-import com.airbnb.epoxy.Typed4EpoxyController;
+import com.airbnb.epoxy.TypedEpoxyController;
+import com.shahar91.poems.Constants;
 import com.shahar91.poems.data.models.Poem;
-
-import java.util.List;
+import com.shahar91.poems.data.models.Review;
 
 import javax.annotation.Nonnull;
 
-public class PoemDetailAdapterController extends Typed4EpoxyController<Poem, String, String, List<String>> implements PoemNoReviewModel.Listener, PoemOwnReviewModel.Listener {
+public class PoemDetailAdapterController extends TypedEpoxyController<Poem> implements PoemNoReviewModel.Listener, PoemOwnReviewModel.Listener {
     public interface Listener {
         void onRatingBarTouched(float rating);
 
@@ -38,17 +36,18 @@ public class PoemDetailAdapterController extends Typed4EpoxyController<Poem, Str
     // Ik gebruik Sequelize, maar MongoDB heeft andere goeie ook :slightly_smiling_face:
 
 
-
     // TODO: not all parameters are needed, they are all inside of the poem object, just extract them and add the correct views to the list!!!
     @Override
-    protected void buildModels(@Nonnull Poem poem, @Nullable String currentUserReview, @Nonnull String totalReviews, @Nonnull List<String> reviews) {
+    protected void buildModels(@Nonnull Poem poem) {
         poemDetail.poem(poem)
                 .addTo(this);
 
-        poemNoReviewModel.listener(this).addIf(currentUserReview == null, this);
+        Review review = poem.getReviews().where().equalTo("user.userId", Constants.CURRENT_USER_ID).findFirst();
 
-        if (currentUserReview != null) {
-            poemOwnReviewModel.review(currentUserReview).listener(this).addTo(this);
+        poemNoReviewModel.listener(this).addIf(review == null, this);
+
+        if (review != null) {
+            poemOwnReviewModel.review(review).listener(this).addTo(this);
         }
     }
 

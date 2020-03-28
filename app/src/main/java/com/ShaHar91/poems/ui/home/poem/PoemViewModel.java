@@ -24,7 +24,7 @@ public class PoemViewModel extends BaseGoogleViewModel {
         this.dataManager = dataManager;
     }
 
-    public void registerPoemQuery(String poemId) {
+    public void registerPoemQuery(int poemId) {
         addDisposable(dataManager.getPoem(poemId).subscribe(poem -> {
             PoemActions poemActions = Actions.from(PoemActions.class);
             store.dispatch(poemActions.setPoem(poem));
@@ -35,6 +35,7 @@ public class PoemViewModel extends BaseGoogleViewModel {
         Observable<AppState> store = RxStore.asObservable(this.store);
         return store.map(AppState::viewState)
                 .map(ViewState::poemState)
+                .filter(poemState -> poemState.poem() != null)
                 .map(PoemState::poem)
                 .distinctUntilChanged();
     }

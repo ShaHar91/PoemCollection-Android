@@ -5,6 +5,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.shahar91.poems.R
+import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.ui.base.list.KotlinEpoxyHolder
 import kotlinx.android.synthetic.main.list_item_own_review.view.*
 
@@ -15,7 +16,7 @@ abstract class PoemOwnReviewModel : EpoxyModelWithHolder<KotlinEpoxyHolder>() {
     }
 
     @EpoxyAttribute
-    lateinit var review: String
+    lateinit var review: Review
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var listener: Listener
@@ -28,7 +29,7 @@ abstract class PoemOwnReviewModel : EpoxyModelWithHolder<KotlinEpoxyHolder>() {
                 setImage(null, "CB", ContextCompat.getColor(context, R.color.colorPrimary))
             }
 
-            setOnClickListener { listener.onOwnReviewClicked(review) }
+            setOnClickListener { listener.onOwnReviewClicked(review.body) }
         }
     }
 }

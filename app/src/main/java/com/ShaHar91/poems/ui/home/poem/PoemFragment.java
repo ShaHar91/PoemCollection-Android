@@ -54,11 +54,11 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
                 .build();
     }
 
-    public static PoemFragment newInstance(boolean showBackIcon, String poemId) {
+    public static PoemFragment newInstance(boolean showBackIcon, int poemId) {
         PoemFragment fragment = new PoemFragment();
         Bundle args = new Bundle();
         args.putBoolean(SHOW_BACK_ICON, showBackIcon);
-        args.putString(POEM_ID, poemId);
+        args.putInt(POEM_ID, poemId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,7 +88,7 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
 
         initViews();
 
-        addDisposable(viewModel.getPoem().subscribe(this::showPoem));
+        addDisposable(viewModel.getPoem().subscribe(this::showPoem, Timber::e));
     }
 
     private void initViews() {
@@ -101,14 +101,14 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
     }
 
     private void showPoem(Poem poem) {
-        controller.setData(poem, null, "", Collections.emptyList());
+        controller.setData(poem);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        viewModel.registerPoemQuery(requireArguments().getString(POEM_ID, ""));
+        viewModel.registerPoemQuery(requireArguments().getInt(POEM_ID, -1));
     }
 
     @Override

@@ -1,13 +1,13 @@
 package com.shahar91.poems.data
 
-import com.shahar91.poems.data.models.New_Poem
+import com.shahar91.poems.data.models.Poem
 import io.realm.Realm
 
 class InitialRealmData : Realm.Transaction {
     override fun execute(realm: Realm) {
         realm.deleteAll()
 
-        realm.createOrUpdateAllFromJson(New_Poem::class.java, getPoemsAsString())
+        realm.createOrUpdateAllFromJson(Poem::class.java, getPoemsAsString())
     }
 
     private fun getPoemsAsString(): String {
@@ -23,18 +23,6 @@ class InitialRealmData : Realm.Transaction {
                 "      \"pictureUrl\": null\n" +
                 "    },\n" +
                 "    \"reviews\": [\n" +
-                "      {\n" +
-                "        \"reviewId\": 0,\n" +
-                "        \"rating\": 1.0000000e+00,\n" +
-                "        \"body\": \"First body\",\n" +
-                "        \"createdAt\": 1580634600,\n" +
-                "        \"user\": {\n" +
-                "          \"userId\": 0,\n" +
-                "          \"email\": \"christiano.bolla@outlook.com\",\n" +
-                "          \"fullName\": \"Christiano Bolla\",\n" +
-                "          \"pictureUrl\": null\n" +
-                "        }\n" +
-                "      },\n" +
                 "      {\n" +
                 "        \"reviewId\": 1,\n" +
                 "        \"rating\": 2.0000000e+00,\n" +
@@ -161,18 +149,6 @@ class InitialRealmData : Realm.Transaction {
                 "      \"pictureUrl\": null\n" +
                 "    },\n" +
                 "    \"reviews\": [\n" +
-                "      {\n" +
-                "        \"reviewId\": 0,\n" +
-                "        \"rating\": 1.0000000e+00,\n" +
-                "        \"body\": \"First body\",\n" +
-                "        \"createdAt\": 1580634600,\n" +
-                "        \"user\": {\n" +
-                "          \"userId\": 0,\n" +
-                "          \"email\": \"christiano.bolla@outlook.com\",\n" +
-                "          \"fullName\": \"Christiano Bolla\",\n" +
-                "          \"pictureUrl\": null\n" +
-                "        }\n" +
-                "      },\n" +
                 "      {\n" +
                 "        \"reviewId\": 1,\n" +
                 "        \"rating\": 2.0000000e+00,\n" +

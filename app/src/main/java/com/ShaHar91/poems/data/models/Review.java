@@ -3,24 +3,18 @@ package com.shahar91.poems.data.models;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class New_Review extends RealmObject {
-    public static final String ID = "id";
-    public static final String BODY = "body";
-    public static final String RATING = "rating";
-    public static final String CREATED_AT = "created_at";
-    public static final String USER = "user";
-
+public class Review extends RealmObject {
     @PrimaryKey
     private int reviewId;
     private float rating;
     private String body;
     private long createdAt;
-    private New_User user;
+    private User user;
 
-    public New_Review() {
+    public Review() {
     }
 
-    public New_Review(int reviewId, float rating, String body, long createdAt, New_User user) {
+    public Review(int reviewId, float rating, String body, long createdAt, User user) {
         this.reviewId = reviewId;
         this.rating = rating;
         this.body = body;
@@ -60,11 +54,11 @@ public class New_Review extends RealmObject {
         this.createdAt = createdAt;
     }
 
-    public New_User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(New_User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

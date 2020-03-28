@@ -80,7 +80,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
 
         initViews();
 
-        addDisposable(viewModel.getCategories().subscribe(this::showCategories));
+        addDisposable(viewModel.getCategories().subscribe(this::showCategories, Throwable::printStackTrace));
     }
 
     private void showCategories(List<Category> categoryList) {

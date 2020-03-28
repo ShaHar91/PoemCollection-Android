@@ -8,9 +8,4 @@ import dagger.Provides;
 
 @Module
 public class NetworkModule {
-    @ApplicationScope
-    @Provides
-    FirebaseFirestore provideFirebaseFirestore() {
-        return FirebaseFirestore.getInstance();
-    }
 }

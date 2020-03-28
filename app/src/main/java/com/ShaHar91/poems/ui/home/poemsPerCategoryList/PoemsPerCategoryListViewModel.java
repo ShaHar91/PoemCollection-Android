@@ -26,7 +26,7 @@ public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
         this.dataManager = dataManager;
     }
 
-    public void registerPoemsPerCategoryQuery(String categoryId) {
+    public void registerPoemsPerCategoryQuery(int categoryId) {
         addDisposable(dataManager.getPoemsPerCategories(categoryId).subscribe(poems -> {
             PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
             store.dispatch(poemsPerCategoryListActions.setPoemsPerCategoryList(poems));

@@ -8,7 +8,7 @@ import com.yheriatovych.reductor.annotations.AutoReducer;
 public abstract class PoemReducer implements Reducer<PoemState> {
     @AutoReducer.InitialState
     PoemState initialState(){
-        return PoemState.builder().setPoem(new Poem()).build();
+        return PoemState.builder().build();
     }
 
     @AutoReducer.Action(value = PoemActions.RESET, from = PoemActions.class)

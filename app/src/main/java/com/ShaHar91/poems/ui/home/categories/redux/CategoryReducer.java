@@ -12,7 +12,7 @@ public abstract class CategoryReducer implements Reducer<CategoryState> {
     @AutoReducer.InitialState
     CategoryState initialState() {
         return CategoryState.builder()
-                .setCategoryList(new ArrayList<>()).build();
+                .build();
     }
 
     @AutoReducer.Action(value = CategoryActions.RESET, from = CategoryActions.class)

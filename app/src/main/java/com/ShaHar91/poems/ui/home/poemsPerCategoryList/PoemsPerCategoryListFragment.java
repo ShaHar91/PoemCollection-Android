@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList;
 
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,9 +28,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCategoryListViewModel, PoemsPerCategoryListComponent> {
-    private static final String CATEGORY = "CATEGORY";
+    private static final String CATEGORY_ID = "CATEGORY_ID";
 
     private Category category;
     private PoemsPerCategoryListAdapter adapter;
@@ -49,7 +47,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     @Override
     protected PoemsPerCategoryListComponent createComponent() {
         return DaggerPoemsPerCategoryListComponent.builder()
-                .applicationComponent(((MyApp) getActivity().getApplication()).getAppComponent())
+                .applicationComponent(((MyApp) requireActivity().getApplication()).getAppComponent())
                 .build();
     }
 
@@ -57,7 +55,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         PoemsPerCategoryListFragment fragment = new PoemsPerCategoryListFragment();
         Bundle args = new Bundle();
         args.putBoolean(SHOW_BACK_ICON, showBackIcon);
-        args.putSerializable(CATEGORY, category);
+        args.putInt(CATEGORY_ID, category.getCategoryId());
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,7 +81,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PoemsPerCategoryListViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(PoemsPerCategoryListViewModel.class);
 
         initViews();
 
@@ -95,31 +93,30 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     }
 
     private void initViews() {
-        category = (Category) getArguments().getSerializable(CATEGORY);
+        category = Realm.getDefaultInstance().where(Category.class).equalTo("categoryId", requireArguments().getInt(CATEGORY_ID, 0)).findFirst();
 
         //toolbar
         toolbar.setTitle(category.getName());
-        configureToolbar(toolbar, null, ContextCompat.getColor(getActivity(), R.color.colorWhite));
+        configureToolbar(toolbar, null, ContextCompat.getColor(requireActivity(), R.color.colorWhite));
 
-        adapter = new PoemsPerCategoryListAdapter(getActivity(), this::handleClick);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        adapter = new PoemsPerCategoryListAdapter(requireActivity(), this::handleClick);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
         rvPoemsPerCategory.setLayoutManager(linearLayoutManager);
-//        rvPoemsPerCategory.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         rvPoemsPerCategory.setAdapter(adapter);
     }
 
-    private void handleClick(String poemId) {
+    private void handleClick(int poemId) {
         PoemFragment poemFragment = PoemFragment.newInstance(true, poemId);
 
-        ((BaseActivity) getActivity()).replaceFragment(R.id.flHomeContainer, poemFragment, "someTag", true);
+        ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemFragment, "someTag", true);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        viewModel.registerPoemsPerCategoryQuery(category.getId());
+        viewModel.registerPoemsPerCategoryQuery(category.getCategoryId());
     }
 
     @Override

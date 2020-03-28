@@ -51,9 +51,9 @@ public class PoemsPerCategoryListAdapter extends BaseAdapter<Poem, BaseInteracti
             PoemsPerCategoryListInteractionListener listener = (PoemsPerCategoryListInteractionListener) baseInteractionListener;
 
             titleTv.setText(item.getTitle());
-            writerTv.setText(item.getWriter());
+            writerTv.setText(item.getWriter().getFullName());
 
-            itemView.setOnClickListener(view -> listener.onPoemClicked(item.getId()));
+            itemView.setOnClickListener(view -> listener.onPoemClicked(item.getPoemId()));
         }
     }
 }

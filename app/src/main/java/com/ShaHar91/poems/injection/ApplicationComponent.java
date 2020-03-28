@@ -31,7 +31,5 @@ public interface ApplicationComponent {
 
     Store<AppState> store();
 
-    FirebaseFirestore firebaseFirestore();
-
     DataManager dataManager();
 }

@@ -39,6 +39,7 @@ public class CategoryViewModel extends BaseGoogleViewModel {
         Observable<AppState> store = RxStore.asObservable(this.store);
         return store.map(AppState::viewState)
                 .map(ViewState::categoryState)
+                .filter(categoryState -> categoryState.categoryList() != null)
                 .map(CategoryState::categoryList)
                 .distinctUntilChanged();
     }
