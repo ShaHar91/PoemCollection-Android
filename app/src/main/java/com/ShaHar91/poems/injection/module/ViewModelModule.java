@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.injection.scope.ApplicationScope;
+import com.shahar91.poems.ui.add.AddPoemViewModel;
 import com.shahar91.poems.ui.home.HomeViewModel;
 import com.shahar91.poems.ui.home.categories.CategoryViewModel;
 import com.shahar91.poems.ui.home.poem.PoemViewModel;
@@ -27,6 +28,13 @@ public class ViewModelModule {
     @ViewModelKey(HomeViewModel.class)
     ViewModel bindMainViewModel(HomeViewModel homeViewModel) {
         return homeViewModel;
+    }
+
+    @Provides
+    @IntoMap
+    @ViewModelKey(AddPoemViewModel.class)
+    ViewModel bindAddPoemViewModel(AddPoemViewModel addPoemViewModel) {
+        return addPoemViewModel;
     }
 
     @Provides

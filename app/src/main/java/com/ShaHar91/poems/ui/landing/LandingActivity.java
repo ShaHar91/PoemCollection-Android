@@ -1,11 +1,8 @@
 package com.shahar91.poems.ui.landing;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
@@ -33,7 +30,7 @@ public class LandingActivity extends BaseGoogleMobileActivity<LandingViewModel, 
         setContentView(R.layout.activity_landing);
 
         component.inject(this);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LandingViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(LandingViewModel.class);
 
         new Timer().schedule(new TimerTask() {
             @Override

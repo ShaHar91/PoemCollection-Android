@@ -18,12 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Poem;
+import com.shahar91.poems.data.models.Review;
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment;
 import com.shahar91.poems.ui.home.poem.adapter.PoemDetailAdapterController;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -123,11 +122,11 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         @Override
         public void onRatingBarTouched(float rating) {
             //TODO: show review dialog!!
-            Timber.d("onRatingBarTouched %f", rating);
+            Timber.d("onRatingBarTouched %f, %s", rating, controller.getCurrentData());
         }
 
         @Override
-        public void onOwnReviewClicked(String review) {
+        public void onOwnReviewClicked(Review review) {
             //TODO: show review dialog to edit!!
             Timber.d("onOwnReviewClicked %s", review);
         }

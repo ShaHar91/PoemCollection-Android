@@ -21,8 +21,8 @@ public class CategoryViewModel extends BaseGoogleViewModel {
     private final DataManager dataManager;
 
     @Inject
-    public CategoryViewModel(Store<AppState> store,
-                             DataManager dataManager) {
+    CategoryViewModel(Store<AppState> store,
+                      DataManager dataManager) {
         super(store);
         this.dataManager = dataManager;
     }

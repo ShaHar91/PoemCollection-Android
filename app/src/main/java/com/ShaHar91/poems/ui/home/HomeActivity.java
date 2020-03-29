@@ -7,11 +7,20 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.R;
+import com.shahar91.poems.ui.add.AddPoemActivity;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
 import com.shahar91.poems.ui.home.categories.CategoryFragment;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeComponent> {
     private static final String TAG_CATEGORIES = "TagCategories";
+
+    @OnClick(R.id.fabAddPoem)
+    void fabAddPoemClicked() {
+        AddPoemActivity.start(this);
+    }
 
     CategoryFragment categoryFragment;
 
@@ -31,6 +40,7 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
         component.inject(this);
 

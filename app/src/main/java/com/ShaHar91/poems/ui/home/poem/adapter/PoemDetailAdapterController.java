@@ -8,13 +8,15 @@ import com.shahar91.poems.Constants;
 import com.shahar91.poems.data.models.Poem;
 import com.shahar91.poems.data.models.Review;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.Nonnull;
 
 public class PoemDetailAdapterController extends TypedEpoxyController<Poem> implements PoemNoReviewModel.Listener, PoemOwnReviewModel.Listener {
     public interface Listener {
         void onRatingBarTouched(float rating);
 
-        void onOwnReviewClicked(String review);
+        void onOwnReviewClicked(Review review);
     }
 
     @AutoModel
@@ -36,7 +38,7 @@ public class PoemDetailAdapterController extends TypedEpoxyController<Poem> impl
     // Ik gebruik Sequelize, maar MongoDB heeft andere goeie ook :slightly_smiling_face:
 
 
-    // TODO: not all parameters are needed, they are all inside of the poem object, just extract them and add the correct views to the list!!!
+    //TODO: not all parameters are needed, they are all inside of the poem object, just extract them and add the correct views to the list!!!
     @Override
     protected void buildModels(@Nonnull Poem poem) {
         poemDetail.poem(poem)
@@ -57,7 +59,33 @@ public class PoemDetailAdapterController extends TypedEpoxyController<Poem> impl
     }
 
     @Override
-    public void onOwnReviewClicked(String review) {
+    public void onOwnReviewClicked(@NotNull Review review) {
         listener.onOwnReviewClicked(review);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

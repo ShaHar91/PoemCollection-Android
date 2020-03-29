@@ -4,7 +4,6 @@ import com.shahar91.poems.data.models.Category;
 import com.yheriatovych.reductor.Reducer;
 import com.yheriatovych.reductor.annotations.AutoReducer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AutoReducer

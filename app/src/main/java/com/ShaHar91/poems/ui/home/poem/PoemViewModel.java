@@ -19,7 +19,7 @@ public class PoemViewModel extends BaseGoogleViewModel {
     private final DataManager dataManager;
 
     @Inject
-    public PoemViewModel(Store<AppState> store, DataManager dataManager) {
+    PoemViewModel(Store<AppState> store, DataManager dataManager) {
         super(store);
         this.dataManager = dataManager;
     }

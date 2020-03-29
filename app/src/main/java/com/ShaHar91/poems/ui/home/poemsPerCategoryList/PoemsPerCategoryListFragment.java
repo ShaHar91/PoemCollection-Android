@@ -28,12 +28,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
 
 public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCategoryListViewModel, PoemsPerCategoryListComponent> {
     private static final String CATEGORY_ID = "CATEGORY_ID";
+    private static final String CATEGORY_NAME = "CATEGORY_NAME";
 
-    private Category category;
     private PoemsPerCategoryListAdapter adapter;
 
     @BindView(R.id.toolbar)
@@ -56,6 +55,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         Bundle args = new Bundle();
         args.putBoolean(SHOW_BACK_ICON, showBackIcon);
         args.putInt(CATEGORY_ID, category.getCategoryId());
+        args.putString(CATEGORY_NAME, category.getName());
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,10 +93,8 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     }
 
     private void initViews() {
-        category = Realm.getDefaultInstance().where(Category.class).equalTo("categoryId", requireArguments().getInt(CATEGORY_ID, 0)).findFirst();
-
         //toolbar
-        toolbar.setTitle(category.getName());
+        toolbar.setTitle(requireArguments().getString(CATEGORY_NAME, ""));
         configureToolbar(toolbar, null, ContextCompat.getColor(requireActivity(), R.color.colorWhite));
 
         adapter = new PoemsPerCategoryListAdapter(requireActivity(), this::handleClick);
@@ -116,7 +114,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     public void onResume() {
         super.onResume();
 
-        viewModel.registerPoemsPerCategoryQuery(category.getCategoryId());
+        viewModel.registerPoemsPerCategoryQuery(requireArguments().getInt(CATEGORY_ID, 0));
     }
 
     @Override

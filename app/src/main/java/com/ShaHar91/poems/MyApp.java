@@ -2,8 +2,6 @@ package com.shahar91.poems;
 
 import android.app.Application;
 
-import androidx.lifecycle.ProcessLifecycleOwner;
-
 import com.shahar91.poems.data.InitialRealmData;
 import com.shahar91.poems.injection.ApplicationComponent;
 import com.shahar91.poems.injection.DaggerApplicationComponent;

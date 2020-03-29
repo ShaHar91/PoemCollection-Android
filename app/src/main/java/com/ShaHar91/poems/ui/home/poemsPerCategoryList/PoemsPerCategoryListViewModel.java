@@ -21,7 +21,7 @@ public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
     private final DataManager dataManager;
 
     @Inject
-    public PoemsPerCategoryListViewModel(Store<AppState> store, DataManager dataManager) {
+    PoemsPerCategoryListViewModel(Store<AppState> store, DataManager dataManager) {
         super(store);
         this.dataManager = dataManager;
     }

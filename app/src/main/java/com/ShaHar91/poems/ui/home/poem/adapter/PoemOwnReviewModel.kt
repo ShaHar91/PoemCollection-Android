@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.list_item_own_review.view.*
 @EpoxyModelClass(layout = R.layout.list_item_own_review)
 abstract class PoemOwnReviewModel : EpoxyModelWithHolder<KotlinEpoxyHolder>() {
     interface Listener {
-        fun onOwnReviewClicked(review: String)
+        fun onOwnReviewClicked(review: Review)
     }
 
     @EpoxyAttribute
@@ -29,7 +29,7 @@ abstract class PoemOwnReviewModel : EpoxyModelWithHolder<KotlinEpoxyHolder>() {
                 setImage(null, "CB", ContextCompat.getColor(context, R.color.colorPrimary))
             }
 
-            setOnClickListener { listener.onOwnReviewClicked(review.body) }
+            setOnClickListener { listener.onOwnReviewClicked(review) }
         }
     }
 }
