@@ -6,8 +6,12 @@
 
     <color name="general_background">#F6FFFE</color>
 
+    <color name="colorPrimaryDark_Translucent">#800277BD</color>
+    <color name="landing_title_card_background">#42FFFFFF</color>
 
+    <color name="entry_header_background_translucent">#C40288D1</color>
 
+    <color name="entry_divider_line">#979797</color>
 
     <color name="buttonDisableOverlay">#99ffffff</color>
     <color name="buttonPressOverlay">#10000000</color>

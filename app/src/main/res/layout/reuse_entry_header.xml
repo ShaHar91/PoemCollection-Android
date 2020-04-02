@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <ImageView
+        android:id="@+id/ivEntryHeader"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/entry_header_back" />
+
+    <TextView
+        style="@style/EntryHeaderText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/app_name"
+        app:layout_constraintBottom_toBottomOf="@id/ivEntryHeader"
+        app:layout_constraintTop_toTopOf="@id/ivEntryHeader" />
+</merge>

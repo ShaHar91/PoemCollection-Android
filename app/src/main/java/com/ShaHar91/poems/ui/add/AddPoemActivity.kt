@@ -13,6 +13,11 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         fun start(context: Context) {
             context.startActivity(Intent(context, AddPoemActivity::class.java))
         }
+
+        @JvmStatic
+        fun startWithIntent(context: Context): Intent{
+            return Intent(context, AddPoemActivity::class.java)
+        }
     }
 
     override fun createComponent(): AddPoemComponent {

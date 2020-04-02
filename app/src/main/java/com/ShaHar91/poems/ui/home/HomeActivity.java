@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.add.AddPoemActivity;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
+import com.shahar91.poems.ui.entry.EntryActivity;
 import com.shahar91.poems.ui.home.categories.CategoryFragment;
 
 import butterknife.ButterKnife;
@@ -19,7 +21,12 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
 
     @OnClick(R.id.fabAddPoem)
     void fabAddPoemClicked() {
-        AddPoemActivity.start(this);
+        //TODO: check if user is logged in, if is logged in ==> startAddPoem()
+        startActivityForResult(EntryActivity.startWithIntent(this), 100);
+    }
+
+    private void startAddPoem() {
+        startActivityForResult(AddPoemActivity.startWithIntent(this), 101);
     }
 
     CategoryFragment categoryFragment;
@@ -56,5 +63,16 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
         } else {
             categoryFragment = (CategoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_CATEGORIES);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                startAddPoem();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

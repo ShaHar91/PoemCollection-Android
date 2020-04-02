@@ -2,7 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/general_background</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -15,5 +16,39 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.0178571429</item>
+    </style>
+
+    <style name="AppTheme.Landing" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/landing_backg</item>
+
+        <item name="android:statusBarColor">@color/colorPrimaryDark_Translucent</item>
+    </style>
+
+    <style name="AppTheme.Entry" parent="AppTheme">
+        <!-- In the Activity the content will be set to fullScreen so the content will be drawn behind the statusBar-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.Button.General" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <style name="EntryHeaderText">
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline3
+        </item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/entry_header_background_translucent</item>
+        <item name="android:paddingStart">62dp</item>
+        <item name="android:paddingEnd">62dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
+    </style>
+
+    <style name="EntryTextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">6dp</item>
     </style>
 </resources>
