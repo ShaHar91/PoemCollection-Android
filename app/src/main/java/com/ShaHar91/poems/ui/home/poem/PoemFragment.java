@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Poem;
 import com.shahar91.poems.data.models.Review;
@@ -49,7 +48,7 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
     @Override
     protected PoemComponent createComponent() {
         return DaggerPoemComponent.builder()
-                .applicationComponent(((MyApp) requireActivity().getApplication()).getAppComponent())
+                .applicationComponent(appComponent())
                 .build();
     }
 
@@ -92,7 +91,7 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
 
     private void initViews() {
         //toolbar
-        configureToolbar(toolbar, null, ContextCompat.getColor(requireContext(), R.color.colorWhite));
+        configureToolbar(toolbar, ContextCompat.getColor(requireContext(), R.color.colorWhite));
 
         controller = new PoemDetailAdapterController(requireContext(), poemDetailAdapterControllerListener);
         rvPoemDetails.setLayoutManager(new LinearLayoutManager(requireContext()));

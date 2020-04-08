@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.entry.EntryActivity"
+        <activity
+            android:name=".ui.entry.EntryActivity"
             android:theme="@style/AppTheme.Entry"/>
         <activity android:name=".ui.add.AddPoemActivity" />
         <activity android:name=".ui.error.ErrorActivity" />

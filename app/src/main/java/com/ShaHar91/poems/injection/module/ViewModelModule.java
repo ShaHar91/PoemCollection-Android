@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.shahar91.poems.injection.scope.ApplicationScope;
 import com.shahar91.poems.ui.add.AddPoemViewModel;
 import com.shahar91.poems.ui.entry.EntryViewModel;
+import com.shahar91.poems.ui.entry.login.LoginViewModel;
+import com.shahar91.poems.ui.entry.register.RegisterViewModel;
 import com.shahar91.poems.ui.home.HomeViewModel;
 import com.shahar91.poems.ui.home.categories.CategoryViewModel;
 import com.shahar91.poems.ui.home.poem.PoemViewModel;
@@ -43,6 +45,20 @@ public class ViewModelModule {
     @ViewModelKey(EntryViewModel.class)
     ViewModel bindEntryViewModel(EntryViewModel entryViewModel) {
         return entryViewModel;
+    }
+
+    @Provides
+    @IntoMap
+    @ViewModelKey(LoginViewModel.class)
+    ViewModel bindLoginViewModel(LoginViewModel loginViewModel) {
+        return loginViewModel;
+    }
+
+    @Provides
+    @IntoMap
+    @ViewModelKey(RegisterViewModel.class)
+    ViewModel bindRegisterViewModel(RegisterViewModel registerViewModel) {
+        return registerViewModel;
     }
 
     @Provides

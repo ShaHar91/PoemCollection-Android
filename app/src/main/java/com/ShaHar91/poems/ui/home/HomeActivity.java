@@ -22,9 +22,17 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
     @OnClick(R.id.fabAddPoem)
     void fabAddPoemClicked() {
         //TODO: check if user is logged in, if is logged in ==> startAddPoem()
+//        if (isLoggedIn) {
+//            startAddPoem();
+//        } else {
+        // start the EntryActivity to make sure the user gets logged in
         startActivityForResult(EntryActivity.startWithIntent(this), 100);
+//        }
     }
 
+    /**
+     * This may only be called when the user successfully logged in or already was logged in
+     */
     private void startAddPoem() {
         startActivityForResult(AddPoemActivity.startWithIntent(this), 101);
     }

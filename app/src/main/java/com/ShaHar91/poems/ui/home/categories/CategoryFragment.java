@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Category;
 import com.shahar91.poems.ui.base.BaseActivity;
@@ -24,8 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -35,15 +32,12 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     @BindView(R.id.rvCategories)
     RecyclerView rvCategories;
 
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
-
     private CategoryAdapter adapter;
 
     @Override
     protected CategoryComponent createComponent() {
         return DaggerCategoryComponent.builder()
-                .applicationComponent(((MyApp) requireActivity().getApplication()).getAppComponent())
+                .applicationComponent(appComponent())
                 .build();
     }
 
@@ -90,7 +84,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     private void initViews() {
         //toolbar
         toolbar.setTitle("Categories");
-        configureToolbar(toolbar, null, null);
+        configureToolbar(toolbar, null);
 
         adapter = new CategoryAdapter(getActivity(), this::handleClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

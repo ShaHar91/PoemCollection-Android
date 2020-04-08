@@ -5,21 +5,26 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.injection.ApplicationComponent;
 import com.shahar91.poems.ui.base.BaseFragment;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C extends BaseGoogleComponent<VM>> extends BaseFragment {
+    @Inject
+    public ViewModelProvider.Factory viewModelFactory;
+
     protected VM viewModel;
     protected C component;
     private AppCompatActivity parentActivity;
@@ -35,7 +40,7 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
         compositeDisposable = new CompositeDisposable();
         component = createComponent();
 
-        parentActivity = (AppCompatActivity) getActivity();
+        parentActivity = (AppCompatActivity) requireActivity();
     }
 
     @Override
@@ -44,8 +49,11 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
         super.onDestroy();
     }
 
+    protected void configureToolbar(Toolbar toolbar, Integer color) {
+        configureToolbar(toolbar, color, true);
+    }
 
-    protected void configureToolbar(Toolbar toolbar, View toolbarIcon, Integer color) {
+    protected void configureToolbar(Toolbar toolbar, Integer color, boolean showTitle) {
         parentActivity.setSupportActionBar(toolbar);
 
         boolean showBackIcon = getArguments() != null && getArguments().getBoolean(SHOW_BACK_ICON);
@@ -57,14 +65,15 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
                 if (color != null) {
                     toolbar.getNavigationIcon().setColorFilter(color, PorterDuff.Mode.SRC_IN);
                 }
+
+                if (!showTitle) {
+                    toolbar.setTitle(null);
+                }
             }
             toolbar.setNavigationOnClickListener(v -> parentActivity.onBackPressed());
         }
-
-        if (toolbarIcon != null) {
-            toolbarIcon.setVisibility(showBackIcon ? View.GONE : View.VISIBLE);
-        }
     }
+
 
     public void tintMenuIcons(Menu menu, int color) {
         for (int i = 0; i < menu.size(); i++) {
@@ -108,7 +117,7 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
     }
 
     protected ApplicationComponent appComponent() {
-        return ((MyApp) getActivity().getApplication()).getAppComponent();
+        return ((MyApp) requireActivity().getApplication()).getAppComponent();
     }
 
 }

@@ -95,7 +95,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     private void initViews() {
         //toolbar
         toolbar.setTitle(requireArguments().getString(CATEGORY_NAME, ""));
-        configureToolbar(toolbar, null, ContextCompat.getColor(requireActivity(), R.color.colorWhite));
+        configureToolbar(toolbar, ContextCompat.getColor(requireActivity(), R.color.colorWhite));
 
         adapter = new PoemsPerCategoryListAdapter(requireActivity(), this::handleClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
