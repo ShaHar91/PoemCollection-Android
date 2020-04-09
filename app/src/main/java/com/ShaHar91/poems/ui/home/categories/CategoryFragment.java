@@ -27,6 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, CategoryComponent> {
+    private static final String TAG_POEMS_LIST = "TagPoemsList";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.rvCategories)
@@ -96,7 +98,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     private void handleClick(Category category) {
         PoemsPerCategoryListFragment poemsPerCategoryListFragment = PoemsPerCategoryListFragment.newInstance(true, category);
 
-        ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemsPerCategoryListFragment, "someTag", true);
+        ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemsPerCategoryListFragment, TAG_POEMS_LIST, true);
     }
 
     @Override

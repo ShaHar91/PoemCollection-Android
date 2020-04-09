@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.AppBarLayout
 import com.shahar91.poems.R
+import com.shahar91.poems.extensions.snackBar
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*
@@ -62,14 +63,21 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(EntryViewModel::class.java)
 
-        showLoginFragment(savedInstanceState)
-        loginFragment.listeners = entryListeners
+        initToolbar()
 
-        tbEntry.setNavigationOnClickListener { onBackPressed() }
-        setSupportActionBar(tbEntry)
-        setAppBarLayoutListener()
+        showLoginFragment(savedInstanceState)
     }
 
+    private fun initToolbar() {
+        setSupportActionBar(tbEntry)
+        setAppBarLayoutListener()
+        // This navigationListener should be after the actionBar has been set
+        tbEntry.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    /**
+     * The toolbar title should only be filled when the toolbar is collapsed.
+     */
     private fun setAppBarLayoutListener() {
         var isShow = true
         var scrollRange = -1
@@ -91,10 +99,17 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
         if (savedInstanceState == null) {
             replaceFragment(R.id.flEntryContainer, loginFragment, TAG_LOGIN, false)
         } else {
+            Timber.tag("FragmentByTag").d("Find Login Fragment By Tag")
             loginFragment = supportFragmentManager.findFragmentByTag(TAG_LOGIN) as LoginFragment
         }
+        loginFragment.listeners = entryListeners
     }
 
+    /**
+     * Set a custom icon for Up-navigation depending on login or register fragment being active
+     *
+     * @param icNavigationBack icon identifier to be set in the toolbar
+     */
     fun setHomeUpIcon(icNavigationBack: Int) {
         supportActionBar?.setHomeAsUpIndicator(
             ContextCompat.getDrawable(this, icNavigationBack)?.apply {

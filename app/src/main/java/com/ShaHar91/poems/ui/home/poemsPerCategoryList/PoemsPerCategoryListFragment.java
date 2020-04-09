@@ -30,6 +30,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCategoryListViewModel, PoemsPerCategoryListComponent> {
+    private static final String TAG_POEM = "TagPoem";
+
     private static final String CATEGORY_ID = "CATEGORY_ID";
     private static final String CATEGORY_NAME = "CATEGORY_NAME";
 
@@ -107,7 +109,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     private void handleClick(int poemId) {
         PoemFragment poemFragment = PoemFragment.newInstance(true, poemId);
 
-        ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemFragment, "someTag", true);
+        ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemFragment, TAG_POEM, true);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.shahar91.poems.Constants;
 import com.shahar91.poems.R;
 import com.shahar91.poems.ui.add.AddPoemActivity;
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
@@ -15,6 +16,7 @@ import com.shahar91.poems.ui.home.categories.CategoryFragment;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeComponent> {
     private static final String TAG_CATEGORIES = "TagCategories";
@@ -26,7 +28,7 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
 //            startAddPoem();
 //        } else {
         // start the EntryActivity to make sure the user gets logged in
-        startActivityForResult(EntryActivity.startWithIntent(this), 100);
+        startActivityForResult(EntryActivity.startWithIntent(this), Constants.REQUEST_CODE_NEW_USER);
 //        }
     }
 
@@ -34,10 +36,10 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
      * This may only be called when the user successfully logged in or already was logged in
      */
     private void startAddPoem() {
-        startActivityForResult(AddPoemActivity.startWithIntent(this), 101);
+        startActivityForResult(AddPoemActivity.startWithIntent(this), Constants.REQUEST_CODE_ADD_POEM);
     }
 
-    CategoryFragment categoryFragment;
+    CategoryFragment categoryFragment = CategoryFragment.newInstance(false);
 
     public static void start(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -66,18 +68,28 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
 
     private void showCategoryFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            categoryFragment = CategoryFragment.newInstance(false);
             replaceFragment(R.id.flHomeContainer, categoryFragment, TAG_CATEGORIES, false);
         } else {
+            Timber.tag("FragmentByTag").d("Find Category Fragment By Tag");
             categoryFragment = (CategoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_CATEGORIES);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 100) {
-            if (resultCode == RESULT_OK) {
-                startAddPoem();
+        switch (requestCode) {
+            case Constants.REQUEST_CODE_NEW_USER: {
+                if (resultCode == RESULT_OK) {
+                    // A user has been logged in successfully
+                    startAddPoem();
+                }
+                break;
+            }
+            case Constants.REQUEST_CODE_ADD_POEM: {
+                if (resultCode == RESULT_OK) {
+                    // TODO: a new poem has been added successfully
+                }
+                break;
             }
         }
 

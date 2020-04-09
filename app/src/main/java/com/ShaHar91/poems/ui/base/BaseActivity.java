@@ -2,6 +2,7 @@ package com.shahar91.poems.ui.base;
 
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -39,11 +40,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void configureToolbar(Toolbar toolbar, boolean showBackIcon, @StringRes int toolbarTitleRes) {
+        configureToolbar(toolbar, showBackIcon, toolbarTitleRes, R.drawable.ic_navigation_back);
+    }
+
+    protected void configureToolbar(Toolbar toolbar, boolean showBackIcon, @StringRes int toolbarTitleRes, @DrawableRes int drawableRes) {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(toolbarTitleRes);
         if (showBackIcon) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
+            getSupportActionBar().setHomeAsUpIndicator(drawableRes);
             toolbar.setNavigationOnClickListener(v -> onToolbarNavigationIconClicked());
         }
     }

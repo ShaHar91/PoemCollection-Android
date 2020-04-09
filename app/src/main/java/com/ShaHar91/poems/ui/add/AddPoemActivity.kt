@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
+import kotlinx.android.synthetic.main.toolbar.*
 
 class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemComponent>() {
     companion object {
@@ -31,7 +32,12 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         setContentView(R.layout.activity_add_poem)
 
         component.inject(this)
-
         viewModel = ViewModelProvider(this, viewModelFactory).get(AddPoemViewModel::class.java)
+
+        initViews()
+    }
+
+    private fun initViews() {
+        configureToolbar(toolbar, true, R.string.app_name, R.drawable.ic_close)
     }
 }
