@@ -11,11 +11,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.injection.ApplicationComponent;
 import com.shahar91.poems.ui.base.BaseFragment;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -120,4 +122,15 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
         return ((MyApp) requireActivity().getApplication()).getAppComponent();
     }
 
+    /**
+     * Set an error on the inputLayout,
+     * in case the #error is null the layout should be reset
+     *
+     * @param inputLayout The inputLayout on which the error will be set
+     * @param error       The error message which will be set on the inputLayout
+     */
+    protected void setError(TextInputLayout inputLayout, @Nullable String error) {
+        inputLayout.setError(error);
+        inputLayout.setErrorEnabled(error != null);
+    }
 }

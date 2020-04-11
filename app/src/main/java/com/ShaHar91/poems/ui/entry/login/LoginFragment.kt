@@ -2,11 +2,14 @@ package com.shahar91.poems.ui.entry.login
 
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputLayout
+import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.BaseActivity
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
@@ -42,7 +45,7 @@ class LoginFragment : BaseGoogleFragment<LoginViewModel, LoginComponent>() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
 
-        btnLogin.setOnClickListener { listeners.onLoginClicked() }
+        btnLogin.setOnClickListener { checkToLogin() }
         btnLoginFacebook.setOnClickListener { listeners.onFacebookClicked() }
         btnLoginGoogle.setOnClickListener { listeners.onGoogleClicked() }
 
@@ -54,6 +57,33 @@ class LoginFragment : BaseGoogleFragment<LoginViewModel, LoginComponent>() {
         }
 
         (requireActivity() as EntryActivity).setHomeUpIcon(R.drawable.ic_close)
+    }
+
+    private fun checkToLogin() {
+        // Reset both input fields
+        setError(tilEmail, null)
+        setError(tilPassword, null)
+
+        var isValid = true
+        val emailText = tilEmail.editText?.text ?: ""
+        val passwordText = tilPassword.editText?.text ?: ""
+
+        if (viewModel.checkDataValidity(emailText.toString(), Patterns.EMAIL_ADDRESS)) {
+            // Email is not valid, show error on emailEditText
+            setError(tilEmail, "Please fill in a valid email")
+            isValid = false
+        }
+
+        if (viewModel.checkDataValidity(passwordText.toString(), Constants.PASSWORD_PATTERN)) {
+            // Password is not valid, show error on passwordEditText
+            setError(tilPassword, "Please fill in a password with at least 6 characters")
+            isValid = false
+        }
+
+        if (isValid) {
+            //TODO: do the actual login call to the backend, if successful logged in call this listener!!
+            listeners.onLoginClicked()
+        }
     }
 
     companion object {

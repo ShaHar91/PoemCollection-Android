@@ -6,6 +6,8 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.shahar91.poems.redux.AppState;
 import com.yheriatovych.reductor.Store;
 
+import java.util.regex.Pattern;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -35,5 +37,9 @@ public abstract class BaseGoogleViewModel extends ViewModel {
         if (registration != null) {
             registration.remove();
         }
+    }
+
+    public boolean checkDataValidity(String inputText, Pattern pattern) {
+        return inputText.trim().isEmpty() || !pattern.matcher(inputText).matches();
     }
 }

@@ -14,7 +14,6 @@ import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*
 import timber.log.Timber
 
-
 class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>() {
     private var loginFragment: LoginFragment = LoginFragment.newInstance(false)
 
@@ -66,6 +65,8 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
         initToolbar()
 
         showLoginFragment(savedInstanceState)
+
+        //TODO: when softKeyboard opens, resize full screen to not be behind the keyboard!!!
     }
 
     private fun initToolbar() {
