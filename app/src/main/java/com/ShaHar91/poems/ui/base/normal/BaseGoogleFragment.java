@@ -121,16 +121,4 @@ public abstract class BaseGoogleFragment<VM extends BaseGoogleViewModel, C exten
     protected ApplicationComponent appComponent() {
         return ((MyApp) requireActivity().getApplication()).getAppComponent();
     }
-
-    /**
-     * Set an error on the inputLayout,
-     * in case the #error is null the layout should be reset
-     *
-     * @param inputLayout The inputLayout on which the error will be set
-     * @param error       The error message which will be set on the inputLayout
-     */
-    protected void setError(TextInputLayout inputLayout, @Nullable String error) {
-        inputLayout.setError(error);
-        inputLayout.setErrorEnabled(error != null);
-    }
 }

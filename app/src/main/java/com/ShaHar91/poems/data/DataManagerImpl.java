@@ -2,6 +2,7 @@ package com.shahar91.poems.data;
 
 import com.shahar91.poems.data.models.Category;
 import com.shahar91.poems.data.models.Poem;
+import com.shahar91.poems.data.models.User;
 
 import java.util.List;
 
@@ -17,6 +18,14 @@ public class DataManagerImpl implements DataManager {
     @Inject
     DataManagerImpl() {
 
+    }
+
+    @Override
+    public Observable<User> getUser() {
+        return Observable.create(emitter -> {
+            User user = realm.where(User.class).findFirst();
+            emitter.onNext(user);
+        });
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,5 +59,11 @@ public class DataManagerImpl implements DataManager {
             Poem poem = realm.where(Poem.class).equalTo("poemId", poemId).findFirst();
             emitter.onNext(poem);
         });
+    }
+
+    @Override
+    public Observable<Poem> saveNewPoem() {
+
+        return null;
     }
 }

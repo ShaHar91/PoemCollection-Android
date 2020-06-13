@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.shahar91.poems.R;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -81,5 +82,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         transaction.commit();
+    }
+
+    /**
+     * Set an error on the inputLayout,
+     * in case the #error is null the layout should be reset
+     *
+     * @param inputLayout The inputLayout on which the error will be set
+     * @param error       The error message which will be set on the inputLayout
+     */
+    protected void setError(TextInputLayout inputLayout, @javax.annotation.Nullable String error) {
+        inputLayout.setError(error);
+        inputLayout.setErrorEnabled(error != null);
     }
 }

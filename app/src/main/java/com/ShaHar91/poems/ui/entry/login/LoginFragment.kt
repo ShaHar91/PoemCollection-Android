@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputLayout
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
+import com.shahar91.poems.extensions.setErrorLayout
 import com.shahar91.poems.ui.base.BaseActivity
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
 import com.shahar91.poems.ui.entry.EntryActivity
@@ -61,8 +61,8 @@ class LoginFragment : BaseGoogleFragment<LoginViewModel, LoginComponent>() {
 
     private fun checkToLogin() {
         // Reset both input fields
-        setError(tilEmail, null)
-        setError(tilPassword, null)
+        tilEmail.setErrorLayout(null)
+        tilPassword.setErrorLayout(null)
 
         var isValid = true
         val emailText = tilEmail.editText?.text ?: ""
@@ -70,13 +70,13 @@ class LoginFragment : BaseGoogleFragment<LoginViewModel, LoginComponent>() {
 
         if (viewModel.checkDataValidity(emailText.toString(), Patterns.EMAIL_ADDRESS)) {
             // Email is not valid, show error on emailEditText
-            setError(tilEmail, "Please fill in a valid email")
+            tilEmail.setErrorLayout("Please fill in a valid email")
             isValid = false
         }
 
         if (viewModel.checkDataValidity(passwordText.toString(), Constants.PASSWORD_PATTERN)) {
             // Password is not valid, show error on passwordEditText
-            setError(tilPassword, "Please fill in a password with at least 6 characters")
+            tilPassword.setErrorLayout("Please fill in a password with at least 6 characters")
             isValid = false
         }
 
