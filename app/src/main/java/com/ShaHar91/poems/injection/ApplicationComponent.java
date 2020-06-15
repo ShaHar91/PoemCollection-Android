@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.shahar91.poems.data.DataManager;
 import com.shahar91.poems.injection.module.ApplicationModule;
 import com.shahar91.poems.injection.module.NetworkModule;

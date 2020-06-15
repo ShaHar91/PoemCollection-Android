@@ -5,9 +5,9 @@ import io.realm.Realm
 
 class InitialRealmData : Realm.Transaction {
     override fun execute(realm: Realm) {
-        realm.deleteAll()
-
-        realm.createOrUpdateAllFromJson(Poem::class.java, getPoemsAsString())
+//        realm.deleteAll()
+//
+//        realm.createOrUpdateAllFromJson(Poem::class.java, getPoemsAsString())
     }
 
     private fun getPoemsAsString(): String {

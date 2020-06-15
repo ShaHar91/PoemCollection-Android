@@ -25,9 +25,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
+import be.appwise.core.extensions.logging.LoggingExtensionsKt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,13 +44,19 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
     ViewModelProvider.Factory viewModelFactory;
 
     private PoemDetailAdapterController controller;
+    private final PoemDetailAdapterController.Listener poemDetailAdapterControllerListener = new PoemDetailAdapterController.Listener() {
+        @Override
+        public void onRatingBarTouched(float rating) {
+            //TODO: show review dialog!!
+            LoggingExtensionsKt.logd(null, "onRatingBarTouched %f, %s", rating, controller.getCurrentData());
+        }
 
-    @Override
-    protected PoemComponent createComponent() {
-        return DaggerPoemComponent.builder()
-                .applicationComponent(appComponent())
-                .build();
-    }
+        @Override
+        public void onOwnReviewClicked(Review review) {
+            //TODO: show review dialog to edit!!
+            LoggingExtensionsKt.logd(null, "onOwnReviewClicked %s", review);
+        }
+    };
 
     public static PoemFragment newInstance(boolean showBackIcon, int poemId) {
         PoemFragment fragment = new PoemFragment();
@@ -59,6 +65,13 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         args.putInt(POEM_ID, poemId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected PoemComponent createComponent() {
+        return DaggerPoemComponent.builder()
+                .applicationComponent(appComponent())
+                .build();
     }
 
     @Override
@@ -86,7 +99,7 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
 
         initViews();
 
-        addDisposable(viewModel.getPoem().subscribe(this::showPoem, Timber::e));
+        addDisposable(viewModel.getPoem().subscribe(this::showPoem, throwable -> LoggingExtensionsKt.loge(null, throwable, "")));
     }
 
     private void initViews() {
@@ -116,18 +129,4 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         viewModel.stopListeningForChangesInBackend();
         viewModel.resetPoem();
     }
-
-    private final PoemDetailAdapterController.Listener poemDetailAdapterControllerListener = new PoemDetailAdapterController.Listener() {
-        @Override
-        public void onRatingBarTouched(float rating) {
-            //TODO: show review dialog!!
-            Timber.d("onRatingBarTouched %f, %s", rating, controller.getCurrentData());
-        }
-
-        @Override
-        public void onOwnReviewClicked(Review review) {
-            //TODO: show review dialog to edit!!
-            Timber.d("onOwnReviewClicked %s", review);
-        }
-    };
 }

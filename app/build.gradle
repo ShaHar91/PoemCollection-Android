@@ -1,10 +1,15 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 apply plugin: 'realm-android'
+
+// define build version
+def versionMajor = 1
+def versionMinor = 3
+def versionPatch = 0
+def versionBuild = 0
 
 android {
     compileSdkVersion 29
@@ -12,9 +17,34 @@ android {
         applicationId "com.shahar91.poems"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+
+        // generate versionCode and versionName from defined major, minor, versionPatch, versionBuild
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
+        flavorDimensions "versionCode"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    productFlavors {
+        dev {
+            buildConfigField "String", "API_HOST", "\"http://10.0.2.2:5000/api/v1/\""
+            resValue "string", "LOGOUT_ACTION_NAME2", "be.appwise.overtime.dev.logout"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            manifestPlaceholders = [logout_action_name: applicationId + ".logout"]
+        }
+        stg {
+            buildConfigField "String", "API_HOST", "\"http://10.0.2.2:5000/api/v1/\""
+            resValue "string", "LOGOUT_ACTION_NAME2", "be.appwise.overtime.dev.logout"
+            applicationIdSuffix ".stg"
+            versionNameSuffix "-stg"
+            manifestPlaceholders = [logout_action_name: applicationId + ".logout"]
+        }
+        prod {
+            buildConfigField "String", "API_HOST", "\"http://10.0.2.2:5000/api/v1/\""
+            resValue "string", "LOGOUT_ACTION_NAME2", "be.appwise.overtime.dev.logout"
+            manifestPlaceholders = [logout_action_name: applicationId + ".logout"]
+        }
     }
     buildTypes {
         release {
@@ -34,6 +64,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':core')
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -88,9 +120,6 @@ dependencies {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     implementation 'com.google.dagger:dagger:2.27'
     kapt 'com.google.dagger:dagger-compiler:2.22'
-
-    // Logging
-    implementation "com.jakewharton.timber:timber:4.7.1"
 
     // Butterknife
     implementation 'com.jakewharton:butterknife:10.2.1'

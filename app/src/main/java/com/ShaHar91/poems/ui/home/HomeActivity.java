@@ -14,9 +14,9 @@ import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity;
 import com.shahar91.poems.ui.entry.EntryActivity;
 import com.shahar91.poems.ui.home.categories.CategoryFragment;
 
+import be.appwise.core.extensions.logging.LoggingExtensionsKt;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeComponent> {
     private static final String TAG_CATEGORIES = "TagCategories";
@@ -70,7 +70,7 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
         if (savedInstanceState == null) {
             replaceFragment(R.id.flHomeContainer, categoryFragment, TAG_CATEGORIES, false);
         } else {
-            Timber.tag("FragmentByTag").d("Find Category Fragment By Tag");
+            LoggingExtensionsKt.logd("FragmentByTag", "Find Category Fragment By Tag");
             categoryFragment = (CategoryFragment) getSupportFragmentManager().findFragmentByTag(TAG_CATEGORIES);
         }
     }

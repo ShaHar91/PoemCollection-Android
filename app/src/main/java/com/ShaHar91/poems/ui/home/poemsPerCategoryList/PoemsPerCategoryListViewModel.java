@@ -1,7 +1,10 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList;
 
+import androidx.annotation.NonNull;
+
 import com.shahar91.poems.data.DataManager;
 import com.shahar91.poems.data.models.Poem;
+import com.shahar91.poems.data.repositories.PoemRepository;
 import com.shahar91.poems.redux.AppState;
 import com.shahar91.poems.redux.state.ViewState;
 import com.shahar91.poems.ui.base.normal.BaseGoogleViewModel;
@@ -15,7 +18,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import be.appwise.core.extensions.logging.LoggingExtensionsKt;
 import io.reactivex.Observable;
+import kotlin.Unit;
+import timber.log.Timber;
 
 public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
     private final DataManager dataManager;
@@ -26,11 +32,19 @@ public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
         this.dataManager = dataManager;
     }
 
-    public void registerPoemsPerCategoryQuery(int categoryId) {
-        addDisposable(dataManager.getPoemsPerCategories(categoryId).subscribe(poems -> {
-            PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
-            store.dispatch(poemsPerCategoryListActions.setPoemsPerCategoryList(poems));
-        }));
+    public void registerPoemsPerCategoryQuery(@NonNull String categoryId) {
+        PoemRepository.getPoems(() -> {
+            LoggingExtensionsKt.logd(null, "");
+            return Unit.INSTANCE;
+        }, throwable -> {
+            LoggingExtensionsKt.loge(null, throwable, "");
+            return Unit.INSTANCE;
+        });
+
+//        addDisposable(dataManager.getPoemsPerCategories(categoryId).subscribe(poems -> {
+//            PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
+//            store.dispatch(poemsPerCategoryListActions.setPoemsPerCategoryList(poems));
+//        }));
     }
 
     public Observable<List<Poem>> getPoemsPerCategory() {

@@ -56,7 +56,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         PoemsPerCategoryListFragment fragment = new PoemsPerCategoryListFragment();
         Bundle args = new Bundle();
         args.putBoolean(SHOW_BACK_ICON, showBackIcon);
-        args.putInt(CATEGORY_ID, category.getCategoryId());
+        args.putString(CATEGORY_ID, category.getCategoryId());
         args.putString(CATEGORY_NAME, category.getName());
         fragment.setArguments(args);
         return fragment;
@@ -116,7 +116,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
     public void onResume() {
         super.onResume();
 
-        viewModel.registerPoemsPerCategoryQuery(requireArguments().getInt(CATEGORY_ID, 0));
+        viewModel.registerPoemsPerCategoryQuery(requireArguments().getString(CATEGORY_ID, ""));
     }
 
     @Override
