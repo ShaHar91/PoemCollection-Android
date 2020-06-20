@@ -17,8 +17,12 @@ import com.shahar91.poems.ui.base.list.BaseViewHolder;
 import butterknife.BindView;
 
 
-public class CategoryAdapter extends BaseAdapter<Category, BaseInteractionListener, BaseViewHolder<Category, BaseInteractionListener>> {
+public class CategoryAdapter extends BaseAdapter<Category, CategoryAdapter.CategoryInteractionListener, BaseViewHolder<Category, CategoryAdapter.CategoryInteractionListener>> {
     private final CategoryInteractionListener listener;
+
+    public interface CategoryInteractionListener {
+        void onCategoryClicked(Category category);
+    }
 
     public CategoryAdapter(Context context, CategoryInteractionListener listener) {
         super(context);
@@ -33,11 +37,11 @@ public class CategoryAdapter extends BaseAdapter<Category, BaseInteractionListen
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder<Category, BaseInteractionListener> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<Category, CategoryInteractionListener> holder, int position) {
         holder.bind(position, getItem(position), listener);
     }
 
-    static class CategoryViewHolder extends BaseViewHolder<Category, BaseInteractionListener> {
+    static class CategoryViewHolder extends BaseViewHolder<Category, CategoryInteractionListener> {
         @BindView(R.id.categoryTv)
         TextView categoryTv;
 
@@ -46,12 +50,10 @@ public class CategoryAdapter extends BaseAdapter<Category, BaseInteractionListen
         }
 
         @Override
-        public void bind(int position, Category item, BaseInteractionListener baseInteractionListener) {
-            CategoryInteractionListener listener = (CategoryInteractionListener) baseInteractionListener;
-
+        public void bind(int position, Category item, CategoryInteractionListener baseInteractionListener) {
             categoryTv.setText(item.getName());
 
-            itemView.setOnClickListener(view -> listener.onCategoryClicked(item));
+            itemView.setOnClickListener(view -> baseInteractionListener.onCategoryClicked(item));
         }
     }
 

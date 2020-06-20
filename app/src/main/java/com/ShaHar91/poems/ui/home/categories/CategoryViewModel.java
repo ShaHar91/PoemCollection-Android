@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.categories;
 
-import com.shahar91.poems.data.DataManager;
 import com.shahar91.poems.data.models.Category;
 import com.shahar91.poems.data.repositories.CategoryRepository;
 import com.shahar91.poems.redux.AppState;
@@ -17,37 +16,31 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import be.appwise.core.extensions.logging.LoggingExtensionsKt;
 import io.reactivex.Observable;
 import kotlin.Unit;
 
 public class CategoryViewModel extends BaseGoogleViewModel {
-    private final DataManager dataManager;
 
     @Inject
-    CategoryViewModel(Store<AppState> store,
-                      DataManager dataManager) {
+    CategoryViewModel(Store<AppState> store) {
         super(store);
-        this.dataManager = dataManager;
     }
 
-    public void registerCategoryQuery() {
+    public void getAllCategories() {
         CategoryRepository.getCategories(categories -> {
             CategoryActions categoryActions = Actions.from(CategoryActions.class);
             store.dispatch(categoryActions.setCategoryList(new ArrayList<>(categories)));
 
             return Unit.INSTANCE;
         }, throwable -> {
+            throwable.printStackTrace();
+            LoggingExtensionsKt.loge(null, throwable, "");
             return Unit.INSTANCE;
         });
-
-//        addDisposable(dataManager.getCategories()
-//                .subscribe(categories -> {
-//                    CategoryActions categoryActions = Actions.from(CategoryActions.class);
-//                    store.dispatch(categoryActions.setCategoryList(categories));
-//                }));
     }
 
-    public Observable<List<Category>> getCategories() {
+    public Observable<List<Category>> categoriesStateListener() {
         Observable<AppState> store = RxStore.asObservable(this.store);
         return store.map(AppState::viewState)
                 .map(ViewState::categoryState)

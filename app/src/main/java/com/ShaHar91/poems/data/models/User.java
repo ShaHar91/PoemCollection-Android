@@ -7,28 +7,28 @@ import io.realm.annotations.PrimaryKey;
 
 public class User extends RealmObject {
     @PrimaryKey
-    private int userId;
+    private String _id;
     private String email;
-    private String fullName;
+    private String username;
     @Nullable
     private String pictureUrl;
 
     public User() {
     }
 
-    public User(int userId, String email, String fullName, @Nullable String pictureUrl) {
-        this.userId = userId;
+    public User(String _id, String email, String username, @Nullable String pictureUrl) {
+        this._id = _id;
         this.email = email;
-        this.fullName = fullName;
+        this.username = username;
         this.pictureUrl = pictureUrl;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getId() {
+        return _id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(String _id) {
+        this._id = _id;
     }
 
     public String getEmail() {
@@ -39,15 +39,16 @@ public class User extends RealmObject {
         this.email = email;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public @Nullable String getPictureUrl() {
+    @Nullable
+    public String getPictureUrl() {
         return pictureUrl;
     }
 

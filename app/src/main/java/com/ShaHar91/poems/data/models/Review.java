@@ -1,33 +1,55 @@
 package com.shahar91.poems.data.models;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Review extends RealmObject {
     @PrimaryKey
-    private int reviewId;
+    private String _id;
+    private String title;
+    private String text;
     private float rating;
-    private String body;
-    private long createdAt;
+    private Date createdAt;
+    private Poem poem;
     private User user;
 
     public Review() {
     }
 
-    public Review(int reviewId, float rating, String body, long createdAt, User user) {
-        this.reviewId = reviewId;
+    public Review(String _id, String title, String text, float rating, Date createdAt, Poem poem, User user) {
+        this._id = _id;
+        this.title = title;
+        this.text = text;
         this.rating = rating;
-        this.body = body;
         this.createdAt = createdAt;
+        this.poem = poem;
         this.user = user;
     }
 
-    public int getReviewId() {
-        return reviewId;
+    public String getId() {
+        return _id;
     }
 
-    public void setReviewId(int reviewId) {
-        this.reviewId = reviewId;
+    public void setId(String _id) {
+        this._id = _id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public float getRating() {
@@ -38,20 +60,20 @@ public class Review extends RealmObject {
         this.rating = rating;
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public long getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(long createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Poem getPoem() {
+        return poem;
+    }
+
+    public void setPoem(Poem poem) {
+        this.poem = poem;
     }
 
     public User getUser() {

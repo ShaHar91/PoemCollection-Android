@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import com.shahar91.poems.data.DataManager;
 import com.shahar91.poems.injection.module.ApplicationModule;
 import com.shahar91.poems.injection.module.NetworkModule;
 import com.shahar91.poems.injection.module.ReduxModule;
@@ -29,6 +28,4 @@ public interface ApplicationComponent {
     ViewModelProvider.Factory viewModelFactory();
 
     Store<AppState> store();
-
-    DataManager dataManager();
 }

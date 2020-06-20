@@ -12,5 +12,5 @@ open class  NetworkResponse <N> {
     @Expose
     var pagination: Any? = null
     @Expose
-    var data: List<N> = emptyList()
+    var data: N? = null
 }

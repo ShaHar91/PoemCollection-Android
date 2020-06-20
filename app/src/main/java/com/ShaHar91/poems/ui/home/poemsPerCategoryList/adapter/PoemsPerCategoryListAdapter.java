@@ -11,13 +11,17 @@ import androidx.annotation.NonNull;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Poem;
 import com.shahar91.poems.ui.base.list.BaseAdapter;
-import com.shahar91.poems.ui.base.list.BaseInteractionListener;
 import com.shahar91.poems.ui.base.list.BaseViewHolder;
 
 import butterknife.BindView;
 
-public class PoemsPerCategoryListAdapter extends BaseAdapter<Poem, BaseInteractionListener, BaseViewHolder<Poem, BaseInteractionListener>> {
+public class PoemsPerCategoryListAdapter extends BaseAdapter<Poem, PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener,
+        BaseViewHolder<Poem, PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener>> {
     private final PoemsPerCategoryListInteractionListener listener;
+
+    public interface PoemsPerCategoryListInteractionListener {
+        void onPoemClicked(String poemId);
+    }
 
     public PoemsPerCategoryListAdapter(Context context, PoemsPerCategoryListInteractionListener listener) {
         super(context);
@@ -32,11 +36,11 @@ public class PoemsPerCategoryListAdapter extends BaseAdapter<Poem, BaseInteracti
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder<Poem, BaseInteractionListener> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<Poem, PoemsPerCategoryListInteractionListener> holder, int position) {
         holder.bind(position, getItem(position), listener);
     }
 
-    static class PoemsPerCategoryListViewHolder extends BaseViewHolder<Poem, BaseInteractionListener> {
+    static class PoemsPerCategoryListViewHolder extends BaseViewHolder<Poem, PoemsPerCategoryListInteractionListener> {
         @BindView(R.id.titleTv)
         TextView titleTv;
         @BindView(R.id.writerTv)
@@ -47,13 +51,11 @@ public class PoemsPerCategoryListAdapter extends BaseAdapter<Poem, BaseInteracti
         }
 
         @Override
-        public void bind(int position, Poem item, BaseInteractionListener baseInteractionListener) {
-            PoemsPerCategoryListInteractionListener listener = (PoemsPerCategoryListInteractionListener) baseInteractionListener;
-
+        public void bind(int position, Poem item, PoemsPerCategoryListInteractionListener baseInteractionListener) {
             titleTv.setText(item.getTitle());
-            writerTv.setText(item.getWriter().getFullName());
+            writerTv.setText(item.getUser().getUsername());
 
-            itemView.setOnClickListener(view -> listener.onPoemClicked(item.getPoemId()));
+            itemView.setOnClickListener(view -> baseInteractionListener.onPoemClicked(item.getId()));
         }
     }
 }

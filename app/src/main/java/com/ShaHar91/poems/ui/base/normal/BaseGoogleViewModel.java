@@ -2,7 +2,6 @@ package com.shahar91.poems.ui.base.normal;
 
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.firestore.ListenerRegistration;
 import com.shahar91.poems.redux.AppState;
 import com.yheriatovych.reductor.Store;
 
@@ -17,7 +16,6 @@ import io.reactivex.disposables.Disposable;
 public abstract class BaseGoogleViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     protected final Store<AppState> store;
-    protected ListenerRegistration registration;
 
     public BaseGoogleViewModel(Store<AppState> store) {
         this.store = store;
@@ -27,16 +25,6 @@ public abstract class BaseGoogleViewModel extends ViewModel {
     protected void onCleared() {
         super.onCleared();
         compositeDisposable.dispose();
-    }
-
-    protected void addDisposable(Disposable disposable) {
-        compositeDisposable.add(disposable);
-    }
-
-    public void stopListeningForChangesInBackend() {
-        if (registration != null) {
-            registration.remove();
-        }
     }
 
     public boolean checkDataValidity(String inputText, Pattern pattern) {

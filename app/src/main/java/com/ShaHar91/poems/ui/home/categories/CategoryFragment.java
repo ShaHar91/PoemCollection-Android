@@ -76,22 +76,18 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
 
         initViews();
 
-        addDisposable(viewModel.getCategories().subscribe(this::showCategories, Throwable::printStackTrace));
-    }
+        addDisposable(viewModel.categoriesStateListener().subscribe(categories -> adapter.setItems(categories), Throwable::printStackTrace));
 
-    private void showCategories(List<Category> categoryList) {
-        adapter.setItems(categoryList);
+        viewModel.getAllCategories();
     }
 
     private void initViews() {
-        //toolbar
+        // TODO: extract static text to resources
         toolbar.setTitle("Categories");
         configureToolbar(toolbar, null);
 
-        adapter = new CategoryAdapter(getActivity(), this::handleClick);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        rvCategories.setLayoutManager(linearLayoutManager);
-
+        adapter = new CategoryAdapter(requireActivity(), this::handleClick);
+        rvCategories.setLayoutManager(new LinearLayoutManager(requireActivity()));
         rvCategories.setAdapter(adapter);
     }
 
@@ -99,19 +95,5 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
         PoemsPerCategoryListFragment poemsPerCategoryListFragment = PoemsPerCategoryListFragment.newInstance(true, category);
 
         ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemsPerCategoryListFragment, TAG_POEMS_LIST, true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        viewModel.registerCategoryQuery();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        viewModel.stopListeningForChangesInBackend();
     }
 }

@@ -4,11 +4,20 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.shahar91.poems.data.models.Poem;
+import com.shahar91.poems.data.models.Review;
+
+import java.util.List;
 
 @AutoValue
 public abstract class PoemState {
     @Nullable
     public abstract Poem poem();
+
+    @Nullable
+    public abstract List<Review> reviews();
+
+    @Nullable
+    public abstract Review ownReview();
 
     public static Builder builder() { return new AutoValue_PoemState.Builder(); }
 
@@ -17,6 +26,10 @@ public abstract class PoemState {
     @AutoValue.Builder
     public abstract static class Builder{
         public abstract Builder setPoem(Poem poem);
+
+        public abstract Builder setReviews(List<Review> reviews);
+
+        public abstract Builder setOwnReview(Review ownReview);
 
         public abstract PoemState build();
     }

@@ -1,5 +1,6 @@
 package com.shahar91.poems.ui.home.poem.adapter
 
+import be.appwise.core.extensions.logging.logd
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -16,10 +17,10 @@ abstract class PoemDetailDataModel : EpoxyModelWithHolder<KotlinEpoxyHolder>() {
 
     override fun bind(holder: KotlinEpoxyHolder) {
         holder.view.apply {
-            Timber.tag("POEM_SOMETHING").v(poem.toString())
+            logd("POEM_SOMETHING", poem.toString())
             tvPoemTitle.text = poem.title
             tvPoem.text = poem.body
-            tvWriterPoemDetail.text = poem.writer.fullName
+            tvWriterPoemDetail.text = poem.user.username
         }
     }
 }

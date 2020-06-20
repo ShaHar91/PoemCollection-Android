@@ -56,7 +56,7 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         PoemsPerCategoryListFragment fragment = new PoemsPerCategoryListFragment();
         Bundle args = new Bundle();
         args.putBoolean(SHOW_BACK_ICON, showBackIcon);
-        args.putString(CATEGORY_ID, category.getCategoryId());
+        args.putString(CATEGORY_ID, category.getId());
         args.putString(CATEGORY_NAME, category.getName());
         fragment.setArguments(args);
         return fragment;
@@ -87,11 +87,9 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
 
         initViews();
 
-        addDisposable(viewModel.getPoemsPerCategory().subscribe(this::showPoemsPerCategory));
-    }
+        addDisposable(viewModel.poemsPerCategoryStateListener().subscribe(poems -> adapter.setItems(poems), Throwable::printStackTrace));
 
-    private void showPoemsPerCategory(List<Poem> poemsPerCategories) {
-        adapter.setItems(poemsPerCategories);
+        viewModel.getAllPoemsPerCategory(requireArguments().getString(CATEGORY_ID, ""));
     }
 
     private void initViews() {
@@ -100,30 +98,20 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
         configureToolbar(toolbar, ContextCompat.getColor(requireActivity(), R.color.colorWhite));
 
         adapter = new PoemsPerCategoryListAdapter(requireActivity(), this::handleClick);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
-        rvPoemsPerCategory.setLayoutManager(linearLayoutManager);
-
+        rvPoemsPerCategory.setLayoutManager(new LinearLayoutManager(requireActivity()));
         rvPoemsPerCategory.setAdapter(adapter);
     }
 
-    private void handleClick(int poemId) {
+    private void handleClick(String poemId) {
         PoemFragment poemFragment = PoemFragment.newInstance(true, poemId);
 
         ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemFragment, TAG_POEM, true);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        viewModel.registerPoemsPerCategoryQuery(requireArguments().getString(CATEGORY_ID, ""));
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
-        viewModel.stopListeningForChangesInBackend();
         viewModel.resetPoemsPerCategoryList();
     }
 }

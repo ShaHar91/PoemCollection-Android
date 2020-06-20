@@ -1,30 +1,27 @@
 package com.shahar91.poems.data.models;
 
-import com.google.gson.annotations.SerializedName;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Category extends RealmObject {
     @PrimaryKey
-    @SerializedName("_id")
-    private String categoryId;
+    private String _id;
     private String name;
 
     public Category() {
     }
 
-    public Category(String categoryId, String name) {
-        this.categoryId = categoryId;
+    public Category(String _id, String name) {
+        this._id = _id;
         this.name = name;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public String getId() {
+        return _id;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setId(String _id) {
+        this._id = _id;
     }
 
     public String getName() {

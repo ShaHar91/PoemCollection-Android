@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="14dp"
     android:layout_marginTop="12dp"
     android:layout_marginEnd="14dp"
     android:layout_marginBottom="12dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
     android:orientation="vertical"
     app:cardBackgroundColor="@color/colorWhite">
 
@@ -19,28 +17,29 @@
         android:layout_margin="12dp">
 
         <TextView
-            android:id="@+id/tvOwnReviewTitle"
+            android:id="@+id/tvReviewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your review"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Your review" />
 
         <com.shahar91.poems.ui.custom.ReviewHeader
             android:id="@+id/rhUserHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/tvOwnReviewTitle" />
+            app:layout_constraintTop_toBottomOf="@id/tvReviewTitle" />
 
         <TextView
+            android:id="@+id/tvReviewBody"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="No idea. Just do what I do: hold tight and pretend it's a plan. Yes, well, it's a brilliant noise. I love that noise. There are fixed points throughout time where things must stay exactly the way they are. This ..."
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rhUserHeader" />
+            app:layout_constraintTop_toBottomOf="@id/rhUserHeader"
+            tools:text="No idea. Just do what I do: hold tight and pretend it's a plan. Yes, well, it's a brilliant noise. I love that noise. There are fixed points throughout time where things must stay exactly the way they are. This ..." />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

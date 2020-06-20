@@ -3,8 +3,6 @@ package com.shahar91.poems.injection.module;
 import android.content.Context;
 
 import com.shahar91.poems.MyApp;
-import com.shahar91.poems.data.DataManager;
-import com.shahar91.poems.data.DataManagerImpl;
 import com.shahar91.poems.injection.qualifier.ApplicationContext;
 import com.shahar91.poems.injection.scope.ApplicationScope;
 
@@ -24,11 +22,5 @@ public class ApplicationModule {
     @Provides
     Context provideApplicationContext() {
         return myApp;
-    }
-
-    @ApplicationScope
-    @Provides
-    DataManager provideDataManager(DataManagerImpl dataManager) {
-        return dataManager;
     }
 }

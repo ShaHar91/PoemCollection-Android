@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.poem;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shahar91.poems.R;
-import com.shahar91.poems.data.models.Poem;
 import com.shahar91.poems.data.models.Review;
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment;
 import com.shahar91.poems.ui.home.poem.adapter.PoemDetailAdapterController;
+import com.shahar91.poems.ui.home.poem.redux.PoemState;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +27,7 @@ import javax.inject.Inject;
 import be.appwise.core.extensions.logging.LoggingExtensionsKt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,21 +48,21 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         @Override
         public void onRatingBarTouched(float rating) {
             //TODO: show review dialog!!
-            LoggingExtensionsKt.logd(null, "onRatingBarTouched %f, %s", rating, controller.getCurrentData());
+//            LoggingExtensionsKt.logd(null, "onRatingBarTouched %f, %s", rating, controller.getCurrentData());
         }
 
         @Override
-        public void onOwnReviewClicked(Review review) {
+        public void onEditReviewClicked(Review review) {
             //TODO: show review dialog to edit!!
-            LoggingExtensionsKt.logd(null, "onOwnReviewClicked %s", review);
+            LoggingExtensionsKt.logd(null, "onEditReviewClicked %s", review);
         }
     };
 
-    public static PoemFragment newInstance(boolean showBackIcon, int poemId) {
+    public static PoemFragment newInstance(boolean showBackIcon, String poemId) {
         PoemFragment fragment = new PoemFragment();
         Bundle args = new Bundle();
         args.putBoolean(SHOW_BACK_ICON, showBackIcon);
-        args.putInt(POEM_ID, poemId);
+        args.putString(POEM_ID, poemId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -99,7 +99,11 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
 
         initViews();
 
-        addDisposable(viewModel.getPoem().subscribe(this::showPoem, throwable -> LoggingExtensionsKt.loge(null, throwable, "")));
+        addDisposable(viewModel.getPoem()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showPoem, Throwable::printStackTrace));
+
+        viewModel.getPoemAndAllReviews(requireArguments().getString(POEM_ID, ""));
     }
 
     private void initViews() {
@@ -111,22 +115,17 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         rvPoemDetails.setAdapter(controller.getAdapter());
     }
 
-    private void showPoem(Poem poem) {
-        controller.setData(poem);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        viewModel.registerPoemQuery(requireArguments().getInt(POEM_ID, -1));
+    private void showPoem(PoemState poemState) {
+        if (poemState.poem() != null) {
+            controller.setData(poemState.poem(), poemState.ownReview());
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        viewModel.stopListeningForChangesInBackend();
+//        viewModel.stopListeningForChangesInBackend();
         viewModel.resetPoem();
     }
 }
