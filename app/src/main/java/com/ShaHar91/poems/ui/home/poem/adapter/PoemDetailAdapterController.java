@@ -61,7 +61,7 @@ public class PoemDetailAdapterController extends Typed2EpoxyController<Poem, Rev
                     .totalRatingCount(poem.getTotalRatingCount())
                     .addTo(this);
 
-            // TODO: only retrieve the 5 top reviews... create new screen to see a paged list of all reviews!!!
+            // TODO: only retrieve the 5 top reviews...(DONE) create new screen to see a paged list of all reviews!!! (TODO)
             for (Review review: poem.getShortReviewList()) {
                 new PoemReviewModel_()
                         .id(review.getId())

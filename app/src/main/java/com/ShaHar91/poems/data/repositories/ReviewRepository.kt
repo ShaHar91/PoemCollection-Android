@@ -25,7 +25,7 @@ object ReviewRepository : BaseRepository() {
     }
 
     @JvmStatic
-    fun getOwnReviewForPoem(poemId: String, userId: String, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
+    fun getOwnReviewForPoem(poemId: String, userId: String?, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
         addCall(ApiCallsManager.getOwnReviewForPoem(poemId, userId).observeOn(AndroidSchedulers.mainThread()).subscribe({
             if (it.data != null) {
                 reviewDao.createOrUpdateAllFromJson(Review::class.java, it.data!!.toString())

@@ -47,7 +47,9 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
     private final PoemDetailAdapterController.Listener poemDetailAdapterControllerListener = new PoemDetailAdapterController.Listener() {
         @Override
         public void onRatingBarTouched(float rating) {
-            //TODO: show review dialog!!
+            //TODO: check if user is logged in, if not -> show login activity else show dialog!!
+            //TODO: if user logs in -> check if user already has a review for this poem
+            //TODO: if user already has a review -> update the ui to show that review!!
 //            LoggingExtensionsKt.logd(null, "onRatingBarTouched %f, %s", rating, controller.getCurrentData());
         }
 

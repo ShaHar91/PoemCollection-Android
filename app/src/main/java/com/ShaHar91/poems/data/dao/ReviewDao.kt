@@ -22,7 +22,7 @@ class ReviewDao(db: Realm) : BaseDao<Review>(db) {
         return where().equalTo(ReviewFields.POEM._ID, poemId).findAll()
     }
 
-    fun findReviewForPoemByUserId(poemId: String, userId: String): Review? {
+    fun findReviewForPoemByUserId(poemId: String, userId: String?): Review? {
         return where().equalTo(ReviewFields.POEM._ID, poemId).and().equalTo(ReviewFields.USER._ID, userId).findFirst()
     }
 }

@@ -11,7 +11,7 @@ object ApiCallsManager {
     fun getAllPoems(categoryId: String) = Networking.doCallRx(unprotected?.getPoems(categoryId)!!)
 
     @JvmStatic
-    fun getPoemById(poemId: String, userId: String) = Networking.doCallRx(unprotected?.getPoemById(poemId, userId)!!)
+    fun getPoemById(poemId: String, userId: String?) = Networking.doCallRx(unprotected?.getPoemById(poemId, userId)!!)
 
     @JvmStatic
     fun getAllCategories() = Networking.doCallRx(unprotected?.getCategories()!!)
@@ -20,5 +20,11 @@ object ApiCallsManager {
     fun getAllReviewsForPoem(poemId: String) = Networking.doCallRx(unprotected?.getReviewsByPoemId(poemId, 1)!!)
 
     @JvmStatic
-    fun getOwnReviewForPoem(poemId: String, userId: String) = Networking.doCallRx(unprotected?.getOwnReviewForPoem(poemId, userId)!!)
+    fun getOwnReviewForPoem(poemId: String, userId: String?) = Networking.doCallRx(unprotected?.getOwnReviewForPoem(poemId, userId)!!)
+
+    @JvmStatic
+    fun loginUser(email: String, password: String) = Networking.doCallRx(unprotected?.loginUser(email, password)!!)
+
+    @JvmStatic
+    fun getCurrentUser() = Networking.doCallRx(protected?.getCurrentUser()!!)
 }

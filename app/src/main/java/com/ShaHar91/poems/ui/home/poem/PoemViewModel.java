@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.poem;
 
-import com.shahar91.poems.data.models.Poem;
 import com.shahar91.poems.data.repositories.PoemRepository;
 import com.shahar91.poems.data.repositories.ReviewRepository;
 import com.shahar91.poems.redux.AppState;
@@ -13,13 +12,9 @@ import com.yheriatovych.reductor.Actions;
 import com.yheriatovych.reductor.Store;
 import com.yheriatovych.reductor.rxjava2.RxStore;
 
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import be.appwise.core.extensions.logging.LoggingExtensionsKt;
-import be.appwise.core.networking.Networking;
 import io.reactivex.Observable;
 import kotlin.Unit;
 
@@ -30,8 +25,6 @@ public class PoemViewModel extends BaseGoogleViewModel {
     }
 
     public void getPoemAndAllReviews(String poemId) {
-        HawkUtils.setHawkCurrentUserId("5eea1713c4af2208821c8a25");
-
         PoemRepository.getPoemById(poemId, HawkUtils.getHawkCurrentUserId(), poem -> {
             PoemActions poemActions = Actions.from(PoemActions.class);
             store.dispatch(poemActions.setPoem(poem));
@@ -42,8 +35,7 @@ public class PoemViewModel extends BaseGoogleViewModel {
             return Unit.INSTANCE;
         });
 
-
-        if (!HawkUtils.getHawkCurrentUserId().isEmpty()) {
+        if (HawkUtils.getHawkCurrentUserId() != null && !HawkUtils.getHawkCurrentUserId().isEmpty()) {
             ReviewRepository.getOwnReviewForPoem(poemId, HawkUtils.getHawkCurrentUserId(), review -> {
                 PoemActions poemActions = Actions.from(PoemActions.class);
                 store.dispatch(poemActions.setOwnReview(review));

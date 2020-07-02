@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import com.shahar91.poems.ui.base.BaseActivity;
-//TODO: check if there is a 'javax' variant
 
 public abstract class BaseMobileActivity<VM extends BaseViewModel, C extends BaseComponent<VM>>
         extends BaseActivity {

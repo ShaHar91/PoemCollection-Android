@@ -15,21 +15,28 @@ import com.shahar91.poems.ui.entry.EntryActivity;
 import com.shahar91.poems.ui.home.categories.CategoryFragment;
 
 import be.appwise.core.extensions.logging.LoggingExtensionsKt;
+import be.appwise.core.networking.Networking;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeComponent> {
     private static final String TAG_CATEGORIES = "TagCategories";
+    CategoryFragment categoryFragment = CategoryFragment.newInstance(false);
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        context.startActivity(intent);
+    }
 
     @OnClick(R.id.fabAddPoem)
     void fabAddPoemClicked() {
         //TODO: check if user is logged in, if is logged in ==> startAddPoem()
-//        if (isLoggedIn) {
-//            startAddPoem();
-//        } else {
-        // start the EntryActivity to make sure the user gets logged in
-        startActivityForResult(EntryActivity.startWithIntent(this), Constants.REQUEST_CODE_NEW_USER);
-//        }
+        if (Networking.isLoggedIn()) {
+            startAddPoem();
+        } else {
+            // start the EntryActivity to make sure the user gets logged in
+            startActivityForResult(EntryActivity.startWithIntent(this), Constants.REQUEST_CODE_NEW_USER);
+        }
     }
 
     /**
@@ -37,13 +44,6 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
      */
     private void startAddPoem() {
         startActivityForResult(AddPoemActivity.startWithIntent(this), Constants.REQUEST_CODE_ADD_POEM);
-    }
-
-    CategoryFragment categoryFragment = CategoryFragment.newInstance(false);
-
-    public static void start(Context context) {
-        Intent intent = new Intent(context, HomeActivity.class);
-        context.startActivity(intent);
     }
 
     @Override

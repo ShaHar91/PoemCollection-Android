@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.AppBarLayout
 import com.shahar91.poems.R
-import com.shahar91.poems.extensions.snackBar
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*

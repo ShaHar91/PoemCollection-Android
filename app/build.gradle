@@ -6,10 +6,10 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
 // define build version
-def versionMajor = 1
-def versionMinor = 3
+def versionMajor = 0
+def versionMinor = 0
 def versionPatch = 0
-def versionBuild = 0
+def versionBuild = 1
 
 android {
     compileSdkVersion 29
@@ -28,22 +28,16 @@ android {
     productFlavors {
         dev {
             buildConfigField "String", "API_HOST", "\"http://10.0.2.2:5000/api/v1/\""
-            resValue "string", "LOGOUT_ACTION_NAME2", "be.appwise.overtime.dev.logout"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
-            manifestPlaceholders = [logout_action_name: applicationId + ".logout"]
         }
         stg {
-            buildConfigField "String", "API_HOST", "\"http://10.0.2.2:5000/api/v1/\""
-            resValue "string", "LOGOUT_ACTION_NAME2", "be.appwise.overtime.dev.logout"
+            buildConfigField "String", "API_HOST", "\"http://192.168.0.245:5000/api/v1/\""
             applicationIdSuffix ".stg"
             versionNameSuffix "-stg"
-            manifestPlaceholders = [logout_action_name: applicationId + ".logout"]
         }
         prod {
             buildConfigField "String", "API_HOST", "\"http://10.0.2.2:5000/api/v1/\""
-            resValue "string", "LOGOUT_ACTION_NAME2", "be.appwise.overtime.dev.logout"
-            manifestPlaceholders = [logout_action_name: applicationId + ".logout"]
         }
     }
     buildTypes {

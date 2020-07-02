@@ -24,7 +24,7 @@ object PoemRepository : BaseRepository() {
     }
 
     @JvmStatic
-    fun getPoemById(poemId: String, userId: String, onSuccess: (Poem?) -> Unit, onError: (Throwable) -> Unit) {
+    fun getPoemById(poemId: String, userId: String?, onSuccess: (Poem?) -> Unit, onError: (Throwable) -> Unit) {
         addCall(ApiCallsManager.getPoemById(poemId, userId).observeOn(AndroidSchedulers.mainThread()).subscribe({
             if (it.data != null) {
                 poemDao.copyOrUpdate(it.data!!)
