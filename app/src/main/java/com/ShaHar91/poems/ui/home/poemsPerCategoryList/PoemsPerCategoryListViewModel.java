@@ -49,13 +49,4 @@ public class PoemsPerCategoryListViewModel extends BaseGoogleViewModel {
                 .map(PoemsPerCategoryListState::poemsPerCategoryList)
                 .distinctUntilChanged();
     }
-
-    /**
-     * Don't exactly know why this was needed
-     * Could be disable to test certain conditions
-     */
-    public void resetPoemsPerCategoryList() {
-        PoemsPerCategoryListActions poemsPerCategoryListActions = Actions.from(PoemsPerCategoryListActions.class);
-        store.dispatch(poemsPerCategoryListActions.reset());
-    }
 }

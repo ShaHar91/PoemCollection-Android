@@ -19,13 +19,26 @@ import io.reactivex.Observable;
 import kotlin.Unit;
 
 public class PoemViewModel extends BaseGoogleViewModel {
+    private String poemId;
+
     @Inject
     PoemViewModel(Store<AppState> store) {
         super(store);
     }
 
-    public void getPoemAndAllReviews(String poemId) {
-        PoemRepository.getPoemById(poemId, HawkUtils.getHawkCurrentUserId(), poem -> {
+    public void init(String poemId) {
+        this.poemId = poemId;
+    }
+
+    public Observable<PoemState> getPoem() {
+        Observable<AppState> store = RxStore.asObservable(this.store);
+        return store.map(AppState::viewState)
+                .map(ViewState::poemState)
+                .distinctUntilChanged();
+    }
+
+    public void getPoemAndAllReviews() {
+        PoemRepository.getPoemById(this.poemId, HawkUtils.getHawkCurrentUserId(), poem -> {
             PoemActions poemActions = Actions.from(PoemActions.class);
             store.dispatch(poemActions.setPoem(poem));
 
@@ -36,7 +49,7 @@ public class PoemViewModel extends BaseGoogleViewModel {
         });
 
         if (HawkUtils.getHawkCurrentUserId() != null && !HawkUtils.getHawkCurrentUserId().isEmpty()) {
-            ReviewRepository.getOwnReviewForPoem(poemId, HawkUtils.getHawkCurrentUserId(), review -> {
+            ReviewRepository.getOwnReviewForPoem(this.poemId, HawkUtils.getHawkCurrentUserId(), review -> {
                 PoemActions poemActions = Actions.from(PoemActions.class);
                 store.dispatch(poemActions.setOwnReview(review));
 
@@ -46,13 +59,6 @@ public class PoemViewModel extends BaseGoogleViewModel {
                 return Unit.INSTANCE;
             });
         }
-    }
-
-    public Observable<PoemState> getPoem() {
-        Observable<AppState> store = RxStore.asObservable(this.store);
-        return store.map(AppState::viewState)
-                .map(ViewState::poemState)
-                .distinctUntilChanged();
     }
 
     public void resetPoem() {

@@ -64,4 +64,30 @@
         <item name="android:progressTint">@color/colorPrimary</item>
     </style>
 
+    <!--<editor-fold desc="Write or edit a review dialog">-->
+    <style name="MaterialAlertDialog.Review" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.Review.Dialog.Style</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Review.Title.Style</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Review.Dialog.Style" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/MaterialAlertDialog.Review.Dialog.Appearance</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Review.Dialog.Appearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Review.Title.Style" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <!-- This is the details of the "TextAppearance.MaterialComponents.Headline6"-->
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0.0125</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+    <!--</editor-fold>-->
 </resources>

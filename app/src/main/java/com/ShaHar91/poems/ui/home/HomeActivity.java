@@ -30,7 +30,6 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
 
     @OnClick(R.id.fabAddPoem)
     void fabAddPoemClicked() {
-        //TODO: check if user is logged in, if is logged in ==> startAddPoem()
         if (Networking.isLoggedIn()) {
             startAddPoem();
         } else {

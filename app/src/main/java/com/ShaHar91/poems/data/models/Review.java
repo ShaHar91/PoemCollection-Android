@@ -8,7 +8,6 @@ import io.realm.annotations.PrimaryKey;
 public class Review extends RealmObject {
     @PrimaryKey
     private String _id;
-    private String title;
     private String text;
     private float rating;
     private Date createdAt;
@@ -18,9 +17,8 @@ public class Review extends RealmObject {
     public Review() {
     }
 
-    public Review(String _id, String title, String text, float rating, Date createdAt, Poem poem, User user) {
+    public Review(String _id, String text, float rating, Date createdAt, Poem poem, User user) {
         this._id = _id;
-        this.title = title;
         this.text = text;
         this.rating = rating;
         this.createdAt = createdAt;
@@ -34,14 +32,6 @@ public class Review extends RealmObject {
 
     public void setId(String _id) {
         this._id = _id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getText() {

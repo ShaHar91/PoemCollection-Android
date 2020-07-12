@@ -107,11 +107,4 @@ public class PoemsPerCategoryListFragment extends BaseGoogleFragment<PoemsPerCat
 
         ((BaseActivity) requireActivity()).replaceFragment(R.id.flHomeContainer, poemFragment, TAG_POEM, true);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        viewModel.resetPoemsPerCategoryList();
-    }
 }
