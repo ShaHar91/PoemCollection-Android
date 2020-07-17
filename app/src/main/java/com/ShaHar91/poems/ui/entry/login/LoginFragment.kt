@@ -5,14 +5,11 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import be.appwise.core.extensions.fragment.hideKeyboard
 import be.appwise.core.extensions.fragment.snackBar
-import be.appwise.core.extensions.logging.loge
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.extensions.setErrorLayout
+import be.appwise.core.extensions.view.setErrorLayout
 import com.shahar91.poems.ui.base.BaseActivity
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
 import com.shahar91.poems.ui.entry.EntryActivity
@@ -70,13 +67,13 @@ class LoginFragment : BaseGoogleFragment<LoginViewModel, LoginComponent>() {
 
         if (viewModel.checkDataValidity(emailText, Patterns.EMAIL_ADDRESS)) {
             // Email is not valid, show error on emailEditText
-            tilEmail.setErrorLayout("Please fill in a valid email")
+            tilEmail.setErrorLayout(getString(R.string.entry_invalid_email))
             isValid = false
         }
 
         if (viewModel.checkDataValidity(passwordText, Constants.PASSWORD_PATTERN)) {
             // Password is not valid, show error on passwordEditText
-            tilPassword.setErrorLayout("Please fill in a password with at least 6 characters")
+            tilPassword.setErrorLayout(getString(R.string.entry_invalid_password))
             isValid = false
         }
 

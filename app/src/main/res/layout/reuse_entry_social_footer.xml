@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="or"
+        android:text="@string/common_or"
         app:layout_constraintEnd_toStartOf="@id/viewDividerEnd"
         app:layout_constraintStart_toEndOf="@id/viewDividerStart"
         app:layout_constraintTop_toBottomOf="@+id/tvLoginOrRegister" />
@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/entry_button_height"
         android:layout_marginTop="12dp"
-        android:text="Google"
+        android:text="@string/common_google"
         android:textColor="@color/colorBlack_1000"
         app:backgroundTint="@color/colorWhite"
         app:icon="@drawable/ic_google"
@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/entry_button_height"
         android:layout_marginTop="8dp"
-        android:text="Facebook"
+        android:text="@string/common_facebook"
         app:backgroundTint="#4868AD"
         app:icon="@drawable/ic_facebook"
         app:layout_constraintTop_toBottomOf="@id/btnLoginGoogle" />

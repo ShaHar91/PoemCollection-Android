@@ -39,5 +39,4 @@ class ReviewHeader(context: Context, attrs: AttributeSet) :
     fun setImage(url: String?, initials: String, color: Int) {
         ivUserImage.setImage(url, initials, color)
     }
-
 }

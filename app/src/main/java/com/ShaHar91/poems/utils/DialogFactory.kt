@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import be.appwise.core.extensions.activity.snackBar
 import be.appwise.core.extensions.view.optionalCallbacks
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shahar91.poems.R
@@ -35,36 +36,40 @@ class DialogFactory {
             val dialogRatingBar = dialogView.rbReviewDialog
             val dialogReviewEditText = dialogView.tilReviewBody.editText
 
-            dialogRatingBar.rbReviewDialog.rating = review?.rating ?: (rating ?: 0f)
+            // fill in starting values
+            dialogRatingBar.rating = review?.rating ?: (rating ?: 0f)
             dialogReviewEditText?.setText(review?.text ?: "")
 
             // instantiate the dialog
             val dialog = MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialog_Review)
-                .setTitle(if (review != null) "Edit a review" else "Write a review")
                 .setView(dialogView)
+                .setTitle(if (review != null) activity.getString(R.string.dialog_review_title_edit) else activity.getString(R.string.dialog_review_title_create))
                 .setCancelable(false)
-                .setPositiveButton("ok", null)
-                .setNegativeButton("cancel", null)
+                .setPositiveButton(activity.getString(R.string.common_ok), null)
+                .setNegativeButton(activity.getString(R.string.common_cancel), null)
                 .show()
 
             // custom validation and handling the Positive Button clicks
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).apply {
+                // starting state for the button
                 isEnabled = !dialogReviewEditText?.text?.toString().isNullOrBlank()
 
                 setOnClickListener {
-                    val newReviewText = dialogReviewEditText?.text?.toString()
+                    val newReviewText = dialogReviewEditText?.text?.toString() ?: ""
 
                     // No need for to make a call to the backend when both new values are unchanged
-                    if (review != null && newReviewText?.textEqualTo(review.text) == true && dialogRatingBar?.rating?.equals(review.rating) == true){
+                    if (review != null && newReviewText.textEqualTo(review.text) && dialogRatingBar.rating.equals(review.rating)) {
                         dialog.dismiss()
                         return@setOnClickListener
                     }
 
-                    if (!newReviewText.isNullOrBlank()) {
-                        saveReviewCallback(review?.id, newReviewText, dialogRatingBar.rating)
-                        dialog.dismiss()
+                    if (dialogRatingBar.rating < 1) {
+                        activity.snackBar("At least a rating of 1 is required")
                         return@setOnClickListener
                     }
+
+                    saveReviewCallback(review?.id, newReviewText, dialogRatingBar.rating)
+                    dialog.dismiss()
                 }
             }
 

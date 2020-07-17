@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import be.appwise.core.extensions.logging.logd
 import com.google.android.material.appbar.AppBarLayout
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
@@ -24,7 +25,7 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
 
         override fun onRegisterClicked() {
             Timber.tag("entryListeners").d("onRegisterClicked")
-            finishThisActivity(Activity.RESULT_CANCELED)
+            finishThisActivity(Activity.RESULT_OK)
         }
 
         override fun onGoogleClicked() {
@@ -89,7 +90,7 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
                 collapsing_toolbar.title = resources.getString(R.string.app_name)
                 isShow = true
             } else if (isShow) {
-                collapsing_toolbar.title = " " //careful there should a space between double quote otherwise it wont work
+                collapsing_toolbar.title = " " //careful, there should a space between double quote otherwise this hack wont work
                 isShow = false
             }
         })
@@ -99,7 +100,7 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
         if (savedInstanceState == null) {
             replaceFragment(R.id.flEntryContainer, loginFragment, TAG_LOGIN, false)
         } else {
-            Timber.tag("FragmentByTag").d("Find Login Fragment By Tag")
+            logd("FragmentByTag", "Find Login Fragment By Tag")
             loginFragment = supportFragmentManager.findFragmentByTag(TAG_LOGIN) as LoginFragment
         }
         loginFragment.listeners = entryListeners

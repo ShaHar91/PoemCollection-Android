@@ -19,7 +19,7 @@
             android:id="@+id/tvNoReviewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Rate this poem"
+            android:text="@string/no_review_rate_poem_title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +27,7 @@
             android:id="@+id/tvNoReviewBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tell others what you think"
+            android:text="@string/no_review_rate_poem_body"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintTop_toBottomOf="@id/tvNoReviewTitle" />
 
@@ -39,6 +39,7 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="18dp"
+            android:stepSize="1"
             android:numStars="5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

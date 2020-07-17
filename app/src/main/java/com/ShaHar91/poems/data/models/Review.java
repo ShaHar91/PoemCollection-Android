@@ -1,5 +1,7 @@
 package com.shahar91.poems.data.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
 import io.realm.RealmObject;
@@ -15,6 +17,10 @@ public class Review extends RealmObject {
     private User user;
 
     public Review() {
+    }
+
+    public static Review createNewReview(@NonNull Review review) {
+        return new Review(review.getId(), review.getText(), review.getRating(), review.getCreatedAt(), review.getPoem(), review.getUser());
     }
 
     public Review(String _id, String text, float rating, Date createdAt, Poem poem, User user) {

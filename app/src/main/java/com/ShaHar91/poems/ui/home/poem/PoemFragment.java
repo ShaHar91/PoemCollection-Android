@@ -62,6 +62,7 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
             //TODO: check if user is logged in, if not -> show login activity else show dialog!!
             if (Networking.isLoggedIn()) {
                 DialogFactory.showDialogToAddReview(requireActivity(), rating, (reviewId, newReviewText, newRating) -> {
+                    viewModel.saveOrUpdateReview(reviewId, newReviewText, newRating);
                     return Unit.INSTANCE;
                 });
             } else {
@@ -76,8 +77,14 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         @Override
         public void onEditReviewClicked(Review review) {
             DialogFactory.showDialogToEditReview(requireActivity(), review, (reviewId, newReviewText, newRating) -> {
+                viewModel.saveOrUpdateReview(reviewId, newReviewText, newRating);
                 return Unit.INSTANCE;
             });
+        }
+
+        @Override
+        public void onDeleteReviewClicked(String reviewId) {
+            viewModel.deleteReview(reviewId);
         }
     };
 

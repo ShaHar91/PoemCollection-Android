@@ -1,8 +1,6 @@
 package com.shahar91.poems.networking
 
-import com.google.gson.JsonArray
 import com.google.gson.annotations.Expose
-import io.realm.RealmList
 
 open class  NetworkResponse <N> {
     @Expose

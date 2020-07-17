@@ -20,6 +20,8 @@ public class PoemDetailAdapterController extends Typed2EpoxyController<Poem, Rev
         void onRatingBarTouched(float rating);
 
         void onEditReviewClicked(Review review);
+
+        void onDeleteReviewClicked(String reviewId);
     }
 
     @AutoModel
@@ -80,6 +82,11 @@ public class PoemDetailAdapterController extends Typed2EpoxyController<Poem, Rev
     @Override
     public void onEditReviewClicked(@NotNull Review review) {
         listener.onEditReviewClicked(review);
+    }
+
+    @Override
+    public void onDeleteReviewClicked(@NotNull String reviewId) {
+        listener.onDeleteReviewClicked(reviewId);
     }
 }
 

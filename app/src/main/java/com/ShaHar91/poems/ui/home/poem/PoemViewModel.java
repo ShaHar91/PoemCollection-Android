@@ -38,7 +38,7 @@ public class PoemViewModel extends BaseGoogleViewModel {
     }
 
     public void getPoemAndAllReviews() {
-        PoemRepository.getPoemById(this.poemId, HawkUtils.getHawkCurrentUserId(), poem -> {
+        PoemRepository.getPoemById(this.poemId, poem -> {
             PoemActions poemActions = Actions.from(PoemActions.class);
             store.dispatch(poemActions.setPoem(poem));
 
@@ -49,7 +49,7 @@ public class PoemViewModel extends BaseGoogleViewModel {
         });
 
         if (HawkUtils.getHawkCurrentUserId() != null && !HawkUtils.getHawkCurrentUserId().isEmpty()) {
-            ReviewRepository.getOwnReviewForPoem(this.poemId, HawkUtils.getHawkCurrentUserId(), review -> {
+            ReviewRepository.getOwnReviewForPoem(this.poemId, review -> {
                 PoemActions poemActions = Actions.from(PoemActions.class);
                 store.dispatch(poemActions.setOwnReview(review));
 
@@ -59,6 +59,44 @@ public class PoemViewModel extends BaseGoogleViewModel {
                 return Unit.INSTANCE;
             });
         }
+    }
+
+    public void saveOrUpdateReview(String reviewId, String newReviewText, float newRating) {
+        if (reviewId != null) {
+            // Update review
+            ReviewRepository.updateReview(poemId, reviewId, newReviewText, newRating, review -> {
+                PoemActions poemActions = Actions.from(PoemActions.class);
+                store.dispatch(poemActions.setOwnReview(review));
+
+                return Unit.INSTANCE;
+            }, throwable -> {
+                LoggingExtensionsKt.loge(null, throwable, "");
+                return Unit.INSTANCE;
+            });
+        } else {
+            // new review
+            ReviewRepository.createReview(poemId, newReviewText, newRating, review -> {
+                PoemActions poemActions = Actions.from(PoemActions.class);
+                store.dispatch(poemActions.setOwnReview(review));
+
+                return Unit.INSTANCE;
+            }, throwable -> {
+                LoggingExtensionsKt.loge(null, throwable, "");
+                return Unit.INSTANCE;
+            });
+        }
+    }
+
+    public void deleteReview(String reviewId) {
+        ReviewRepository.deleteReview(reviewId, () -> {
+            PoemActions poemActions = Actions.from(PoemActions.class);
+            store.dispatch(poemActions.setOwnReview(null));
+
+            return Unit.INSTANCE;
+        }, throwable -> {
+            LoggingExtensionsKt.loge(null, throwable, "");
+            return Unit.INSTANCE;
+        });
     }
 
     public void resetPoem() {

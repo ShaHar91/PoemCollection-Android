@@ -82,8 +82,7 @@ public class CategoryFragment extends BaseGoogleFragment<CategoryViewModel, Cate
     }
 
     private void initViews() {
-        // TODO: extract static text to resources
-        toolbar.setTitle("Categories");
+        toolbar.setTitle(getString(R.string.categories_toolbar_title));
         configureToolbar(toolbar, null);
 
         adapter = new CategoryAdapter(requireActivity(), this::handleClick);

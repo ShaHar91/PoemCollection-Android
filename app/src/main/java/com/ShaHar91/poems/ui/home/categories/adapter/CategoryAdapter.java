@@ -16,7 +16,6 @@ import com.shahar91.poems.ui.base.list.BaseViewHolder;
 
 import butterknife.BindView;
 
-
 public class CategoryAdapter extends BaseAdapter<Category, CategoryAdapter.CategoryInteractionListener, BaseViewHolder<Category, CategoryAdapter.CategoryInteractionListener>> {
     private final CategoryInteractionListener listener;
 
@@ -56,5 +55,4 @@ public class CategoryAdapter extends BaseAdapter<Category, CategoryAdapter.Categ
             itemView.setOnClickListener(view -> baseInteractionListener.onCategoryClicked(item));
         }
     }
-
 }

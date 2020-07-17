@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import be.appwise.core.extensions.fragment.snackBar
+import be.appwise.core.extensions.view.setErrorLayout
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.extensions.setErrorLayout
 import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.entry.EntryListeners
@@ -57,34 +58,38 @@ class RegisterFragment : BaseGoogleFragment<RegisterViewModel, RegisterComponent
         tilReEnterPassword.setErrorLayout(null)
 
         var isValid = true
-        val usernameText = tilUsername.editText?.text ?: ""
-        val emailText = tilEmail.editText?.text ?: ""
-        val passwordText = tilPassword.editText?.text ?: ""
-        val reEnterPasswordText = tilReEnterPassword.editText?.text ?: ""
+        val usernameText = tilUsername.editText?.text?.toString() ?: ""
+        val emailText = tilEmail.editText?.text?.toString() ?: ""
+        val passwordText = tilPassword.editText?.text?.toString() ?: ""
+        val reEnterPasswordText = tilReEnterPassword.editText?.text?.toString() ?: ""
 
         if (usernameText.isBlank()) {
-            tilUsername.setErrorLayout("Please fill in a valid username")
+            tilUsername.setErrorLayout(getString(R.string.entry_invalid_username))
             isValid = false
         }
 
-        if (viewModel.checkDataValidity(emailText.toString(), Patterns.EMAIL_ADDRESS)) {
-            tilEmail.setErrorLayout("Please fill in a valid email")
+        if (viewModel.checkDataValidity(emailText, Patterns.EMAIL_ADDRESS)) {
+            tilEmail.setErrorLayout(getString(R.string.entry_invalid_email))
             isValid = false
         }
 
-        if (viewModel.checkDataValidity(passwordText.toString(), Constants.PASSWORD_PATTERN)) {
-            tilPassword.setErrorLayout("Please fill in a password with at least 6 characters")
+        if (viewModel.checkDataValidity(passwordText, Constants.PASSWORD_PATTERN)) {
+            tilPassword.setErrorLayout(getString(R.string.entry_invalid_password))
             isValid = false
         }
 
         if (passwordText != reEnterPasswordText) {
-            tilReEnterPassword.setErrorLayout("Please make sure both passwords are the same")
+            tilReEnterPassword.setErrorLayout(getString(R.string.entry_invalid_re_enter_password))
             isValid = false
         }
 
         if (isValid) {
-            //TODO: do the actual register call to the backend, if successful registered call this listener!!
-            listeners.onRegisterClicked()
+            viewModel.registerUser(usernameText, emailText, passwordText,
+                {
+                    listeners.onRegisterClicked()
+                }, {
+                    it.message?.let { message -> snackBar(message) }
+                })
         }
     }
 

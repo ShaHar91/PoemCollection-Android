@@ -1,3 +1,57 @@
 <resources>
     <string name="app_name">Poem Collection</string>
+
+    <!-- Common Strings -->
+    <string name="common_or">or</string>
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_hint_email">Email</string>
+    <string name="common_hint_password">Password</string>
+    <string name="common_hint_username">Username</string>
+    <string name="common_hint_re_enter_password">Re-enter Password</string>
+    <string name="common_no_account_yet">No account yet? Create one here!</string>
+    <string name="common_google" translatable="false">Google</string>
+    <string name="common_facebook" translatable="false">Facebook</string>
+
+    <!-- Categories -->
+    <string name="categories_toolbar_title">Categories</string>
+
+    <!-- Login/Register -->
+    <string name="entry_button_login">Login</string>
+    <string name="entry_invalid_username">Please make sure a username is entered</string>
+    <string name="entry_invalid_email">Please fill in a valid email</string>
+    <string name="entry_invalid_password">Please fill in a password with at least 6 characters</string>
+    <string name="entry_invalid_re_enter_password">Please make sure both passwords are the same</string>
+    <string name="entry_button_register">register</string>
+
+    <!-- Add Poem -->
+    <string name="add_poem_toolbar_title">Poem Collection</string>
+    <string name="add_poem_hint_title">Poem Title</string>
+    <string name="add_poem_hint_body">Fill in the body of your poem</string>
+    <string name="add_poem_required_title">Field is required</string>
+    <string name="add_poem_required_body">Field is required</string>
+    <string name="add_poem_button_save">Save Poem</string>
+
+    <!-- Edit/Create Review Dialog -->
+    <string name="dialog_review_title_create">Write a review</string>
+    <string name="dialog_review_title_edit">Edit your review</string>
+    <string name="dialog_review_hint_body">What is your thought of this poem?</string>
+
+    <!-- Global Rating -->
+    <string name="global_rating_label_five">5</string>
+    <string name="global_rating_label_four">4</string>
+    <string name="global_rating_label_three">3</string>
+    <string name="global_rating_label_two">2</string>
+    <string name="global_rating_label_one">1</string>
+
+    <!-- No Review -->
+    <string name="no_review_rate_poem_title">Rate this poem</string>
+    <string name="no_review_rate_poem_body">Tell others what you think</string>
+
+    <!-- Poem Detail -->
+    <string name="poem_detail_label_writer">Written by:\ </string>
+
+    <!-- Review -->
+    <string name="review_menu_edit">Edit</string>
+    <string name="review_menu_delete">Delete</string>
 </resources>

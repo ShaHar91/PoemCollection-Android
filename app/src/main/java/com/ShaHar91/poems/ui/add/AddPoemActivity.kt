@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import be.appwise.core.extensions.view.setErrorLayout
 import com.shahar91.poems.R
-import com.shahar91.poems.extensions.setErrorLayout
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
 import kotlinx.android.synthetic.main.activity_add_poem.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -40,7 +40,7 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
     }
 
     private fun initViews() {
-        configureToolbar(toolbar, true, R.string.app_name, R.drawable.ic_close)
+        configureToolbar(toolbar, true, R.string.add_poem_toolbar_title, R.drawable.ic_close)
 
         btnSavePoem.setOnClickListener {
             checkToSavePoem()
@@ -56,12 +56,12 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         val poemBody = tilPoemBody.editText?.text ?: ""
 
         if (poemTitle.isBlank()) {
-            tilPoemTitle.setErrorLayout("Field is required")
+            tilPoemTitle.setErrorLayout(getString(R.string.add_poem_required_title))
             isValid = false
         }
 
         if (poemBody.isBlank()) {
-            tilPoemBody.setErrorLayout("Field is required")
+            tilPoemBody.setErrorLayout(getString(R.string.add_poem_required_body))
             isValid = false
         }
 

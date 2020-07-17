@@ -1,7 +1,6 @@
 package com.shahar91.poems.data.repositories
 
 import be.appwise.core.data.base.BaseRepository
-import be.appwise.core.networking.Networking
 import com.shahar91.poems.data.dao.CategoryDao
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.networking.ApiCallsManager
@@ -17,7 +16,12 @@ object CategoryRepository : BaseRepository() {
                 categoryDao.createOrUpdateAllFromJson(Category::class.java, it.data!!.toString())
             }
         }, {
+            // TODO: offline "feature" can be better!!
+            //            if (it.cause is ConnectException) {
+            //                onSuccess(categoryDao.findAllCategories())
+            //            } else {
             onError(it)
+            //            }
         }, {
             onSuccess(categoryDao.findAllCategories())
         }))

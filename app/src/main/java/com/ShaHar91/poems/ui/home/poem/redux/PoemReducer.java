@@ -11,28 +11,37 @@ import java.util.List;
 
 @AutoReducer
 public abstract class PoemReducer implements Reducer<PoemState> {
+    public static PoemReducer create() {
+        return new PoemReducerImpl();
+    }
+
     @AutoReducer.InitialState
-    PoemState initialState(){
+    PoemState initialState() {
         return PoemState.builder().build();
     }
 
     @AutoReducer.Action(value = PoemActions.RESET, from = PoemActions.class)
-    PoemState reset(PoemState state) { return initialState(); }
+    PoemState reset(PoemState state) {
+        return initialState();
+    }
 
-    @AutoReducer.Action(value = PoemActions.SET_POEM,from = PoemActions.class)
-    PoemState setPoem(PoemState state, Poem poem){
+    @AutoReducer.Action(value = PoemActions.SET_POEM, from = PoemActions.class)
+    PoemState setPoem(PoemState state, Poem poem) {
         return state.toBuilder().setPoem(poem).build();
     }
 
-    @AutoReducer.Action(value = PoemActions.SET_REVIEWS,from = PoemActions.class)
-    PoemState setReviews(PoemState state, List<Review> reviews){
+    @AutoReducer.Action(value = PoemActions.SET_REVIEWS, from = PoemActions.class)
+    PoemState setReviews(PoemState state, List<Review> reviews) {
         return state.toBuilder().setReviews(reviews).build();
     }
 
     @AutoReducer.Action(value = PoemActions.SET_OWN_REVIEW, from = PoemActions.class)
-    PoemState setOwnReview(PoemState state, Review review) {
-        return state.toBuilder().setOwnReview(review).build();
+    PoemState setOwnReview(PoemState state, @Nullable Review review) {
+        Review newReviewObject = null;
+        if (review != null) {
+            // This is a hack in order for the Epoxy controller to update the view
+            newReviewObject = Review.createNewReview(review);
+        }
+        return state.toBuilder().setOwnReview(newReviewObject).build();
     }
-
-    public static PoemReducer create() { return new PoemReducerImpl(); }
 }
