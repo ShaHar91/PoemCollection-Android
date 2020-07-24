@@ -46,6 +46,13 @@ interface NewApiManagerService {
     fun getPoemById(
         @Path("id") poemId: String,
         @Query("userId") userId: String?): Call<NetworkResponse<Poem>>
+
+    @FormUrlEncoded
+    @POST("poems")
+    fun createPoem(
+        @Field("title") poemTitle: String,
+        @Field("body") poemBody: String,
+        @Field("categories") categoryList: List<String>): Call<NetworkResponse<Poem>>
     //</editor-fold>
 
     //<editor-fold desc="Reviews">

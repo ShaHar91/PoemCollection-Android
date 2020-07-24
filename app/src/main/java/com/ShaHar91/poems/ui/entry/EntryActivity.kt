@@ -3,6 +3,7 @@ package com.shahar91.poems.ui.entry
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -117,10 +118,5 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
                 setTint(ContextCompat.getColor(this@EntryActivity, R.color.colorWhite))
             }
         )
-    }
-
-    private fun finishThisActivity(resultOk: Int) {
-        setResult(resultOk)
-        finish()
     }
 }

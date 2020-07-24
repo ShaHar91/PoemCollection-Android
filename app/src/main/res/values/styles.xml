@@ -1,5 +1,7 @@
 <resources>
 
+    <!--  TODO: Check out dark theme for the app!!! https://medium.com/@vapoyan/perfectus-dark-theme-910e30a38f25-->
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@color/general_background</item>
@@ -50,7 +52,7 @@
         <item name="android:textColor">@android:color/transparent</item>
     </style>
 
-    <style name="EntryTextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="CommonTextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
         <item name="android:layout_marginTop">6dp</item>

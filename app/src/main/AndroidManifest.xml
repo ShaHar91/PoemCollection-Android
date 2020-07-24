@@ -15,10 +15,15 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.entry.EntryActivity"
+            android:screenOrientation="behind"
             android:theme="@style/AppTheme.Entry" />
-        <activity android:name=".ui.add.AddPoemActivity" />
+        <activity
+            android:name=".ui.add.AddPoemActivity"
+            android:screenOrientation="behind" />
         <activity
             android:name=".ui.landing.LandingActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="behind"
             android:theme="@style/AppTheme.Landing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.home.HomeActivity" />
+        <activity
+            android:name=".ui.home.HomeActivity"
+            android:screenOrientation="behind" />
     </application>
 </manifest>

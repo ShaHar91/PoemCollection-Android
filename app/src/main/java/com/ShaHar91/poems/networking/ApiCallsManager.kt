@@ -15,6 +15,9 @@ object ApiCallsManager {
 
     @JvmStatic
     fun getPoemById(poemId: String, userId: String?) = Networking.doCallRx(unprotected?.getPoemById(poemId, userId)!!)
+
+    @JvmStatic
+    fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) = Networking.doCallRx(protected?.createPoem(poemTitle, poemBody, categoryList)!!)
     //</editor-fold>
 
     //<editor-fold desc="Categories">

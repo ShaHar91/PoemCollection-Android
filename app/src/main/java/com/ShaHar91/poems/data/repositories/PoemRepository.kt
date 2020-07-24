@@ -35,4 +35,17 @@ object PoemRepository : BaseRepository() {
             onSuccess(poemDao.findPoemById(poemId))
         }))
     }
+
+    @JvmStatic
+    fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
+        addCall(ApiCallsManager.createPoem(poemTitle, poemBody, categoryList).observeOn(AndroidSchedulers.mainThread()).subscribe({
+            if (it.data != null) {
+                poemDao.copyOrUpdate(it.data!!)
+            }
+        }, {
+            onError(it)
+        }, {
+            onSuccess()
+        }))
+    }
 }

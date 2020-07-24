@@ -1,9 +1,12 @@
 package com.shahar91.poems.ui.base;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.shahar91.poems.R;
+import com.shahar91.poems.utils.ViewUtils;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -29,6 +33,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         compositeDisposable = new CompositeDisposable();
+
+        if (!isTablet()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (!isTablet()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
     protected void configureToolbar(Toolbar toolbar, boolean showBackIcon) {
@@ -38,6 +54,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
             toolbar.setNavigationOnClickListener(v -> finish());
         }
+    }
+
+    protected boolean isTablet() {
+        return ViewUtils.isTablet(this);
     }
 
     protected void configureToolbar(Toolbar toolbar, boolean showBackIcon, @StringRes int toolbarTitleRes) {
@@ -82,5 +102,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         transaction.commit();
+    }
+
+    protected void finishThisActivity(int resultOk) {
+        setResult(resultOk);
+        finish();
     }
 }

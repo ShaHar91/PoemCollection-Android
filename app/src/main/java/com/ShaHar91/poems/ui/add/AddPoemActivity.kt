@@ -52,8 +52,8 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         tilPoemBody.setErrorLayout(null)
 
         var isValid = true
-        val poemTitle = tilPoemTitle.editText?.text ?: ""
-        val poemBody = tilPoemBody.editText?.text ?: ""
+        val poemTitle = tilPoemTitle.editText?.text?.toString() ?: ""
+        val poemBody = tilPoemBody.editText?.text?.toString() ?: ""
 
         if (poemTitle.isBlank()) {
             tilPoemTitle.setErrorLayout(getString(R.string.add_poem_required_title))
@@ -65,8 +65,17 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
             isValid = false
         }
 
+        if (cgCategories.childCount == 0) {
+            tilPoemCategory.setErrorLayout("Add at least one Category")
+            isValid = false
+        }
+
+        //        ArrayList("5d725c84c4ded7bcb480eaa0", "5d725c84c4ded7bcb480eaa0")
         if (isValid) {
-            //TODO: save the poem to the backend
+            viewModel.addNewPoem(poemTitle, poemBody, listOf("5d725c84c4ded7bcb480eaa0"), {
+                finishThisActivity(Activity.RESULT_OK)
+            }, {
+                snackBar(it.message ?: "")
+            })
         }
     }
-}
