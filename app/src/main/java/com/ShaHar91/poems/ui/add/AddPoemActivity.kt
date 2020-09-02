@@ -3,19 +3,22 @@ package com.shahar91.poems.ui.add
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.text.Spanned
+import android.text.style.ImageSpan
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import be.appwise.core.extensions.activity.snackBar
-import be.appwise.core.extensions.libraries.copyFromRealm
 import be.appwise.core.extensions.view.optionalCallbacks
 import be.appwise.core.extensions.view.setErrorLayout
-import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.add.adapter.CategoryAutoCompleteAdapter
 import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
+import com.shahar91.poems.utils.DialogFactory
 import kotlinx.android.synthetic.main.activity_add_poem.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -52,38 +55,42 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
 
     private fun initViews() {
         configureToolbar(toolbar, true, R.string.add_poem_toolbar_title, R.drawable.ic_close)
+        toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorWhite), PorterDuff.Mode.SRC_IN)
 
-        tilPoemTitle.editText?.optionalCallbacks(beforeTextChanged = {s, start, count, after -> resetErrorLayouts()})
-        tilPoemBody.editText?.optionalCallbacks(beforeTextChanged = {s, start, count, after -> resetErrorLayouts()})
-        tilPoemCategory.editText?.optionalCallbacks(beforeTextChanged = {s, start, count, after -> resetErrorLayouts()})
-        
+        tilPoemTitle.editText?.optionalCallbacks(beforeTextChanged = { s, start, count, after -> resetErrorLayouts() })
+        tilPoemBody.editText?.optionalCallbacks(beforeTextChanged = { s, start, count, after -> resetErrorLayouts() })
+        tilPoemCategory.editText?.optionalCallbacks(beforeTextChanged = { s, start, count, after -> resetErrorLayouts() })
+
         btnSavePoem.setOnClickListener {
             checkToSavePoem()
         }
 
-        viewModel.getAllCategories {
-            atvCategories.threshold = 0
-            atvCategories.setAdapter(CategoryAutoCompleteAdapter(this, it.copyFromRealm().toTypedArray()))
-            atvCategories.setOnItemClickListener { adapterView, view, i, l ->
-                atvCategories.text = null
-                val category = adapterView.getItemAtPosition(i) as Category
-
-                addChip(category)
+        viewModel.getAllCategories { categories ->
+            tilPoemCategory.editText?.setOnClickListener {
+                DialogFactory.showDialogToAddCategories(this, categories, viewModel.checkedCategories) {
+                    viewModel.checkedCategories = it
+                    atvCategory.text = null
+                    it.forEach { category -> addChip(category) }
+                }
             }
         }
     }
 
     private fun addChip(category: Category) {
-        val chip = layoutInflater.inflate(R.layout.chip_category, null) as Chip
-            chip.apply {
-                text = category.name
-                tag = category.id
+        val span = ImageSpan(createChip(category))
+        atvCategory.text = atvCategory.text?.append("${category.name}, ")
+        val text = atvCategory.text
+        text?.setSpan(span, text.length - (category.name.length + 2), text.length - 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+    }
 
-                setOnCloseIconClickListener {
-                    cgCategories.removeView(it)
-                }
-            }
-        cgCategories.addView(chip)
+    private fun createChip(category: Category): ChipDrawable {
+        val chip = ChipDrawable.createFromResource(this, R.xml.chip_category)
+        chip.text = category.name
+        chip.setTextAppearanceResource(R.style.Category_Chip_TextAppearance)
+        // setBounds should be done as the very last thing
+        chip.setBounds(0, 0, chip.intrinsicWidth, chip.intrinsicHeight)
+        chip.chipEndPadding = 10f
+        return chip
     }
 
     private fun resetErrorLayouts() {
@@ -92,12 +99,14 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         tilPoemCategory.setErrorLayout(null)
     }
 
+    //TODO: when poem is added, refresh the pages the user is on...
     private fun checkToSavePoem() {
         resetErrorLayouts()
 
         var isValid = true
         val poemTitle = tilPoemTitle.editText?.text?.toString() ?: ""
         val poemBody = tilPoemBody.editText?.text?.toString() ?: ""
+        val poemCategories = tilPoemCategory.editText?.text?.toString() ?: ""
 
         if (poemTitle.isBlank()) {
             tilPoemTitle.setErrorLayout(getString(R.string.add_poem_required_title))
@@ -109,14 +118,13 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
             isValid = false
         }
 
-        if (cgCategories.childCount == 0) {
+        if (poemCategories.isBlank()) {
             tilPoemCategory.setErrorLayout("Add at least one Category")
             isValid = false
         }
 
-        //        ArrayList("5d725c84c4ded7bcb480eaa0", "5d725c84c4ded7bcb480eaa0")
         if (isValid) {
-            viewModel.addNewPoem(poemTitle, poemBody, listOf("5d725c84c4ded7bcb480eaa0"), {
+            viewModel.addNewPoem(poemTitle, poemBody, {
                 finishThisActivity(Activity.RESULT_OK)
             }, {
                 snackBar(it.message ?: "")
@@ -124,5 +132,3 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         }
     }
 }
-//info@stevenverheyen.be
-//GmuDrqtR2ujc

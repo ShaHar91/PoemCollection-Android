@@ -36,7 +36,7 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
 
         override fun onFacebookClicked() {
             Timber.tag("entryListeners").d("onFacebookClicked")
-            finishThisActivity(Activity.RESULT_OK)
+            finishThisActivity(Activity.RESULT_CANCELED)
         }
     }
 

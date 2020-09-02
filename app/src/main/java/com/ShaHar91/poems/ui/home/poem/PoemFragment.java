@@ -41,9 +41,7 @@ import kotlin.Unit;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+//TODO: adding a new review updates own review layout, but not the totalReviews layout
 public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponent> {
     private static final String POEM_ID = "POEM_ID";
 

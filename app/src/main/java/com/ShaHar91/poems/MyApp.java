@@ -37,7 +37,7 @@ public class MyApp extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
 
-        NetworkingBuilder networkBuilder = new NetworkingBuilder(this)
+        NetworkingBuilder networkBuilder = new NetworkingBuilder()
                 .setEndPoint(BuildConfig.API_HOST)
                 .setPackageName(getPackageName())
                 .setClientSecretValue("")

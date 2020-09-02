@@ -86,6 +86,5 @@ class CategoryAutoCompleteAdapter(context: Context, categories: Array<Category>)
                 notifyDataSetChanged()
             }
         }
-
     }
 }

@@ -14,7 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.shahar91.poems.R;
 import com.shahar91.poems.utils.ViewUtils;
 
@@ -47,15 +46,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void configureToolbar(Toolbar toolbar, boolean showBackIcon) {
-        setSupportActionBar(toolbar);
-        if (showBackIcon) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_navigation_back);
-            toolbar.setNavigationOnClickListener(v -> finish());
-        }
-    }
-
     protected boolean isTablet() {
         return ViewUtils.isTablet(this);
     }
@@ -66,11 +56,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void configureToolbar(Toolbar toolbar, boolean showBackIcon, @StringRes int toolbarTitleRes, @DrawableRes int drawableRes) {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(toolbarTitleRes);
-        if (showBackIcon) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(drawableRes);
-            toolbar.setNavigationOnClickListener(v -> onToolbarNavigationIconClicked());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(toolbarTitleRes);
+            if (showBackIcon) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setHomeAsUpIndicator(drawableRes);
+                toolbar.setNavigationOnClickListener(v -> onToolbarNavigationIconClicked());
+            }
         }
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:checkedIconTint="@color/general_background"
+    android:textColor="@android:color/white"
+    style="@style/Widget.MaterialComponents.Chip.Action"
+    app:chipBackgroundColor="@color/colorAccent"
+    app:chipIconTint="@android:color/white"
+    tools:text="hello" />

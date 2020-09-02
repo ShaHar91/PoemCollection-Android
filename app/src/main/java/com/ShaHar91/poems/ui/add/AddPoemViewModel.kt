@@ -10,19 +10,18 @@ import com.yheriatovych.reductor.Store
 import javax.inject.Inject
 
 class AddPoemViewModel @Inject internal constructor(store: Store<AppState>) : BaseGoogleViewModel(store) {
-    lateinit var categories: List<Category>
+    var checkedCategories: List<Category> = emptyList()
 
     fun getAllCategories(onSuccess: (List<Category>) -> Unit) {
         CategoryRepository.getCategories({
-            categories = it
             onSuccess(it)
         }, {
             loge(null, it, "")
         })
     }
 
-    fun addNewPoem(poemTitle: String, poemBody: String, categoryList: List<String>, onSuccess: () -> Unit,
+    fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit,
         onError: (Throwable) -> Unit) {
-        PoemRepository.createPoem(poemTitle, poemBody, categoryList, onSuccess, onError)
+        PoemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it.id }, onSuccess, onError)
     }
 }

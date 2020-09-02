@@ -66,6 +66,10 @@
         <item name="android:progressTint">@color/colorPrimary</item>
     </style>
 
+    <style name="Category.Chip.TextAppearance" parent="@style/TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
     <!--<editor-fold desc="Write or edit a review dialog">-->
     <style name="MaterialAlertDialog.Review" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="alertDialogStyle">@style/MaterialAlertDialog.Review.Dialog.Style</item>
