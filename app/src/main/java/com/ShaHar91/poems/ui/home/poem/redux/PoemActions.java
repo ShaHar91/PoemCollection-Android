@@ -13,6 +13,7 @@ public interface PoemActions {
     String SET_POEM = "Poem_SET_POEM";
     String SET_REVIEWS = "Poem_SET_REVIEWS";
     String SET_OWN_REVIEW = "Poem_SET_OWN_REVIEW";
+    String SET_DELAYED_RATING = "Poem_SET_DELAYED_RATING";
 
     @ActionCreator.Action(RESET)
     Action reset();
@@ -25,4 +26,7 @@ public interface PoemActions {
 
     @ActionCreator.Action(SET_OWN_REVIEW)
     Action setOwnReview(Review review);
+
+    @ActionCreator.Action(SET_DELAYED_RATING)
+    Action setDelayedRating(Float rating);
 }

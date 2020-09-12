@@ -19,6 +19,7 @@ import io.reactivex.Observable;
 import kotlin.Unit;
 
 public class PoemViewModel extends BaseGoogleViewModel {
+    PoemActions poemActions = Actions.from(PoemActions.class);
     private String poemId;
 
     @Inject
@@ -38,21 +39,18 @@ public class PoemViewModel extends BaseGoogleViewModel {
     }
 
     public void getPoemAndAllReviews() {
-        PoemRepository.getPoemById(this.poemId, poem -> {
-            PoemActions poemActions = Actions.from(PoemActions.class);
-            store.dispatch(poemActions.setPoem(poem));
+        getPoemAndAllReviews(null);
+    }
 
-            return Unit.INSTANCE;
-        }, throwable -> {
-            LoggingExtensionsKt.loge(null, throwable, "");
-            return Unit.INSTANCE;
-        });
+    public void getPoemAndAllReviews(Float rating) {
+        getPoemFromBackend();
 
         if (HawkUtils.getHawkCurrentUserId() != null && !HawkUtils.getHawkCurrentUserId().isEmpty()) {
             ReviewRepository.getOwnReviewForPoem(this.poemId, review -> {
-                PoemActions poemActions = Actions.from(PoemActions.class);
                 store.dispatch(poemActions.setOwnReview(review));
-
+                if (rating != null && rating > 0) {
+                    store.dispatch(poemActions.setDelayedRating(rating));
+                }
                 return Unit.INSTANCE;
             }, throwable -> {
                 LoggingExtensionsKt.loge(null, throwable, "");
@@ -61,12 +59,24 @@ public class PoemViewModel extends BaseGoogleViewModel {
         }
     }
 
+    private void getPoemFromBackend() {
+        PoemRepository.getPoemById(this.poemId, poem -> {
+            store.dispatch(poemActions.setPoem(poem));
+
+            return Unit.INSTANCE;
+        }, throwable -> {
+            LoggingExtensionsKt.loge(null, throwable, "");
+            return Unit.INSTANCE;
+        });
+    }
+
     public void saveOrUpdateReview(String reviewId, String newReviewText, float newRating) {
         if (reviewId != null) {
             // Update review
             ReviewRepository.updateReview(poemId, reviewId, newReviewText, newRating, review -> {
-                PoemActions poemActions = Actions.from(PoemActions.class);
                 store.dispatch(poemActions.setOwnReview(review));
+
+                getPoemFromBackend();
 
                 return Unit.INSTANCE;
             }, throwable -> {
@@ -76,8 +86,9 @@ public class PoemViewModel extends BaseGoogleViewModel {
         } else {
             // new review
             ReviewRepository.createReview(poemId, newReviewText, newRating, review -> {
-                PoemActions poemActions = Actions.from(PoemActions.class);
                 store.dispatch(poemActions.setOwnReview(review));
+
+                getPoemFromBackend();
 
                 return Unit.INSTANCE;
             }, throwable -> {
@@ -89,8 +100,9 @@ public class PoemViewModel extends BaseGoogleViewModel {
 
     public void deleteReview(String reviewId) {
         ReviewRepository.deleteReview(reviewId, () -> {
-            PoemActions poemActions = Actions.from(PoemActions.class);
             store.dispatch(poemActions.setOwnReview(null));
+
+            getPoemFromBackend();
 
             return Unit.INSTANCE;
         }, throwable -> {
@@ -100,7 +112,10 @@ public class PoemViewModel extends BaseGoogleViewModel {
     }
 
     public void resetPoem() {
-        PoemActions poemActions = Actions.from(PoemActions.class);
         store.dispatch(poemActions.reset());
+    }
+
+    public void resetRating() {
+        store.dispatch(poemActions.setDelayedRating(null));
     }
 }

@@ -27,12 +27,21 @@ public abstract class PoemReducer implements Reducer<PoemState> {
 
     @AutoReducer.Action(value = PoemActions.SET_POEM, from = PoemActions.class)
     PoemState setPoem(PoemState state, Poem poem) {
+//        Poem newPoemObject = null;
+//        if (poem != null) {
+//            newPoemObject = Poem.createNewPoem(poem);
+//        }
         return state.toBuilder().setPoem(poem).build();
     }
 
     @AutoReducer.Action(value = PoemActions.SET_REVIEWS, from = PoemActions.class)
     PoemState setReviews(PoemState state, List<Review> reviews) {
         return state.toBuilder().setReviews(reviews).build();
+    }
+
+    @AutoReducer.Action(value = PoemActions.SET_DELAYED_RATING, from = PoemActions.class)
+    PoemState setDelayedRating(PoemState state, Float rating) {
+        return state.toBuilder().setDelayedRating(rating).build();
     }
 
     @AutoReducer.Action(value = PoemActions.SET_OWN_REVIEW, from = PoemActions.class)

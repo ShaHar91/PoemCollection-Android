@@ -86,7 +86,7 @@ class RegisterFragment : BaseGoogleFragment<RegisterViewModel, RegisterComponent
         if (isValid) {
             viewModel.registerUser(usernameText, emailText, passwordText,
                 {
-                    listeners.onRegisterClicked()
+                    listeners.onRegisterSuccessful()
                 }, {
                     it.message?.let { message -> snackBar(message) }
                 })

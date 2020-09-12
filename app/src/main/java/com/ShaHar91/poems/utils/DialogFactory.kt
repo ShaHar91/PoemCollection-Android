@@ -76,6 +76,10 @@ object DialogFactory {
             }
         }
 
+        dialogRatingBar.setOnRatingChangeListener { _, barRating ->
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = barRating > 0
+        }
+
         dialogReviewEditText?.optionalCallbacks { s ->
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = !s.isBlank()
         }

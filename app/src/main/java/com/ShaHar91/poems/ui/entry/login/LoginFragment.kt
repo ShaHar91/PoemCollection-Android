@@ -80,7 +80,7 @@ class LoginFragment : BaseGoogleFragment<LoginViewModel, LoginComponent>() {
         if (isValid) {
             viewModel.loginUser(emailText, passwordText,
                 {
-                    listeners.onLoginClicked()
+                    listeners.onLoginSuccessful()
                 }, {
                     it.message?.let { message -> snackBar(message) }
                 })

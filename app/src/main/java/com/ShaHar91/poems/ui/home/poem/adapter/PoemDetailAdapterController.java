@@ -58,6 +58,7 @@ public class PoemDetailAdapterController extends Typed2EpoxyController<Poem, Rev
         }
 
         if (!poem.getShortReviewList().isEmpty()) {
+            //TODO: issues exist when adding or removing own review not updating the global review layout due to epoxy's hatefull state and immutable shit....
             poemGlobalRatingModel
                     .averageRating(poem.getAverageRating())
                     .totalRatingCount(poem.getTotalRatingCount())

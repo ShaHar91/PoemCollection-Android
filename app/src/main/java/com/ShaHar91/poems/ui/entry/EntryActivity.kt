@@ -3,7 +3,6 @@ package com.shahar91.poems.ui.entry
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -19,24 +18,24 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
     private var loginFragment: LoginFragment = LoginFragment.newInstance(false)
 
     private var entryListeners = object : EntryListeners {
-        override fun onLoginClicked() {
+        override fun onLoginSuccessful() {
             Timber.tag("entryListeners").d("onLoginClicked")
-            finishThisActivity(Activity.RESULT_OK)
+            finishThisActivity(Activity.RESULT_OK, intent)
         }
 
-        override fun onRegisterClicked() {
+        override fun onRegisterSuccessful() {
             Timber.tag("entryListeners").d("onRegisterClicked")
-            finishThisActivity(Activity.RESULT_OK)
+            finishThisActivity(Activity.RESULT_OK, intent)
         }
 
         override fun onGoogleClicked() {
             Timber.tag("entryListeners").d("onGoogleClicked")
-            finishThisActivity(Activity.RESULT_CANCELED)
+            finishThisActivity(Activity.RESULT_CANCELED, intent)
         }
 
         override fun onFacebookClicked() {
             Timber.tag("entryListeners").d("onFacebookClicked")
-            finishThisActivity(Activity.RESULT_CANCELED)
+            finishThisActivity(Activity.RESULT_CANCELED, intent)
         }
     }
 
@@ -44,8 +43,13 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
         private const val TAG_LOGIN = "TagLogin"
 
         @JvmStatic
-        fun startWithIntent(context: Context): Intent {
-            return Intent(context, EntryActivity::class.java)
+        @JvmOverloads
+        fun startWithIntent(context: Context, rating: Float? = null): Intent {
+            val intent = Intent(context, EntryActivity::class.java)
+            if (rating != null) {
+                intent.putExtra("rating", rating)
+            }
+            return intent
         }
     }
 

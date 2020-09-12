@@ -21,6 +21,10 @@ public class Poem extends RealmObject {
     public Poem() {
     }
 
+    public static Poem createNewPoem(Poem poem) {
+        return new Poem(poem.getId(), poem.getTitle(), poem.getBody(), poem.getUser(), poem.getCategories(), poem.getAverageRating(), poem.getTotalRatingCount(), poem.getShortReviewList(), poem.getCreatedAt());
+    }
+
     public Poem(String _id, String title, String body, User user, RealmList<Category> categories, float averageRating, RealmList<Integer> totalRatingCount, RealmList<Review> shortReviewList, Date createdAt) {
         this._id = _id;
         this.title = title;

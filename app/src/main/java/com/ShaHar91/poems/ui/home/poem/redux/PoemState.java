@@ -19,6 +19,9 @@ public abstract class PoemState {
     @Nullable
     public abstract Review ownReview();
 
+    @Nullable
+    public abstract Float delayedRating();
+
     public static Builder builder() { return new AutoValue_PoemState.Builder(); }
 
     public abstract Builder toBuilder();
@@ -30,6 +33,8 @@ public abstract class PoemState {
         public abstract Builder setReviews(List<Review> reviews);
 
         public abstract Builder setOwnReview(Review ownReview);
+
+        public abstract Builder setDelayedRating(Float rating);
 
         public abstract PoemState build();
     }

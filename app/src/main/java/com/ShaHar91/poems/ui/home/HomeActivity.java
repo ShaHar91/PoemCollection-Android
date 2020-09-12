@@ -86,7 +86,7 @@ public class HomeActivity extends BaseGoogleMobileActivity<HomeViewModel, HomeCo
             }
             case Constants.REQUEST_CODE_ADD_POEM: {
                 if (resultCode == RESULT_OK) {
-                    // TODO: a new poem has been added successfully
+                    // TODO: a new poem has been added successfully, work with a listener on the BaseActivity or BaseFragment to update the "active" pages
                 }
                 break;
             }

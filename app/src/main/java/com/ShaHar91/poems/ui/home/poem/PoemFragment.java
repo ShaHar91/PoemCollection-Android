@@ -8,15 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.shahar91.poems.Constants;
 import com.shahar91.poems.R;
 import com.shahar91.poems.data.models.Review;
@@ -28,10 +25,10 @@ import com.shahar91.poems.utils.DialogFactory;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
-import be.appwise.core.extensions.fragment.FragmentExtensionsKt;
-import be.appwise.core.extensions.logging.LoggingExtensionsKt;
 import be.appwise.core.extensions.view.RecyclerViewExtensionsKt;
 import be.appwise.core.networking.Networking;
 import butterknife.BindView;
@@ -41,7 +38,6 @@ import kotlin.Unit;
 
 import static android.app.Activity.RESULT_OK;
 
-//TODO: adding a new review updates own review layout, but not the totalReviews layout
 public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponent> {
     private static final String POEM_ID = "POEM_ID";
 
@@ -57,19 +53,12 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
     private final PoemDetailAdapterController.Listener poemDetailAdapterControllerListener = new PoemDetailAdapterController.Listener() {
         @Override
         public void onRatingBarTouched(float rating) {
-            //TODO: check if user is logged in, if not -> show login activity else show dialog!!
             if (Networking.isLoggedIn()) {
-                DialogFactory.showDialogToAddReview(requireActivity(), rating, (reviewId, newReviewText, newRating) -> {
-                    viewModel.saveOrUpdateReview(reviewId, newReviewText, newRating);
-                    return Unit.INSTANCE;
-                });
+                showAddReviewDialog(rating);
             } else {
                 // start the EntryActivity to make sure the user gets logged in
-                startActivityForResult(EntryActivity.startWithIntent(requireContext()), Constants.REQUEST_CODE_NEW_USER);
+                startActivityForResult(EntryActivity.startWithIntent(requireContext(), rating), Constants.REQUEST_CODE_NEW_USER);
             }
-            //TODO: if user logs in -> check if user already has a review for this poem
-            //TODO: if user already has a review -> update the ui to show that review!!
-//            LoggingExtensionsKt.logd(null, "onRatingBarTouched %f, %s", rating, controller.getCurrentData());
         }
 
         @Override
@@ -146,6 +135,18 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
         if (poemState.poem() != null) {
             controller.setData(poemState.poem(), poemState.ownReview());
         }
+
+        if (poemState.delayedRating() != null) {
+            showAddReviewDialog(poemState.delayedRating());
+        }
+    }
+
+    private void showAddReviewDialog(Float rating) {
+        viewModel.resetRating();
+        DialogFactory.showDialogToAddReview(requireActivity(), rating, (reviewId, newReviewText, newRating) -> {
+            viewModel.saveOrUpdateReview(reviewId, newReviewText, newRating);
+            return Unit.INSTANCE;
+        });
     }
 
     @Override
@@ -168,7 +169,7 @@ public class PoemFragment extends BaseGoogleFragment<PoemViewModel, PoemComponen
             if (resultCode == RESULT_OK) {
                 // A user has been logged in successfully
                 // Refresh the poem and all reviews (as the user's review may have been in the preview list)
-                viewModel.getPoemAndAllReviews();
+                viewModel.getPoemAndAllReviews(data.getFloatExtra("rating", -1));
             }
         }
 

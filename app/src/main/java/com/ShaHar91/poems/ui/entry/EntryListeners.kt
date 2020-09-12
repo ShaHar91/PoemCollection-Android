@@ -1,9 +1,9 @@
 package com.shahar91.poems.ui.entry
 
 interface EntryListeners {
-    fun onLoginClicked()
+    fun onLoginSuccessful()
 
-    fun onRegisterClicked()
+    fun onRegisterSuccessful()
 
     fun onGoogleClicked()
 

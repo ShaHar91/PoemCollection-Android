@@ -1,5 +1,6 @@
 package com.shahar91.poems.ui.base;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -96,8 +97,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    protected void finishThisActivity(int resultOk) {
-        setResult(resultOk);
+    protected void finishThisActivity(int resultOk, Intent intent) {
+        setResult(resultOk, intent);
         finish();
+    }
+
+    protected void finishThisActivity(int resultOk) {
+        finishThisActivity(resultOk, null);
     }
 }
