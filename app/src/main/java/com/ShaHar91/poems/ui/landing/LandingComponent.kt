@@ -1,13 +1,12 @@
-package com.shahar91.poems.ui.entry.register
+package com.shahar91.poems.ui.landing
 
 import com.shahar91.poems.injection.ApplicationComponent
 import com.shahar91.poems.injection.scope.ActivityScope
-import com.shahar91.poems.injection.scope.FragmentScope
 import com.shahar91.poems.ui.base.normal.BaseGoogleComponent
 import dagger.Component
 
-@FragmentScope
+@ActivityScope
 @Component(dependencies = [ApplicationComponent::class])
-interface RegisterComponent : BaseGoogleComponent<RegisterViewModel>{
-    fun inject(registerFragment: RegisterFragment)
+interface LandingComponent : BaseGoogleComponent<LandingViewModel?> {
+    fun inject(landingActivity: LandingActivity?)
 }

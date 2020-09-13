@@ -57,9 +57,9 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         configureToolbar(toolbar, true, R.string.add_poem_toolbar_title, R.drawable.ic_close)
         toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorWhite), PorterDuff.Mode.SRC_IN)
 
-        tilPoemTitle.editText?.optionalCallbacks(beforeTextChanged = { s, start, count, after -> resetErrorLayouts() })
-        tilPoemBody.editText?.optionalCallbacks(beforeTextChanged = { s, start, count, after -> resetErrorLayouts() })
-        tilPoemCategory.editText?.optionalCallbacks(beforeTextChanged = { s, start, count, after -> resetErrorLayouts() })
+        tilPoemTitle.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
+        tilPoemBody.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
+        tilPoemCategory.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
 
         btnSavePoem.setOnClickListener {
             checkToSavePoem()
