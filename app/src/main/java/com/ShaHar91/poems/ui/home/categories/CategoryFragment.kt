@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import be.appwise.core.extensions.logging.loge
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
@@ -55,23 +56,38 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
 
         initViews()
 
-        addDisposable(viewModel.categoriesStateListener().subscribe({
-            adapter.items = it
-        }, Throwable::printStackTrace))
+        getAllCategories()
     }
 
     private fun initViews() {
-        toolbar.title = getString(R.string.categories_toolbar_title)
-        configureToolbar(toolbar, null)
+        toolbar.apply {
+            title = getString(R.string.categories_toolbar_title)
+            configureToolbar(this, null)
+        }
+
         adapter = CategoryAdapter(requireActivity(),
             CategoryInteractionListener { category: Category -> handleClick(category) })
         rvCategories.layoutManager = LinearLayoutManager(requireActivity())
         rvCategories.adapter = adapter
         srlRefreshCategories.setOnRefreshListener {
-            viewModel.getAllCategories()
-            Handler().postDelayed({ srlRefreshCategories.isRefreshing = false },
-                Constants.DEFAULT_REFRESH_LAYOUT_DURATION)
+            getAllCategories()
+
+//            Handler().postDelayed({ srlRefreshCategories.isRefreshing = false },
+//                Constants.DEFAULT_REFRESH_LAYOUT_DURATION)
         }
+    }
+
+    private fun getAllCategories() {
+        viewModel.getAllCategories({
+            adapter.items = it
+
+            srlRefreshCategories.isRefreshing = false
+        }, { throwable ->
+            throwable.printStackTrace()
+            loge(null, throwable, "")
+
+            srlRefreshCategories.isRefreshing = false
+        })
     }
 
     private fun handleClick(category: Category) {

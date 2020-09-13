@@ -17,6 +17,10 @@ public abstract class BaseGoogleViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     protected final Store<AppState> store;
 
+    public BaseGoogleViewModel() {
+        this.store = null;
+    }
+
     public BaseGoogleViewModel(Store<AppState> store) {
         this.store = store;
     }
