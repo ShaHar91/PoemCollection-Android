@@ -12,8 +12,8 @@ object CategoryRepository : BaseRepository() {
     @JvmStatic
     fun getCategories(onSuccess: (List<Category>) -> Unit, onError: (Throwable) -> Unit) {
         addCall(ApiCallsManager.getAllCategories().observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null) {
-                categoryDao.createOrUpdateAllFromJson(Category::class.java, it.data!!.toString())
+            it.data?.let { data ->
+                categoryDao.saveAll(data, true)
             }
         }, {
             // TODO: offline "feature" can be better!!

@@ -1,14 +1,12 @@
 package com.shahar91.poems.ui.home.categories
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import be.appwise.core.extensions.logging.loge
-import com.shahar91.poems.Constants
+import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.ui.base.BaseActivity
@@ -65,15 +63,15 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
             configureToolbar(this, null)
         }
 
-        adapter = CategoryAdapter(requireActivity(),
-            CategoryInteractionListener { category: Category -> handleClick(category) })
-        rvCategories.layoutManager = LinearLayoutManager(requireActivity())
-        rvCategories.adapter = adapter
-        srlRefreshCategories.setOnRefreshListener {
-            getAllCategories()
+        adapter = CategoryAdapter(requireActivity(), CategoryInteractionListener(this@CategoryFragment::handleClick))
+        adapter.items = viewModel.categories
 
-//            Handler().postDelayed({ srlRefreshCategories.isRefreshing = false },
-//                Constants.DEFAULT_REFRESH_LAYOUT_DURATION)
+        rvCategories.setupRecyclerView(null)
+        rvCategories.adapter = adapter
+        srlRefreshCategories.run {
+            setOnRefreshListener(this@CategoryFragment::getAllCategories)
+            setColorSchemeResources(R.color.colorWhite)
+            setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
         }
     }
 
@@ -91,9 +89,7 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
     }
 
     private fun handleClick(category: Category) {
-        val poemsPerCategoryListFragment = PoemsPerCategoryListFragment.newInstance(true,
-            category)
-        (requireActivity() as BaseActivity).replaceFragment(R.id.flHomeContainer,
-            poemsPerCategoryListFragment, TAG_POEMS_LIST, true)
+        val fragment = PoemsPerCategoryListFragment.newInstance(true, category)
+        (requireActivity() as BaseActivity).replaceFragment(R.id.flHomeContainer, fragment, TAG_POEMS_LIST, true)
     }
 }

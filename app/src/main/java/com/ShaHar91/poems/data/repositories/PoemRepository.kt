@@ -12,40 +12,50 @@ object PoemRepository : BaseRepository() {
 
     @JvmStatic
     fun getPoems(categoryId: String, onSuccess: (List<Poem>) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getAllPoems(categoryId).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null) {
-                poemDao.createOrUpdateAllFromJson(Poem::class.java, it.data!!.toString())
-            }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(poemDao.findAllPoemsByCategoryId(categoryId))
-        }))
+        addCall(
+            ApiCallsManager.getAllPoems(categoryId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it.data?.let { data ->
+                        poemDao.createOrUpdateAllFromJson(Poem::class.java, data.toString())
+                    }
+                }, {
+                    onError(it)
+                }, {
+                    onSuccess(poemDao.findAllPoemsByCategoryId(categoryId))
+                }))
     }
 
     @JvmStatic
     fun getPoemById(poemId: String, onSuccess: (Poem?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getPoemById(poemId, HawkUtils.hawkCurrentUserId).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null) {
-                poemDao.copyOrUpdate(it.data!!)
-            }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(poemDao.findPoemById(poemId))
-        }))
+        addCall(
+            ApiCallsManager.getPoemById(poemId, HawkUtils.hawkCurrentUserId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it.data?.let { data ->
+                        poemDao.copyOrUpdate(data)
+                    }
+                }, {
+                    onError(it)
+                }, {
+                    onSuccess(poemDao.findPoemById(poemId))
+                }))
     }
 
     @JvmStatic
-    fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.createPoem(poemTitle, poemBody, categoryList).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null) {
-                poemDao.copyOrUpdate(it.data!!)
-            }
-        }, {
-            onError(it)
-        }, {
-            onSuccess()
-        }))
+    fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>, onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit) {
+        addCall(
+            ApiCallsManager.createPoem(poemTitle, poemBody, categoryList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it.data?.let { data ->
+                        poemDao.copyOrUpdate(data)
+                    }
+                }, {
+                    onError(it)
+                }, {
+                    onSuccess()
+                }))
     }
 }

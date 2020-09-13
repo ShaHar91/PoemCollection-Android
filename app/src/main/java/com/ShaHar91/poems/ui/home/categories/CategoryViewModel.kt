@@ -6,12 +6,16 @@ import com.shahar91.poems.ui.base.normal.BaseGoogleViewModel
 import javax.inject.Inject
 
 class CategoryViewModel @Inject internal constructor() : BaseGoogleViewModel() {
+    var categories: List<Category> = emptyList()
+        private set
+
     fun getAllCategories(onSuccess: (List<Category>) -> Unit, onError: (Throwable) -> Unit) {
         CategoryRepository.getCategories(
-            { categories ->
-                onSuccess(categories)
-            }, { throwable: Throwable ->
-                onError(throwable)
+            {
+                this.categories = it
+                onSuccess(it)
+            }, {
+                onError(it)
             })
     }
 }
