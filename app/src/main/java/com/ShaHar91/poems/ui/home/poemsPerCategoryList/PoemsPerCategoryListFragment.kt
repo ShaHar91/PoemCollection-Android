@@ -71,9 +71,12 @@ class PoemsPerCategoryListFragment :
             title = requireArguments().getString(CATEGORY_NAME, "")
             configureToolbar(this, ContextCompat.getColor(requireActivity(), R.color.colorWhite))
         }
-        adapter = PoemsPerCategoryListAdapter(requireActivity(),
-            PoemsPerCategoryListInteractionListener { poemId: String -> handleClick(poemId) })
-        adapter.items = viewModel.allPoemsForCategory
+        adapter = PoemsPerCategoryListAdapter(requireActivity(), object : PoemsPerCategoryListInteractionListener {
+            override fun onPoemClicked(poemId: String) {
+                handleClick(poemId)
+            }
+        })
+        adapter.setItems(viewModel.allPoemsForCategory)
 
         rvPoemsPerCategory.setupRecyclerView(null)
         rvPoemsPerCategory.adapter = adapter
@@ -86,7 +89,7 @@ class PoemsPerCategoryListFragment :
 
     private fun getAllPoemsForCategory() {
         viewModel.getAllPoemsPerCategory(requireArguments().getString(CATEGORY_ID, ""), {
-            adapter.items = it
+            adapter.setItems(it)
 
             srlRefreshPoemsPerCategory.isRefreshing = false
         }, {

@@ -63,8 +63,12 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
             configureToolbar(this, null)
         }
 
-        adapter = CategoryAdapter(requireActivity(), CategoryInteractionListener(this@CategoryFragment::handleClick))
-        adapter.items = viewModel.categories
+        adapter = CategoryAdapter(requireActivity(), object : CategoryInteractionListener {
+            override fun onCategoryClicked(category: Category) {
+                handleClick(category)
+            }
+        })
+        adapter.setItems(viewModel.categories)
 
         rvCategories.setupRecyclerView(null)
         rvCategories.adapter = adapter
@@ -77,7 +81,7 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
 
     private fun getAllCategories() {
         viewModel.getAllCategories({
-            adapter.items = it
+            adapter.setItems(it)
 
             srlRefreshCategories.isRefreshing = false
         }, { throwable ->

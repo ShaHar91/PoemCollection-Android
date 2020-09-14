@@ -42,8 +42,6 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
     companion object {
         private const val TAG_LOGIN = "TagLogin"
 
-        @JvmStatic
-        @JvmOverloads
         fun startWithIntent(context: Context, rating: Float? = null): Intent {
             val intent = Intent(context, EntryActivity::class.java)
             if (rating != null) {
