@@ -17,7 +17,7 @@ import be.appwise.core.extensions.view.setErrorLayout
 import com.google.android.material.chip.ChipDrawable
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
 import com.shahar91.poems.utils.DialogFactory
 import kotlinx.android.synthetic.main.activity_add_poem.*
 import kotlinx.android.synthetic.main.toolbar.*

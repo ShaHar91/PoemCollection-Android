@@ -15,7 +15,7 @@ import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
-import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseGoogleFragment
 import com.shahar91.poems.ui.entry.EntryActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.home.poem.adapter.PoemDetailAdapterController
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview

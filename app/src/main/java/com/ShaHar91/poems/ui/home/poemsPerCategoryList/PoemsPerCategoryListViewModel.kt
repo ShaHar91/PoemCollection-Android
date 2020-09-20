@@ -2,7 +2,7 @@ package com.shahar91.poems.ui.home.poemsPerCategoryList
 
 import com.shahar91.poems.data.models.Poem
 import com.shahar91.poems.data.repositories.PoemRepository.getPoems
-import com.shahar91.poems.ui.base.normal.BaseGoogleViewModel
+import com.shahar91.poems.ui.base.BaseGoogleViewModel
 import javax.inject.Inject
 
 class PoemsPerCategoryListViewModel @Inject internal constructor() : BaseGoogleViewModel() {

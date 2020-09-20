@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import be.appwise.core.extensions.logging.logd
 import com.google.android.material.appbar.AppBarLayout
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*
 import timber.log.Timber

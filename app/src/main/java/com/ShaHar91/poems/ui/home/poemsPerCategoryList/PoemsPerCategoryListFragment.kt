@@ -11,8 +11,8 @@ import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.BaseActivity
-import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
 import com.shahar91.poems.ui.home.poem.PoemFragment
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
@@ -102,6 +102,7 @@ class PoemsPerCategoryListFragment :
 
     private fun handleClick(poemId: String) {
         val poemFragment = PoemFragment.newInstance(true, poemId)
-        (requireActivity() as BaseActivity).replaceFragment(R.id.flHomeContainer, poemFragment, TAG_POEM, true)
+        (requireActivity() as BaseGoogleMobileActivity<*, *>).replaceFragment(R.id.flHomeContainer, poemFragment,
+            TAG_POEM, true)
     }
 }

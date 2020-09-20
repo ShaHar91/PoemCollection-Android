@@ -10,7 +10,7 @@ import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.extensions.view.setErrorLayout
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseGoogleFragment
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.entry.EntryListeners
 import kotlinx.android.synthetic.main.fragment_register.*

@@ -7,12 +7,10 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import be.appwise.core.extensions.logging.logd
 import be.appwise.core.networking.Networking.isLoggedIn
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
-import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.home.categories.CategoryFragment
 import com.shahar91.poems.ui.home.categories.CategoryFragment.Companion.newInstance

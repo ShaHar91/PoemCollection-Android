@@ -1,7 +1,7 @@
 package com.shahar91.poems.ui.entry.register
 
 import com.shahar91.poems.data.repositories.AuthRepository
-import com.shahar91.poems.ui.base.normal.BaseGoogleViewModel
+import com.shahar91.poems.ui.base.BaseGoogleViewModel
 import javax.inject.Inject
 
 class RegisterViewModel @Inject internal constructor() : BaseGoogleViewModel() {

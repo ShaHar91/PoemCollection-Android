@@ -9,8 +9,8 @@ import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.BaseActivity
-import com.shahar91.poems.ui.base.normal.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 import com.shahar91.poems.ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment
@@ -94,6 +94,7 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
 
     private fun handleClick(category: Category) {
         val fragment = PoemsPerCategoryListFragment.newInstance(true, category)
-        (requireActivity() as BaseActivity).replaceFragment(R.id.flHomeContainer, fragment, TAG_POEMS_LIST, true)
+        (requireActivity() as BaseGoogleMobileActivity<*, *>).replaceFragment(R.id.flHomeContainer, fragment,
+            TAG_POEMS_LIST, true)
     }
 }

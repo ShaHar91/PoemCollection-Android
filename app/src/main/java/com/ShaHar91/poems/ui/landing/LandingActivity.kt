@@ -3,11 +3,9 @@ package com.shahar91.poems.ui.landing
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.normal.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
 import com.shahar91.poems.ui.home.HomeActivity
-import com.shahar91.poems.ui.landing.LandingActivity
 import java.util.*
-import javax.inject.Inject
 
 class LandingActivity : BaseGoogleMobileActivity<LandingViewModel, LandingComponent>() {
 
