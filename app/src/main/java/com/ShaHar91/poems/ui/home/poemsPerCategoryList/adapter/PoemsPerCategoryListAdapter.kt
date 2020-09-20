@@ -29,8 +29,8 @@ class PoemsPerCategoryListAdapter(context: Context, listener: PoemsPerCategoryLi
 
         override fun bind(position: Int, item: Poem, listener: PoemsPerCategoryListInteractionListener) {
             itemView.titleTv.text = item.title
-            itemView.writerTv.text = item.user.username
-            itemView.setOnClickListener { listener.onPoemClicked(item.id) }
+            itemView.writerTv.text = item.user?.username
+            itemView.setOnClickListener { listener.onPoemClicked(item._id) }
         }
     }
 }

@@ -20,6 +20,6 @@ class AddPoemViewModel @Inject internal constructor() : BaseGoogleViewModel() {
 
     fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit,
         onError: (Throwable) -> Unit) {
-        PoemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it.id }, onSuccess, onError)
+        PoemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it._id }, onSuccess, onError)
     }
 }

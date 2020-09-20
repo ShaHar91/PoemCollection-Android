@@ -24,7 +24,7 @@ object UserRepository : BaseRepository() {
 
             //Save current user id in Hawk
             currentUser = userDao.createOrUpdateObjectFromJson(User::class.java, it.data.toString())
-            hawkCurrentUserId = currentUser?.id ?: ""
+            hawkCurrentUserId = currentUser?._id ?: ""
         }, {
             onError(it)
         }, {

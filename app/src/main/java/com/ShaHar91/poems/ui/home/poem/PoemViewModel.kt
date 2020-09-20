@@ -61,7 +61,7 @@ class PoemViewModel @Inject internal constructor() : BaseGoogleViewModel() {
         if (reviewId != null) {
             // Update review
             ReviewRepository.updateReview(poemId, reviewId, newReviewText!!, newRating, {
-                this.ownReview = it?.let { Review(it.id, it.text, it.rating, it.createdAt, it.poem, it.user) }
+                this.ownReview = it?.let { Review(it._id, it.text, it.rating, it.createdAt, it.poem, it.user) }
                 getPoemFromBackend { listener.refreshLayout() }
             }, {
                 listener.error(it)
@@ -69,7 +69,7 @@ class PoemViewModel @Inject internal constructor() : BaseGoogleViewModel() {
         } else {
             // new review
             ReviewRepository.createReview(poemId, newReviewText!!, newRating, {
-                ownReview = it?.let { Review(it.id, it.text, it.rating, it.createdAt, it.poem, it.user) }
+                ownReview = it?.let { Review(it._id, it.text, it.rating, it.createdAt, it.poem, it.user) }
                 getPoemFromBackend { listener.refreshLayout() }
             }, {
                 listener.error(it)

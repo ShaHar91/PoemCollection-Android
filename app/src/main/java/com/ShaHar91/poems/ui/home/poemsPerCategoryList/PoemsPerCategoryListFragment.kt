@@ -31,7 +31,7 @@ class PoemsPerCategoryListFragment :
             val fragment = PoemsPerCategoryListFragment()
             val args = Bundle()
             args.putBoolean(SHOW_BACK_ICON, showBackIcon)
-            args.putString(CATEGORY_ID, category.id)
+            args.putString(CATEGORY_ID, category._id)
             args.putString(CATEGORY_NAME, category.name)
             fragment.arguments = args
             return fragment

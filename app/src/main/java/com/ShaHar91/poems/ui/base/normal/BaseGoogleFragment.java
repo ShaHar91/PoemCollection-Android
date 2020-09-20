@@ -11,13 +11,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.shahar91.poems.MyApp;
 import com.shahar91.poems.R;
 import com.shahar91.poems.injection.ApplicationComponent;
 import com.shahar91.poems.ui.base.BaseFragment;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;

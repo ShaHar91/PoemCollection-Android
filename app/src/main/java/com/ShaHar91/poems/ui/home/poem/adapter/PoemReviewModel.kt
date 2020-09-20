@@ -38,20 +38,20 @@ abstract class PoemReviewModel : EpoxyModelWithHolder<KotlinEpoxyHolder>() {
         holder.view.apply {
             rhUserHeader.apply {
                 rating = review.rating
-                userName = review.user.username
+                userName = review.user?.username ?: ""
                 setImage(null, userName[0].toString(), ContextCompat.getColor(context, R.color.colorPrimary))
             }
 
             tvReviewBody.text = review.text
 
-            if (review.user.id != HawkUtils.hawkCurrentUserId) {
+            if (review.user?._id != HawkUtils.hawkCurrentUserId) {
                 val lp = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT)
                 lp.setMargins(holder.view.marginLeft, holder.view.marginTop, holder.view.marginRight, 0)
                 holder.view.layoutParams = lp
             }
 
-            if (review.user.id == HawkUtils.hawkCurrentUserId) {
+            if (review.user?._id == HawkUtils.hawkCurrentUserId) {
                 holder.view.ivReviewMenu.show()
                 holder.view.ivReviewMenu.setOnClickListener {
                     PopupMenu(context, it).apply {
@@ -61,7 +61,7 @@ abstract class PoemReviewModel : EpoxyModelWithHolder<KotlinEpoxyHolder>() {
                                 R.id.review_edit ->
                                     listener.onEditReviewClicked(review)
                                 R.id.review_delete ->
-                                    listener.onDeleteReviewClicked(review.id)
+                                    listener.onDeleteReviewClicked(review._id)
                             }
                             true
                         }

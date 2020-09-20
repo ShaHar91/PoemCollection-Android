@@ -1,6 +1,5 @@
 package com.shahar91.poems.data
 
-import com.shahar91.poems.data.models.Poem
 import io.realm.Realm
 
 class InitialRealmData : Realm.Transaction {

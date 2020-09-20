@@ -33,5 +33,4 @@ class CategoryAdapter(context: Context, listener: CategoryInteractionListener) :
             itemView.setOnClickListener { listener.onCategoryClicked(item) }
         }
     }
-
 }

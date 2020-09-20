@@ -71,7 +71,7 @@ object DialogFactory {
                     return@setOnClickListener
                 }
 
-                saveReviewCallback(review?.id, newReviewText, dialogRatingBar.rating)
+                saveReviewCallback(review?._id, newReviewText, dialogRatingBar.rating)
                 dialog.dismiss()
             }
         }
