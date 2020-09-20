@@ -3,9 +3,8 @@ package com.shahar91.poems.ui.home.categories
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.data.repositories.CategoryRepository
 import com.shahar91.poems.ui.base.BaseGoogleViewModel
-import javax.inject.Inject
 
-class CategoryViewModel @Inject internal constructor() : BaseGoogleViewModel() {
+class CategoryViewModel : BaseGoogleViewModel() {
     var categories: List<Category> = emptyList()
         private set
 

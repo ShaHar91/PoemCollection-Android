@@ -3,24 +3,17 @@ package com.shahar91.poems.ui.landing
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseActivity
 import com.shahar91.poems.ui.home.HomeActivity
 import java.util.*
 
-class LandingActivity : BaseGoogleMobileActivity<LandingViewModel, LandingComponent>() {
-
-    override fun createComponent(): LandingComponent {
-        return DaggerLandingComponent.builder()
-            .applicationComponent(appComponent)
-            .build()
-    }
+class LandingActivity : BaseActivity<LandingViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landing)
 
-        component.inject(this)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(LandingViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(LandingViewModel::class.java)
 
         Timer().schedule(object : TimerTask() {
             override fun run() {

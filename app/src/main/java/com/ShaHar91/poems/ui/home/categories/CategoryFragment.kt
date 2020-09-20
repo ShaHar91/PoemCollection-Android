@@ -9,19 +9,18 @@ import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.BaseGoogleFragment
-import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseActivity
+import com.shahar91.poems.ui.base.BaseFragment
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 import com.shahar91.poems.ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment
 import kotlinx.android.synthetic.main.fragment_categories.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent>() {
+class CategoryFragment : BaseFragment<CategoryViewModel>() {
     companion object {
         private const val TAG_POEMS_LIST = "TagPoemsList"
 
-        @JvmStatic
         fun newInstance(showBackIcon: Boolean): CategoryFragment {
             val fragment = CategoryFragment()
             val args = Bundle()
@@ -33,24 +32,13 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
 
     private lateinit var adapter: CategoryAdapter
 
-    override fun createComponent(): CategoryComponent {
-        return DaggerCategoryComponent.builder()
-            .applicationComponent(appComponent())
-            .build()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        component.inject(this)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_categories, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(CategoryViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
 
         initViews()
 
@@ -94,7 +82,7 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
 
     private fun handleClick(category: Category) {
         val fragment = PoemsPerCategoryListFragment.newInstance(true, category)
-        (requireActivity() as BaseGoogleMobileActivity<*, *>).replaceFragment(R.id.flHomeContainer, fragment,
+        (requireActivity() as BaseActivity<*>).replaceFragment(R.id.flHomeContainer, fragment,
             TAG_POEMS_LIST, true)
     }
 }

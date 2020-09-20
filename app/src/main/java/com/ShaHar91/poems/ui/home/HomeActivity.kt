@@ -10,13 +10,13 @@ import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
-import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseActivity
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.home.categories.CategoryFragment
 import com.shahar91.poems.ui.home.categories.CategoryFragment.Companion.newInstance
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : BaseGoogleMobileActivity<HomeViewModel, HomeComponent>() {
+class HomeActivity : BaseActivity<HomeViewModel>() {
     private var categoryFragment: CategoryFragment = newInstance(false)
 
     companion object {
@@ -27,17 +27,10 @@ class HomeActivity : BaseGoogleMobileActivity<HomeViewModel, HomeComponent>() {
         }
     }
 
-    override fun createComponent(): HomeComponent {
-        return DaggerHomeComponent.builder()
-            .applicationComponent(appComponent)
-            .build()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        component.inject(this)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         showCategoryFragment(savedInstanceState)
 
         fabAddPoem.setOnClickListener {

@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import be.appwise.core.extensions.logging.logd
 import com.google.android.material.appbar.AppBarLayout
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*
 import timber.log.Timber
 
-class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>() {
+class EntryActivity : BaseActivity<EntryViewModel>() {
     private var loginFragment: LoginFragment = LoginFragment.newInstance(false)
 
     private var entryListeners = object : EntryListeners {
@@ -51,19 +51,11 @@ class EntryActivity : BaseGoogleMobileActivity<EntryViewModel, EntryComponent>()
         }
     }
 
-    override fun createComponent(): EntryComponent {
-        return DaggerEntryComponent.builder()
-            .applicationComponent(appComponent)
-            .build()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_entry)
 
-        component.inject(this)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(EntryViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(EntryViewModel::class.java)
 
         initToolbar()
 

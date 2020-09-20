@@ -15,7 +15,7 @@ import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
-import com.shahar91.poems.ui.base.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.home.poem.adapter.PoemDetailAdapterController
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
@@ -23,7 +23,7 @@ import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
 import kotlinx.android.synthetic.main.fragment_poem.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class PoemFragment : BaseGoogleFragment<PoemViewModel, PoemComponent>() {
+class PoemFragment : BaseFragment<PoemViewModel>() {
     companion object {
         private const val POEM_ID = "POEM_ID"
         fun newInstance(showBackIcon: Boolean, poemId: String?): PoemFragment {
@@ -73,17 +73,6 @@ class PoemFragment : BaseGoogleFragment<PoemViewModel, PoemComponent>() {
         }
     }
 
-    override fun createComponent(): PoemComponent {
-        return DaggerPoemComponent.builder()
-            .applicationComponent(appComponent())
-            .build()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        component.inject(this)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_poem, container, false)
@@ -91,7 +80,7 @@ class PoemFragment : BaseGoogleFragment<PoemViewModel, PoemComponent>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(PoemViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(PoemViewModel::class.java)
         viewModel.init(requireArguments().getString(POEM_ID, ""), poemViewModelListener)
 
         initViews()

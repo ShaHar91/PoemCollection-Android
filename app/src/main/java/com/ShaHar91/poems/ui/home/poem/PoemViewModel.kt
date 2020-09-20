@@ -6,9 +6,8 @@ import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
 import com.shahar91.poems.ui.base.BaseGoogleViewModel
 import com.shahar91.poems.utils.HawkUtils.hawkCurrentUserId
-import javax.inject.Inject
 
-class PoemViewModel @Inject internal constructor() : BaseGoogleViewModel() {
+class PoemViewModel : BaseGoogleViewModel() {
     private lateinit var poemId: String
     private lateinit var listener: ViewModelCallbacks
 

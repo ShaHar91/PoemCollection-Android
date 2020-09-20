@@ -9,26 +9,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
-import com.shahar91.poems.injection.ApplicationComponent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import javax.inject.Inject
 
-abstract class BaseGoogleFragment<VM : BaseGoogleViewModel, C : BaseGoogleComponent<VM>> :
+abstract class BaseFragment<VM : BaseGoogleViewModel> :
     Fragment() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     protected lateinit var viewModel: VM
-    protected lateinit var component: C
     private lateinit var parentActivity: AppCompatActivity
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-    protected abstract fun createComponent(): C
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        component = createComponent()
         parentActivity = requireActivity() as AppCompatActivity
     }
 
@@ -89,10 +82,6 @@ abstract class BaseGoogleFragment<VM : BaseGoogleViewModel, C : BaseGoogleCompon
             return listener
         }
         throw IllegalStateException("parent must implement listener")
-    }
-
-    protected fun appComponent(): ApplicationComponent? {
-        return (requireActivity().application as MyApp).appComponent
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

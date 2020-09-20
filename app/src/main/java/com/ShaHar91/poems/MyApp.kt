@@ -5,9 +5,6 @@ import be.appwise.core.core.CoreApp.init
 import be.appwise.core.extensions.logging.loge
 import be.appwise.core.networking.NetworkingBuilder
 import com.shahar91.poems.data.InitialRealmData
-import com.shahar91.poems.injection.ApplicationComponent
-import com.shahar91.poems.injection.DaggerApplicationComponent
-import com.shahar91.poems.injection.module.ApplicationModule
 import com.shahar91.poems.networking.NewApiManagerService
 import io.reactivex.plugins.RxJavaPlugins
 import io.realm.Realm
@@ -19,17 +16,9 @@ class MyApp : Application() {
             private set
     }
 
-    var appComponent: ApplicationComponent? = null
-        private set
-
     override fun onCreate() {
         super.onCreate()
         instance = this
-
-        appComponent = DaggerApplicationComponent
-            .builder()
-            .applicationModule(ApplicationModule(this))
-            .build()
 
         val networkBuilder = NetworkingBuilder()
             .setEndPoint(BuildConfig.API_HOST)

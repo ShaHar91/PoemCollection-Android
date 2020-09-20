@@ -10,41 +10,26 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
-import com.shahar91.poems.injection.ApplicationComponent
-import com.shahar91.poems.utils.ViewUtils.isTablet
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import javax.inject.Inject
 
 /**
  * Default BaseActivity that will be used for most of the Activities.
  *
  * @param <VM> The ViewModel working with the Activity
- * @param <C> The Component working and linked with the Activity
-</C></VM> */
-abstract class BaseGoogleMobileActivity<VM : BaseGoogleViewModel, C : BaseGoogleComponent<VM>> :
-    AppCompatActivity() {
-    private var compositeDisposable: CompositeDisposable? = null
+</VM> */
+abstract class BaseActivity<VM : BaseGoogleViewModel> : AppCompatActivity() {
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     protected lateinit var viewModel: VM
-    protected lateinit var component: C
-    protected abstract fun createComponent(): C
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        compositeDisposable = CompositeDisposable()
         if (!isTablet) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
-        component = createComponent()
     }
-
-    val appComponent: ApplicationComponent?
-        get() = (application as MyApp).appComponent
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -54,7 +39,7 @@ abstract class BaseGoogleMobileActivity<VM : BaseGoogleViewModel, C : BaseGoogle
     }
 
     protected val isTablet: Boolean
-        protected get() = isTablet(this)
+        get() =  resources.getBoolean(R.bool.isTablet)
 
     protected fun configureToolbar(toolbar: Toolbar, showBackIcon: Boolean,
         @StringRes toolbarTitleRes: Int, @DrawableRes drawableRes: Int = R.drawable.ic_navigation_back) {
@@ -74,12 +59,12 @@ abstract class BaseGoogleMobileActivity<VM : BaseGoogleViewModel, C : BaseGoogle
     }
 
     override fun onDestroy() {
-        compositeDisposable!!.dispose()
+        compositeDisposable.dispose()
         super.onDestroy()
     }
 
     protected fun addDisposable(disposable: Disposable?) {
-        compositeDisposable!!.add(disposable!!)
+        compositeDisposable.add(disposable!!)
     }
 
     fun replaceFragment(@IdRes containerViewId: Int, fragment: Fragment?,

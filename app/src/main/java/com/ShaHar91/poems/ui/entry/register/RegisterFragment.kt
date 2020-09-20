@@ -10,25 +10,14 @@ import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.extensions.view.setErrorLayout
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.BaseGoogleFragment
+import com.shahar91.poems.ui.base.BaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.entry.EntryListeners
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
 
-class RegisterFragment : BaseGoogleFragment<RegisterViewModel, RegisterComponent>() {
+class RegisterFragment : BaseFragment<RegisterViewModel>() {
     lateinit var listeners: EntryListeners
-
-    override fun createComponent(): RegisterComponent {
-        return DaggerRegisterComponent.builder()
-            .applicationComponent(appComponent())
-            .build()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        component.inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -37,7 +26,7 @@ class RegisterFragment : BaseGoogleFragment<RegisterViewModel, RegisterComponent
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(RegisterViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
 
         btnRegister.setOnClickListener { checkToRegister() }
         btnLoginFacebook.setOnClickListener { listeners.onFacebookClicked() }

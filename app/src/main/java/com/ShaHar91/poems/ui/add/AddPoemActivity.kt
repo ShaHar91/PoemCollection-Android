@@ -17,12 +17,12 @@ import be.appwise.core.extensions.view.setErrorLayout
 import com.google.android.material.chip.ChipDrawable
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.BaseGoogleMobileActivity
+import com.shahar91.poems.ui.base.BaseActivity
 import com.shahar91.poems.utils.DialogFactory
 import kotlinx.android.synthetic.main.activity_add_poem.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemComponent>() {
+class AddPoemActivity : BaseActivity<AddPoemViewModel>() {
     lateinit var adapter: ArrayAdapter<String>
 
     companion object {
@@ -37,18 +37,11 @@ class AddPoemActivity : BaseGoogleMobileActivity<AddPoemViewModel, AddPoemCompon
         }
     }
 
-    override fun createComponent(): AddPoemComponent {
-        return DaggerAddPoemComponent.builder()
-            .applicationComponent(appComponent)
-            .build()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_poem)
 
-        component.inject(this)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(AddPoemViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(AddPoemViewModel::class.java)
 
         initViews()
     }
