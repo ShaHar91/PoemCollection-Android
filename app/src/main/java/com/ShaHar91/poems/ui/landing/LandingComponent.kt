@@ -7,6 +7,6 @@ import dagger.Component
 
 @ActivityScope
 @Component(dependencies = [ApplicationComponent::class])
-interface LandingComponent : BaseGoogleComponent<LandingViewModel?> {
+interface LandingComponent : BaseGoogleComponent<LandingViewModel> {
     fun inject(landingActivity: LandingActivity?)
 }

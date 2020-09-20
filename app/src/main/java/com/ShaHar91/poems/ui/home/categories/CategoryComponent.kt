@@ -7,6 +7,6 @@ import dagger.Component
 
 @FragmentScope
 @Component(dependencies = [ApplicationComponent::class])
-interface CategoryComponent : BaseGoogleComponent<CategoryViewModel?> {
+interface CategoryComponent : BaseGoogleComponent<CategoryViewModel> {
     fun inject(categoryFragment: CategoryFragment?)
 }

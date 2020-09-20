@@ -8,6 +8,6 @@ import dagger.Component
 @FragmentScope
 @Component(dependencies = [ApplicationComponent::class])
 interface PoemsPerCategoryListComponent :
-    BaseGoogleComponent<PoemsPerCategoryListViewModel?> {
+    BaseGoogleComponent<PoemsPerCategoryListViewModel> {
     fun inject(poemsPerCategoryListFragment: PoemsPerCategoryListFragment?)
 }

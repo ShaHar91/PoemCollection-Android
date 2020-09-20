@@ -60,7 +60,7 @@ class CategoryFragment : BaseGoogleFragment<CategoryViewModel, CategoryComponent
     private fun initViews() {
         toolbar.apply {
             title = getString(R.string.categories_toolbar_title)
-            configureToolbar(this, null)
+            configureToolbar(this)
         }
 
         adapter = CategoryAdapter(requireActivity(), object : CategoryInteractionListener {

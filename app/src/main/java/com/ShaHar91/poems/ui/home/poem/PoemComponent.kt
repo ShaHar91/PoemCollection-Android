@@ -7,6 +7,6 @@ import dagger.Component
 
 @FragmentScope
 @Component(dependencies = [ApplicationComponent::class])
-interface PoemComponent : BaseGoogleComponent<PoemViewModel?> {
+interface PoemComponent : BaseGoogleComponent<PoemViewModel> {
     fun inject(poemFragment: PoemFragment?)
 }
