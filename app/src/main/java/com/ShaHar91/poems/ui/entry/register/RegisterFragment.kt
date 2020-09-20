@@ -10,13 +10,13 @@ import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.extensions.view.setErrorLayout
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.BaseFragment
+import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.entry.EntryListeners
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
 
-class RegisterFragment : BaseFragment<RegisterViewModel>() {
+class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
     lateinit var listeners: EntryListeners
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

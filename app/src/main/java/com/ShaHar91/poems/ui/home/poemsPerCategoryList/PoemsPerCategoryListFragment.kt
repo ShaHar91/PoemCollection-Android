@@ -10,8 +10,8 @@ import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.BaseActivity
-import com.shahar91.poems.ui.base.BaseFragment
+import com.shahar91.poems.ui.base.PoemBaseActivity
+import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.home.poem.PoemFragment
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_poems_per_category.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class PoemsPerCategoryListFragment :
-    BaseFragment<PoemsPerCategoryListViewModel>() {
+    PoemBaseFragment<PoemsPerCategoryListViewModel>() {
 
     companion object {
         private const val TAG_POEM = "TagPoem"
@@ -90,7 +90,7 @@ class PoemsPerCategoryListFragment :
 
     private fun handleClick(poemId: String) {
         val poemFragment = PoemFragment.newInstance(true, poemId)
-        (requireActivity() as BaseActivity<*>).replaceFragment(R.id.flHomeContainer, poemFragment,
+        (requireActivity() as PoemBaseActivity<*>).replaceFragment(R.id.flHomeContainer, poemFragment,
             TAG_POEM, true)
     }
 }

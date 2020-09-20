@@ -4,10 +4,10 @@ import com.shahar91.poems.data.models.Poem
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
-import com.shahar91.poems.ui.base.BaseGoogleViewModel
+import com.shahar91.poems.ui.base.PoemBaseViewModel
 import com.shahar91.poems.utils.HawkUtils.hawkCurrentUserId
 
-class PoemViewModel : BaseGoogleViewModel() {
+class PoemViewModel : PoemBaseViewModel() {
     private lateinit var poemId: String
     private lateinit var listener: ViewModelCallbacks
 

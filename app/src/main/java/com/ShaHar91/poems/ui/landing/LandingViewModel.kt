@@ -1,5 +1,5 @@
 package com.shahar91.poems.ui.landing
 
-import com.shahar91.poems.ui.base.BaseGoogleViewModel
+import com.shahar91.poems.ui.base.PoemBaseViewModel
 
-class LandingViewModel : BaseGoogleViewModel()
+class LandingViewModel : PoemBaseViewModel()

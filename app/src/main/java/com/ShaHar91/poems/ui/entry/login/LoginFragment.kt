@@ -10,15 +10,15 @@ import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.extensions.view.setErrorLayout
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.BaseActivity
-import com.shahar91.poems.ui.base.BaseFragment
+import com.shahar91.poems.ui.base.PoemBaseActivity
+import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.entry.EntryListeners
 import com.shahar91.poems.ui.entry.register.RegisterFragment
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
 
-class LoginFragment : BaseFragment<LoginViewModel>() {
+class LoginFragment : PoemBaseFragment<LoginViewModel>() {
     lateinit var listeners: EntryListeners
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,7 +39,7 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
             val registerFragment = RegisterFragment.newInstance(true)
             registerFragment.listeners = this.listeners
 
-            (requireActivity() as BaseActivity<*>).replaceFragment(R.id.flEntryContainer,
+            (requireActivity() as PoemBaseActivity<*>).replaceFragment(R.id.flEntryContainer,
                 registerFragment, "NewTag", true)
         }
 

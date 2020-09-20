@@ -3,11 +3,11 @@ package com.shahar91.poems.ui.landing
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.BaseActivity
+import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.home.HomeActivity
 import java.util.*
 
-class LandingActivity : BaseActivity<LandingViewModel>() {
+class LandingActivity : PoemBaseActivity<LandingViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import be.appwise.core.extensions.logging.logd
 import com.google.android.material.appbar.AppBarLayout
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.BaseActivity
+import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*
 import timber.log.Timber
 
-class EntryActivity : BaseActivity<EntryViewModel>() {
+class EntryActivity : PoemBaseActivity<EntryViewModel>() {
     private var loginFragment: LoginFragment = LoginFragment.newInstance(false)
 
     private var entryListeners = object : EntryListeners {

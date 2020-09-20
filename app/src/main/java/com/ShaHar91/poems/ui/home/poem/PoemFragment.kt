@@ -15,7 +15,7 @@ import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
-import com.shahar91.poems.ui.base.BaseFragment
+import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.home.poem.adapter.PoemDetailAdapterController
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
@@ -23,7 +23,7 @@ import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
 import kotlinx.android.synthetic.main.fragment_poem.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class PoemFragment : BaseFragment<PoemViewModel>() {
+class PoemFragment : PoemBaseFragment<PoemViewModel>() {
     companion object {
         private const val POEM_ID = "POEM_ID"
         fun newInstance(showBackIcon: Boolean, poemId: String?): PoemFragment {

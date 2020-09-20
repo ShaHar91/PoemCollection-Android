@@ -4,26 +4,17 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import be.appwise.core.ui.base.BaseActivity
 import com.shahar91.poems.R
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 /**
  * Default BaseActivity that will be used for most of the Activities.
  *
  * @param <VM> The ViewModel working with the Activity
 </VM> */
-abstract class BaseActivity<VM : BaseGoogleViewModel> : AppCompatActivity() {
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-
-    protected lateinit var viewModel: VM
-
+abstract class PoemBaseActivity<VM : PoemBaseViewModel> : BaseActivity<VM>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!isTablet) {
@@ -40,32 +31,6 @@ abstract class BaseActivity<VM : BaseGoogleViewModel> : AppCompatActivity() {
 
     protected val isTablet: Boolean
         get() =  resources.getBoolean(R.bool.isTablet)
-
-    protected fun configureToolbar(toolbar: Toolbar, showBackIcon: Boolean,
-        @StringRes toolbarTitleRes: Int, @DrawableRes drawableRes: Int = R.drawable.ic_navigation_back) {
-        setSupportActionBar(toolbar)
-        supportActionBar?.let {
-            it.setTitle(toolbarTitleRes)
-            if (showBackIcon) {
-                it.setDisplayHomeAsUpEnabled(true)
-                it.setHomeAsUpIndicator(drawableRes)
-                toolbar.setNavigationOnClickListener { onToolbarNavigationIconClicked() }
-            }
-        }
-    }
-
-    protected fun onToolbarNavigationIconClicked() {
-        onBackPressed()
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.dispose()
-        super.onDestroy()
-    }
-
-    protected fun addDisposable(disposable: Disposable?) {
-        compositeDisposable.add(disposable!!)
-    }
 
     fun replaceFragment(@IdRes containerViewId: Int, fragment: Fragment?,
         addToBackstack: Boolean) {

@@ -4,9 +4,9 @@ import be.appwise.core.extensions.logging.loge
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.data.repositories.CategoryRepository
 import com.shahar91.poems.data.repositories.PoemRepository
-import com.shahar91.poems.ui.base.BaseGoogleViewModel
+import com.shahar91.poems.ui.base.PoemBaseViewModel
 
-class AddPoemViewModel : BaseGoogleViewModel() {
+class AddPoemViewModel : PoemBaseViewModel() {
     var checkedCategories: List<Category> = emptyList()
 
     fun getAllCategories(onSuccess: (List<Category>) -> Unit) {
