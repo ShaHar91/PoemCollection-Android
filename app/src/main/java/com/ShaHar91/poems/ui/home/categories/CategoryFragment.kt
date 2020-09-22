@@ -5,34 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
-import com.shahar91.poems.ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment
 import kotlinx.android.synthetic.main.fragment_categories.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
-    companion object {
-        private const val TAG_POEMS_LIST = "TagPoemsList"
-
-        fun newInstance(showBackIcon: Boolean): CategoryFragment {
-            val fragment = CategoryFragment()
-            val args = Bundle()
-            args.putBoolean(SHOW_BACK_ICON, showBackIcon)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     private lateinit var adapter: CategoryAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_categories, container, false)
     }
 
@@ -46,14 +32,11 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
     }
 
     private fun initViews() {
-        toolbar.apply {
-            title = getString(R.string.categories_toolbar_title)
-            configureToolbar(this)
-        }
-
         adapter = CategoryAdapter(requireActivity(), object : CategoryInteractionListener {
             override fun onCategoryClicked(category: Category) {
-                handleClick(category)
+                findNavController().navigate(
+                    CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category._id,
+                        category.name))
             }
         })
         adapter.setItems(viewModel.categories)
@@ -78,11 +61,5 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
 
             srlRefreshCategories.isRefreshing = false
         })
-    }
-
-    private fun handleClick(category: Category) {
-        val fragment = PoemsPerCategoryListFragment.newInstance(true, category)
-        (requireActivity() as PoemBaseActivity<*>).replaceFragment(R.id.flHomeContainer, fragment,
-            TAG_POEMS_LIST, true)
     }
 }

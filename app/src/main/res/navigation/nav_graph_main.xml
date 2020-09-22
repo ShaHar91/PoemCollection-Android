@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/categoryFragment">
+
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.shahar91.poems.ui.home.categories.CategoryFragment"
+        android:label="@string/categories_toolbar_title"
+        tools:layout="@layout/fragment_categories">
+
+        <action
+            android:id="@+id/action_categoryFragment_to_poemsPerCategoryListFragment"
+            app:destination="@id/poemsPerCategoryListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/poemsPerCategoryListFragment"
+        android:name="com.shahar91.poems.ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment"
+        android:label="{categoryName}"
+        tools:layout="@layout/fragment_poems_per_category">
+
+        <argument
+            android:name="categoryId"
+            app:argType="string"/>
+
+        <argument
+            android:name="categoryName"
+            app:argType="string"/>
+
+        <action
+            android:id="@+id/action_poemsPerCategoryListFragment_to_poemFragment"
+            app:destination="@id/poemFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/poemFragment"
+        android:name="com.shahar91.poems.ui.home.poem.PoemFragment"
+        android:label="fragment_poem"
+        tools:layout="@layout/fragment_poem">
+
+        <argument
+            android:name="poemId"
+            app:argType="string"/>
+    </fragment>
+</navigation>

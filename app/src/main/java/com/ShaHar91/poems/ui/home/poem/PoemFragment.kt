@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
@@ -21,22 +21,10 @@ import com.shahar91.poems.ui.home.poem.adapter.PoemDetailAdapterController
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
 import kotlinx.android.synthetic.main.fragment_poem.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 class PoemFragment : PoemBaseFragment<PoemViewModel>() {
-    companion object {
-        private const val POEM_ID = "POEM_ID"
-        fun newInstance(showBackIcon: Boolean, poemId: String?): PoemFragment {
-            val fragment = PoemFragment()
-            val args = Bundle()
-            args.putBoolean(SHOW_BACK_ICON, showBackIcon)
-            args.putString(POEM_ID, poemId)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     private lateinit var controller: PoemDetailAdapterController
+    private val safeArgs: PoemFragmentArgs by navArgs()
     private val poemDetailAdapterControllerListener: PoemDetailAdapterController.Listener = object :
         PoemDetailAdapterController.Listener {
         override fun onRatingBarTouched(rating: Float) {
@@ -73,22 +61,19 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_poem, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PoemViewModel::class.java)
-        viewModel.init(requireArguments().getString(POEM_ID, ""), poemViewModelListener)
+        viewModel.init(safeArgs.poemId, poemViewModelListener)
 
         initViews()
     }
 
     private fun initViews() {
-        //toolbar
-        configureToolbar(toolbar, ContextCompat.getColor(requireContext(), R.color.colorWhite))
         controller = PoemDetailAdapterController(requireContext(), poemDetailAdapterControllerListener)
         rvPoemDetails.setupRecyclerView(null, LinearLayoutManager(requireContext()))
         rvPoemDetails.adapter = controller.adapter

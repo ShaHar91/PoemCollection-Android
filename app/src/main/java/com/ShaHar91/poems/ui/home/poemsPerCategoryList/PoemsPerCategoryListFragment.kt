@@ -4,38 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.R
-import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.base.PoemBaseFragment
-import com.shahar91.poems.ui.home.poem.PoemFragment
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
 import kotlinx.android.synthetic.main.fragment_poems_per_category.*
-import kotlinx.android.synthetic.main.toolbar.*
+
 
 class PoemsPerCategoryListFragment :
     PoemBaseFragment<PoemsPerCategoryListViewModel>() {
-
-    companion object {
-        private const val TAG_POEM = "TagPoem"
-        private const val CATEGORY_ID = "CATEGORY_ID"
-        private const val CATEGORY_NAME = "CATEGORY_NAME"
-        fun newInstance(showBackIcon: Boolean,
-            category: Category): PoemsPerCategoryListFragment {
-            val fragment = PoemsPerCategoryListFragment()
-            val args = Bundle()
-            args.putBoolean(SHOW_BACK_ICON, showBackIcon)
-            args.putString(CATEGORY_ID, category._id)
-            args.putString(CATEGORY_NAME, category.name)
-            fragment.arguments = args
-            return fragment
-        }
-    }
+    private val safeArgs: PoemsPerCategoryListFragmentArgs by navArgs()
 
     private lateinit var adapter: PoemsPerCategoryListAdapter
 
@@ -55,13 +39,9 @@ class PoemsPerCategoryListFragment :
     }
 
     private fun initViews() {
-        toolbar.apply {
-            title = requireArguments().getString(CATEGORY_NAME, "")
-            configureToolbar(this, ContextCompat.getColor(requireActivity(), R.color.colorWhite))
-        }
         adapter = PoemsPerCategoryListAdapter(requireActivity(), object : PoemsPerCategoryListInteractionListener {
             override fun onPoemClicked(poemId: String) {
-                handleClick(poemId)
+                findNavController().navigate(PoemsPerCategoryListFragmentDirections.actionPoemsPerCategoryListFragmentToPoemFragment(poemId = poemId))
             }
         })
         adapter.setItems(viewModel.allPoemsForCategory)
@@ -76,7 +56,7 @@ class PoemsPerCategoryListFragment :
     }
 
     private fun getAllPoemsForCategory() {
-        viewModel.getAllPoemsPerCategory(requireArguments().getString(CATEGORY_ID, ""), {
+        viewModel.getAllPoemsPerCategory(safeArgs.categoryId, {
             adapter.setItems(it)
 
             srlRefreshPoemsPerCategory.isRefreshing = false
@@ -86,11 +66,5 @@ class PoemsPerCategoryListFragment :
 
             srlRefreshPoemsPerCategory.isRefreshing = false
         })
-    }
-
-    private fun handleClick(poemId: String) {
-        val poemFragment = PoemFragment.newInstance(true, poemId)
-        (requireActivity() as PoemBaseActivity<*>).replaceFragment(R.id.flHomeContainer, poemFragment,
-            TAG_POEM, true)
     }
 }

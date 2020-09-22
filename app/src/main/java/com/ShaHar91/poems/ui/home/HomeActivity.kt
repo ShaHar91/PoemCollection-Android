@@ -1,37 +1,41 @@
 package com.shahar91.poems.ui.home
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import be.appwise.core.extensions.logging.logd
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.entry.EntryActivity
-import com.shahar91.poems.ui.home.categories.CategoryFragment
-import com.shahar91.poems.ui.home.categories.CategoryFragment.Companion.newInstance
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class HomeActivity : PoemBaseActivity<HomeViewModel>() {
-    private var categoryFragment: CategoryFragment = newInstance(false)
-
-    companion object {
-        private const val TAG_CATEGORIES = "TagCategories"
-        fun start(context: Context) {
-            val intent = Intent(context, HomeActivity::class.java)
-            context.startActivity(intent)
-        }
-    }
+    private lateinit var appBarConfiguration : AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        showCategoryFragment(savedInstanceState)
+
+        setSupportActionBar(toolbar)
+        val host = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
+        val navController = host.navController
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.categoryFragment))
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
         fabAddPoem.setOnClickListener {
             if (isLoggedIn()) {
@@ -41,16 +45,6 @@ class HomeActivity : PoemBaseActivity<HomeViewModel>() {
                 startActivityForResult(EntryActivity.startWithIntent(this),
                     Constants.REQUEST_CODE_NEW_USER)
             }
-        }
-    }
-
-    private fun showCategoryFragment(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            replaceFragment(R.id.flHomeContainer, categoryFragment, TAG_CATEGORIES, false)
-        } else {
-            logd("FragmentByTag", "Find Category Fragment By Tag")
-            categoryFragment = supportFragmentManager.findFragmentByTag(
-                TAG_CATEGORIES) as CategoryFragment
         }
     }
 
@@ -77,5 +71,9 @@ class HomeActivity : PoemBaseActivity<HomeViewModel>() {
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.my_nav_host_fragment).navigateUp(appBarConfiguration)
     }
 }
