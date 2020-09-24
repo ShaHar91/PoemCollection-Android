@@ -4,7 +4,7 @@
     <item>
         <bitmap android:src="@drawable/landing_backg"/>
     </item>
-    <item android:top="108dp">
+    <item android:top="120dp">
         <bitmap android:gravity="center|top"
             android:src="@drawable/splash_logo"/>
     </item>

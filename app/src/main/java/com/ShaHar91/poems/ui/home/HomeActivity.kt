@@ -19,21 +19,21 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class HomeActivity : PoemBaseActivity<HomeViewModel>() {
-    private lateinit var appBarConfiguration : AppBarConfiguration
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // replace the startup 'Splash Theme' with the default AppTheme
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        setSupportActionBar(toolbar)
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        setSupportActionBar(toolbar)
         val host = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
         val navController = host.navController
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.categoryFragment))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.categoryFragment))
 
         setupActionBarWithNavController(navController, appBarConfiguration)
 
