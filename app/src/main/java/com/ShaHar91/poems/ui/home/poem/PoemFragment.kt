@@ -56,7 +56,6 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
         }
 
         override fun error(throwable: Throwable) {
-            throwable.printStackTrace()
             loge(null, throwable)
         }
     }

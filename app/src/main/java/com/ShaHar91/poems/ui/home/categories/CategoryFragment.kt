@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
+import be.appwise.core.ui.custom.RecyclerViewEnum
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.ui.base.PoemBaseFragment
@@ -16,7 +17,7 @@ import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInt
 import kotlinx.android.synthetic.main.fragment_categories.*
 
 class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
-    private lateinit var adapter: CategoryAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_categories, container, false)
@@ -28,38 +29,45 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
 
         initViews()
 
-        getAllCategories()
+        getAllCategories(true)
     }
 
     private fun initViews() {
-        adapter = CategoryAdapter(requireActivity(), object : CategoryInteractionListener {
+        categoryAdapter = CategoryAdapter(requireActivity(), object : CategoryInteractionListener {
             override fun onCategoryClicked(category: Category) {
                 findNavController().navigate(
                     CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category._id,
                         category.name))
             }
         })
-        adapter.setItems(viewModel.categories)
 
-        rvCategories.setupRecyclerView(null)
-        rvCategories.adapter = adapter
+        rvCategories.apply {
+            setupRecyclerView(null)
+            emptyStateView = emptyView
+            loadingStateView = loadingView
+            adapter = categoryAdapter
+        }
         srlRefreshCategories.run {
-            setOnRefreshListener(this@CategoryFragment::getAllCategories)
+            setOnRefreshListener { getAllCategories() }
             setColorSchemeResources(R.color.colorWhite)
             setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
         }
     }
 
-    private fun getAllCategories() {
+    private fun getAllCategories(showLoadingState: Boolean = false) {
+        // only show the loading state at the start
+        if (showLoadingState) rvCategories.stateView = RecyclerViewEnum.LOADING
+
         viewModel.getAllCategories({
-            adapter.setItems(it)
+            categoryAdapter.setItems(it)
 
             srlRefreshCategories.isRefreshing = false
         }, { throwable ->
-            throwable.printStackTrace()
-            loge(null, throwable, "")
-
+            // when the response returns an error, show the data saved in the viewModel
+            categoryAdapter.setItems(viewModel.categories)
             srlRefreshCategories.isRefreshing = false
+
+            loge(null, throwable, "")
         })
     }
 }
