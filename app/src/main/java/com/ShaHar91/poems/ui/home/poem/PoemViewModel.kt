@@ -11,8 +11,16 @@ class PoemViewModel : PoemBaseViewModel() {
     private lateinit var poemId: String
     private lateinit var listener: ViewModelCallbacks
 
-    var poem: Poem? = null
+    var totalReviews = 0
         private set
+    var poem: Poem? = null
+        private set(value) {
+            field = value
+            totalReviews = 0
+            value?.totalRatingCount?.forEach {
+                totalReviews += it
+            }
+        }
     var ownReview: Review? = null
         private set
     var delayedRating: Float? = null

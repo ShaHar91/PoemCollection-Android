@@ -62,21 +62,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':core')
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
 
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
-
-    implementation 'com.hannesdorfmann:adapterdelegates4:4.3.0'
-
-    implementation 'com.airbnb.android:epoxy:3.9.0'
-    // Add the annotation processor if you are using Epoxy's annotations (recommended)
-    kapt 'com.airbnb.android:epoxy-processor:3.9.0'
 
     implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
 

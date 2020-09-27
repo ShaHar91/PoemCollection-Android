@@ -1,18 +1,55 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/general_background"
-    android:orientation="vertical"
-    tools:context=".ui.home.poem.PoemFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPoemDetails"
+    <com.google.android.material.progressindicator.ProgressIndicator
+        android:id="@+id/loadingView"
+        android:layout_gravity="center"
+        style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/poemLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="96dp" />
+        android:background="@color/general_background"
+        android:visibility="gone">
 
-    <!--    <include layout="@layout/list_item_poem_detail" />-->
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".ui.home.poem.PoemFragment">
+
+            <include layout="@layout/list_item_poem_detail" />
+
+            <include
+                android:id="@+id/noReviewLayout"
+                layout="@layout/list_item_no_review" />
+
+            <include
+                android:id="@+id/ownReviewLayout"
+                layout="@layout/list_item_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone" />
+
+            <include layout="@layout/list_item_global_rating" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPoemReviews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingBottom="108dp"
+                tools:listitem="@layout/list_item_review" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>

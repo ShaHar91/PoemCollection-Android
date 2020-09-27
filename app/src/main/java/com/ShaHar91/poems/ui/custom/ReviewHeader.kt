@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.shahar91.poems.R
 import kotlinx.android.synthetic.main.custom_review_header.view.*
 
@@ -17,6 +18,7 @@ class ReviewHeader(context: Context, attrs: AttributeSet) :
         set(value) {
             field = value
             view.tvUsername.text = value
+            setImage(initials = value[0].toString())
         }
 
     var reviewTimestamp: Long = 0
@@ -36,7 +38,7 @@ class ReviewHeader(context: Context, attrs: AttributeSet) :
         view = inflater.inflate(R.layout.custom_review_header, this, true)
     }
 
-    fun setImage(url: String?, initials: String, color: Int) {
+    fun setImage(url: String? = null, initials: String = "", color: Int = ContextCompat.getColor(context, R.color.colorPrimary)) {
         ivUserImage.setImage(url, initials, color)
     }
 }

@@ -1,6 +1,7 @@
 package com.shahar91.poems.utils
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -14,6 +15,16 @@ import com.wajahatkarim3.easyvalidation.core.view_ktx.textEqualTo
 import kotlinx.android.synthetic.main.custom_dialog_add_review.view.*
 
 object DialogFactory {
+    @JvmStatic
+    fun showDialogOkCancel(activity: Activity, title: String, body: String, ok: () -> Unit, cancel: () -> Unit) {
+        MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialog_Review)
+            .setTitle(title)
+            .setMessage(body)
+            .setPositiveButton(android.R.string.ok) { _, _ -> ok() }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> cancel()}
+            .show()
+    }
+
     @JvmStatic
     fun showDialogToEditReview(activity: Activity, review: Review,
         saveReviewCallback: (reviewId: String?, reviewText: String, rating: Float) -> Unit) {
@@ -86,7 +97,8 @@ object DialogFactory {
     }
 
     @JvmStatic
-    fun showDialogToAddCategories(activity: Activity, categories: List<Category>, checkedItems: List<Category>, onResult: (resultItems: List<Category>) -> Unit) {
+    fun showDialogToAddCategories(activity: Activity, categories: List<Category>, checkedItems: List<Category>,
+        onResult: (resultItems: List<Category>) -> Unit) {
         var resultItems = checkedItems
 
         // instantiate the dialog

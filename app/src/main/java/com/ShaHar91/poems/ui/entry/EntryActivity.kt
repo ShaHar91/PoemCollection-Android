@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import be.appwise.core.extensions.logging.logd
 import com.google.android.material.appbar.AppBarLayout
+import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
@@ -45,7 +46,7 @@ class EntryActivity : PoemBaseActivity<EntryViewModel>() {
         fun startWithIntent(context: Context, rating: Float? = null): Intent {
             val intent = Intent(context, EntryActivity::class.java)
             if (rating != null) {
-                intent.putExtra("rating", rating)
+                intent.putExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, rating)
             }
             return intent
         }
