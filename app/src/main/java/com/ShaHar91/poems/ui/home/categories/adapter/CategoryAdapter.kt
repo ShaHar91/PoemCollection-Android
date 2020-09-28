@@ -2,14 +2,12 @@ package com.shahar91.poems.ui.home.categories.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
+import com.shahar91.poems.databinding.ListItemCategoryBinding
 import com.shahar91.poems.ui.base.list.BaseAdapter
 import com.shahar91.poems.ui.base.list.BaseViewHolder
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
-import kotlinx.android.synthetic.main.list_item_category.view.*
 
 class CategoryAdapter(context: Context, listener: CategoryInteractionListener) :
     BaseAdapter<Category, CategoryInteractionListener, BaseViewHolder<Category, CategoryInteractionListener>>(
@@ -20,17 +18,16 @@ class CategoryAdapter(context: Context, listener: CategoryInteractionListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        return CategoryViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.list_item_category, parent, false))
+        return CategoryViewHolder(ListItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    class CategoryViewHolder(itemView: View) :
-        BaseViewHolder<Category, CategoryInteractionListener>(itemView) {
+    inner class CategoryViewHolder(private val binding: ListItemCategoryBinding) :
+        BaseViewHolder<Category, CategoryInteractionListener>(binding.root) {
 
         override fun bind(position: Int, item: Category,
             listener: CategoryInteractionListener) {
-            itemView.categoryTv.text = item.name
-            itemView.setOnClickListener { listener.onCategoryClicked(item) }
+            binding.category = item
+            binding.root.setOnClickListener { listener.onCategoryClicked(item) }
         }
     }
 }

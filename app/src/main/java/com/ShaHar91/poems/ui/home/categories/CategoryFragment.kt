@@ -19,6 +19,14 @@ import kotlinx.android.synthetic.main.fragment_categories.*
 class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
     private lateinit var categoryAdapter: CategoryAdapter
 
+    private val categoryAdapterListener = object : CategoryInteractionListener {
+        override fun onCategoryClicked(category: Category) {
+            findNavController().navigate(
+                CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category._id,
+                    category.name))
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_categories, container, false)
     }
@@ -33,13 +41,7 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
     }
 
     private fun initViews() {
-        categoryAdapter = CategoryAdapter(requireActivity(), object : CategoryInteractionListener {
-            override fun onCategoryClicked(category: Category) {
-                findNavController().navigate(
-                    CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category._id,
-                        category.name))
-            }
-        })
+        categoryAdapter = CategoryAdapter(requireActivity(), categoryAdapterListener)
 
         rvCategories.apply {
             setupRecyclerView(null)
@@ -47,7 +49,8 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
             loadingStateView = loadingView
             adapter = categoryAdapter
         }
-        srlRefreshCategories.run {
+
+        srlRefreshCategories.apply {
             setOnRefreshListener { getAllCategories() }
             setColorSchemeResources(R.color.colorWhite)
             setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
@@ -60,7 +63,6 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
 
         viewModel.getAllCategories({
             categoryAdapter.setItems(it)
-
             srlRefreshCategories.isRefreshing = false
         }, { throwable ->
             // when the response returns an error, show the data saved in the viewModel

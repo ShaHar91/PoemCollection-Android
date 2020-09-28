@@ -26,9 +26,8 @@ import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
 import kotlinx.android.synthetic.main.fragment_poem.*
 import kotlinx.android.synthetic.main.list_item_global_rating.*
-import kotlinx.android.synthetic.main.list_item_no_review.*
-import kotlinx.android.synthetic.main.list_item_poem_detail.*
 import kotlinx.android.synthetic.main.list_item_review.*
+import kotlinx.android.synthetic.main.reuse_poem_detail.*
 
 class PoemFragment : PoemBaseFragment<PoemViewModel>() {
     private lateinit var poemReviewsAdapter: PoemReviewsAdapter
@@ -78,22 +77,25 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
             tvPoem.text = poem.body
             tvWriterPoemDetail.text = poem.user?.username
 
-            noReviewLayout.isVisible = viewModel.ownReview == null
-            rbNoReview.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-                if (fromUser) {
-                    if (isLoggedIn()) {
-                        showAddReviewDialog(rating)
-                    } else {
-                        // start the EntryActivity to make sure the user gets logged in
-                        startActivityForResult(startWithIntent(requireContext(), rating),
-                            Constants.REQUEST_CODE_NEW_USER)
-                    }
+            noReview.isVisible = viewModel.ownReview == null
+            viewModel.ownReview?.let {
+                noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
+                    if (fromUser) {
+                        if (isLoggedIn()) {
+                            showAddReviewDialog(rating)
+                        } else {
+                            // start the EntryActivity to make sure the user gets logged in
+                            startActivityForResult(startWithIntent(requireContext(), rating),
+                                Constants.REQUEST_CODE_NEW_USER)
+                        }
 
-                    Handler().postDelayed({
-                        ratingBar.rating = 0f
-                    }, 500)
+                        Handler().postDelayed({
+                            ratingBar.rating = 0f
+                        }, 500)
+                    }
                 }
             }
+
             ownReviewLayout.isVisible = viewModel.ownReview != null
 
             viewModel.ownReview?.let { review ->

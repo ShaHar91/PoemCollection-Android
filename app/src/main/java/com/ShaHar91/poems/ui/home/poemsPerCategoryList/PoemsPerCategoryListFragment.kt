@@ -15,14 +15,20 @@ import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
 import kotlinx.android.synthetic.main.fragment_poems_per_category.*
-import kotlinx.android.synthetic.main.fragment_poems_per_category.emptyView
-import kotlinx.android.synthetic.main.fragment_poems_per_category.loadingView
 
 class PoemsPerCategoryListFragment :
     PoemBaseFragment<PoemsPerCategoryListViewModel>() {
     private val safeArgs: PoemsPerCategoryListFragmentArgs by navArgs()
 
     private lateinit var poemsPerCategoryListAdapter: PoemsPerCategoryListAdapter
+
+    private val poemsPerCategoryListAdapterListener =
+        object : PoemsPerCategoryListInteractionListener {
+            override fun onPoemClicked(poemId: String) {
+                PoemsPerCategoryListFragmentDirections.actionPoemsPerCategoryListFragmentToPoemFragment(poemId)
+                    .run(findNavController()::navigate)
+            }
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
@@ -41,13 +47,7 @@ class PoemsPerCategoryListFragment :
 
     private fun initViews() {
         poemsPerCategoryListAdapter = PoemsPerCategoryListAdapter(requireActivity(),
-            object : PoemsPerCategoryListInteractionListener {
-                override fun onPoemClicked(poemId: String) {
-                    findNavController().navigate(
-                        PoemsPerCategoryListFragmentDirections.actionPoemsPerCategoryListFragmentToPoemFragment(
-                            poemId = poemId))
-                }
-            })
+            poemsPerCategoryListAdapterListener)
 
         rvPoemsPerCategory.apply {
             setupRecyclerView(null)
@@ -69,12 +69,12 @@ class PoemsPerCategoryListFragment :
 
         viewModel.getAllPoemsPerCategory(safeArgs.categoryId, {
             poemsPerCategoryListAdapter.setItems(it)
-
             srlRefreshPoemsPerCategory.isRefreshing = false
         }, {
-            loge(null, it)
-
+            poemsPerCategoryListAdapter.setItems(viewModel.allPoemsForCategory)
             srlRefreshPoemsPerCategory.isRefreshing = false
+
+            loge(null, it)
         })
     }
 }

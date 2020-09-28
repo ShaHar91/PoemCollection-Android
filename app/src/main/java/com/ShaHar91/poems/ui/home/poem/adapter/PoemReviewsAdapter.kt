@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
+import com.shahar91.poems.databinding.ListItemReviewBinding
 import com.shahar91.poems.ui.base.list.BaseAdapter
 import com.shahar91.poems.ui.base.list.BaseViewHolder
 import kotlinx.android.synthetic.main.list_item_review.view.*
@@ -16,15 +17,15 @@ class PoemReviewsAdapter(context: Context, listener: ReviewInteractionListener):
 
     override fun onCreateViewHolder(parent: ViewGroup,
         viewType: Int): BaseViewHolder<Review, ReviewInteractionListener> {
-        return ReviewViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_review, parent, false))
+        return ReviewViewHolder(ListItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    class ReviewViewHolder(itemView: View) : BaseViewHolder<Review, ReviewInteractionListener>(itemView) {
+    class ReviewViewHolder(private val binding: ListItemReviewBinding) : BaseViewHolder<Review, ReviewInteractionListener>(binding.root) {
         override fun bind(position: Int, item: Review, listener: ReviewInteractionListener) {
+            binding.review = item
             itemView.ivReviewMenu.isGone = true
             itemView.rhUserHeader.userName = item.user?.username ?: ""
             itemView.rhUserHeader.rating = item.rating
-            itemView.tvReviewBody.text = item.text
         }
     }
 }

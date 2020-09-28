@@ -1,21 +1,24 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.progressindicator.ProgressIndicator
         android:id="@+id/loadingView"
-        android:layout_gravity="center"
         style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:visibility="gone" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/poemLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/general_background"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,11 +26,16 @@
             android:orientation="vertical"
             tools:context=".ui.home.poem.PoemFragment">
 
-            <include layout="@layout/list_item_poem_detail" />
+            <include layout="@layout/reuse_poem_detail" />
 
-            <include
-                android:id="@+id/noReviewLayout"
-                layout="@layout/list_item_no_review" />
+            <com.shahar91.poems.ui.custom.NoReview
+                android:id="@+id/noReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="12dp" />
 
             <include
                 android:id="@+id/ownReviewLayout"
@@ -49,6 +57,7 @@
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 android:paddingBottom="108dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/list_item_review" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
