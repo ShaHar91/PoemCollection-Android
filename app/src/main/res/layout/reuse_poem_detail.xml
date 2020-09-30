@@ -1,68 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="14dp"
-    android:layout_marginTop="12dp"
-    android:layout_marginEnd="14dp"
-    android:layout_marginBottom="12dp"
-    tools:context=".ui.home.poem.PoemFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="poem"
+            type="String" />
+        <variable
+            name="author"
+            type="String" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvPoemTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            tools:text="Poem Title" />
-
-        <TextView
-            android:id="@+id/tvPoem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="20dp"
-            android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textColor="?android:textColorSecondary"
-            tools:text="hello category category category category category category\ncategory category category category category category\ncategory category category category category category category\ncategory category category category category\ncategory category category category \ncategory category category category category \ncategory category category category category \ncategory category category category category \ncategory category category category \ncategory category category category category \ncategory category category category category \ncategory category category category category category category category category category " />
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="12dp"
+        tools:context=".ui.home.poem.PoemFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvPoemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center_horizontal"
+                android:text="@{title}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                tools:text="Poem Title" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvPoem"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/poem_detail_label_writer"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center_horizontal"
+                android:text="@{poem}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textColor="?android:textColorSecondary"
+                tools:text="hello category category category category category category\ncategory category category category category category\ncategory category category category category category category\ncategory category category category category\ncategory category category category \ncategory category category category category \ncategory category category category category \ncategory category category category category \ncategory category category category \ncategory category category category category \ncategory category category category category \ncategory category category category category category category category category category " />
 
-            <TextView
-                android:id="@+id/tvWriterPoemDetail"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                tools:text="Christiano" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/poem_detail_label_writer"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+
+                <TextView
+                    android:id="@+id/tvWriterPoemDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{author}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                    tools:text="Christiano" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

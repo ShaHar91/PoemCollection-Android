@@ -8,8 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.logging.loge
@@ -18,20 +17,20 @@ import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
+import com.shahar91.poems.databinding.FragmentPoemBinding
 import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.home.poem.adapter.PoemReviewsAdapter
 import com.shahar91.poems.utils.DialogFactory.showDialogOkCancel
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
-import kotlinx.android.synthetic.main.fragment_poem.*
 import kotlinx.android.synthetic.main.list_item_global_rating.*
 import kotlinx.android.synthetic.main.list_item_review.*
-import kotlinx.android.synthetic.main.reuse_poem_detail.*
 
 class PoemFragment : PoemBaseFragment<PoemViewModel>() {
     private lateinit var poemReviewsAdapter: PoemReviewsAdapter
     private val safeArgs: PoemFragmentArgs by navArgs()
+    private lateinit var mDataBinding: FragmentPoemBinding
 
     private val poemViewModelListener: PoemViewModel.ViewModelCallbacks = object :
         PoemViewModel.ViewModelCallbacks {
@@ -45,60 +44,36 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_poem, container, false)
-    }
+        viewModel = ViewModelProvider(this@PoemFragment).get(PoemViewModel::class.java).apply {
+            init(safeArgs.poemId, poemViewModelListener)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PoemViewModel::class.java)
-        viewModel.init(safeArgs.poemId, poemViewModelListener)
+            getPoemAndAllReviews()
+        }
+
+        mDataBinding = DataBindingUtil.inflate<FragmentPoemBinding>(inflater, R.layout.fragment_poem, container, false)
+            .apply {
+                viewModel = this@PoemFragment.viewModel
+            }
 
         initViews()
 
-        viewModel.getPoemAndAllReviews()
+        return mDataBinding.root
     }
 
     private fun initViews() {
         poemReviewsAdapter = PoemReviewsAdapter(requireActivity(),
             object : PoemReviewsAdapter.ReviewInteractionListener {})
 
-        rvPoemReviews.apply {
+        mDataBinding.rvPoemReviews.apply {
             setupRecyclerView(null)
             adapter = poemReviewsAdapter
         }
     }
 
     private fun showPoem() {
-        viewModel.poem?.let { poem ->
-            loadingView.isGone = true
-            poemLayout.isVisible = true
-
-            tvPoemTitle.text = poem.title
-            tvPoem.text = poem.body
-            tvWriterPoemDetail.text = poem.user?.username
-
-            noReview.isVisible = viewModel.ownReview == null
-            viewModel.ownReview?.let {
-                noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
-                    if (fromUser) {
-                        if (isLoggedIn()) {
-                            showAddReviewDialog(rating)
-                        } else {
-                            // start the EntryActivity to make sure the user gets logged in
-                            startActivityForResult(startWithIntent(requireContext(), rating),
-                                Constants.REQUEST_CODE_NEW_USER)
-                        }
-
-                        Handler().postDelayed({
-                            ratingBar.rating = 0f
-                        }, 500)
-                    }
-                }
-            }
-
-            ownReviewLayout.isVisible = viewModel.ownReview != null
-
-            viewModel.ownReview?.let { review ->
+        //TODO: check 2-way databinding!!!!
+        viewModel.poem.get()?.let { poem ->
+            viewModel.ownReview.get()?.let { review ->
                 rhUserHeader.userName = review.user?.username ?: ""
                 rhUserHeader.rating = review.rating
                 tvReviewBody.text = review.text
@@ -119,6 +94,22 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
                         show()
                     }
                 }
+            } ?: run {
+                mDataBinding.noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
+                    if (fromUser) {
+                        if (isLoggedIn()) {
+                            showAddReviewDialog(rating)
+                        } else {
+                            // start the EntryActivity to make sure the user gets logged in
+                            startActivityForResult(startWithIntent(requireContext(), rating),
+                                Constants.REQUEST_CODE_NEW_USER)
+                        }
+
+                        Handler().postDelayed({
+                            ratingBar.rating = 0f
+                        }, 500)
+                    }
+                }
             }
 
             tvAverageRating.text = String.format("%.1f", poem.averageRating)
@@ -135,10 +126,10 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
         }
 
         if (viewModel.delayedRating != null) {
-            if (viewModel.ownReview != null) {
+            if (viewModel.ownReview.get() != null) {
                 showDialogOkCancel(requireActivity(), "Review already exists",
                     "You already have an existing review for this poem, do you want to edit the previous one?", {
-                        showEditReviewDialog(viewModel.ownReview!!)
+                        showEditReviewDialog(viewModel.ownReview.get()!!)
                     }, {
                         viewModel.resetRating()
                     })

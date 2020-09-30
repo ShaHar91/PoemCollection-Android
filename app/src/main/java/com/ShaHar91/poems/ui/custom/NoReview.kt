@@ -8,7 +8,7 @@ import com.google.android.material.card.MaterialCardView
 import com.shahar91.poems.R
 import kotlinx.android.synthetic.main.custom_no_review.view.*
 
-class NoReview@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class NoReview @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     MaterialCardView(context, attrs, defStyleAttr) {
 
     init {
@@ -16,7 +16,9 @@ class NoReview@JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         inflater.inflate(R.layout.custom_no_review, this, true)
     }
 
-    fun setOnRatingChangedListener(callback: (ratingBar: RatingBar, rating: Float, fromUser: Boolean)->Unit) {
-        rbNoReview.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->  callback(ratingBar, rating, fromUser)}
+    fun setOnRatingChangedListener(callback: (ratingBar: RatingBar, rating: Float, fromUser: Boolean) -> Unit) {
+        rbNoReview.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            callback(ratingBar, rating, fromUser)
+        }
     }
 }

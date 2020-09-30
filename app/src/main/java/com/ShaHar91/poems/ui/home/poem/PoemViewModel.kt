@@ -1,5 +1,6 @@
 package com.shahar91.poems.ui.home.poem
 
+import androidx.databinding.ObservableField
 import com.shahar91.poems.data.models.Poem
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.repositories.PoemRepository
@@ -13,16 +14,11 @@ class PoemViewModel : PoemBaseViewModel() {
 
     var totalReviews = 0
         private set
-    var poem: Poem? = null
-        private set(value) {
-            field = value
-            totalReviews = 0
-            value?.totalRatingCount?.forEach {
-                totalReviews += it
-            }
-        }
-    var ownReview: Review? = null
-        private set
+
+    var poem: ObservableField<Poem?> = ObservableField()
+
+    var ownReview: ObservableField<Review?> = ObservableField()
+
     var delayedRating: Float? = null
         private set
 
@@ -41,7 +37,7 @@ class PoemViewModel : PoemBaseViewModel() {
         getPoemFromBackend {
             if (hawkCurrentUserId != null && hawkCurrentUserId!!.isNotEmpty()) {
                 ReviewRepository.getOwnReviewForPoem(poemId, {
-                    ownReview = it
+                    ownReview.set(it)
                     if (rating != null && rating > 0) {
                         delayedRating = rating
                     }
@@ -57,7 +53,13 @@ class PoemViewModel : PoemBaseViewModel() {
 
     private fun getPoemFromBackend(onSuccess: () -> Unit) {
         PoemRepository.getPoemById(poemId, {
-            this.poem = it
+            this.totalReviews = 0
+            it?.totalRatingCount?.forEach { ratingCount ->
+                totalReviews += ratingCount
+            }
+
+            this.poem.set(it)
+
             onSuccess()
         }, {
             listener.error(it)
@@ -68,7 +70,7 @@ class PoemViewModel : PoemBaseViewModel() {
         if (reviewId != null) {
             // Update review
             ReviewRepository.updateReview(poemId, reviewId, newReviewText!!, newRating, {
-                this.ownReview = it?.let { Review(it._id, it.text, it.rating, it.createdAt, it.poem, it.user) }
+                this.ownReview.set(it)
                 getPoemFromBackend { listener.refreshLayout() }
             }, {
                 listener.error(it)
@@ -76,7 +78,7 @@ class PoemViewModel : PoemBaseViewModel() {
         } else {
             // new review
             ReviewRepository.createReview(poemId, newReviewText!!, newRating, {
-                ownReview = it?.let { Review(it._id, it.text, it.rating, it.createdAt, it.poem, it.user) }
+                this.ownReview.set(it)
                 getPoemFromBackend { listener.refreshLayout() }
             }, {
                 listener.error(it)
@@ -86,7 +88,7 @@ class PoemViewModel : PoemBaseViewModel() {
 
     fun deleteReview(reviewId: String?) {
         ReviewRepository.deleteReview(reviewId!!, {
-            ownReview = null
+            ownReview.set(null)
             getPoemFromBackend { listener.refreshLayout() }
         }, {
             listener.error(it)
