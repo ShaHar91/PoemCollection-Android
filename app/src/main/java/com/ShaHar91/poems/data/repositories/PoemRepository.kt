@@ -58,4 +58,12 @@ object PoemRepository : BaseRepository() {
                     onSuccess()
                 }))
     }
+
+    fun getPoemsForCategoryLive(categoryId: String) = poemDao.getPoemsForCategoryLive(categoryId)
+
+    suspend fun getPoemsForCategoryCr(categoryId: String) {
+        ApiCallsManager.getPoemsForCategoryCr(categoryId)?.data?.let {
+            poemDao.createOrUpdateAllFromJson(Poem::class.java, it.toString())
+        }
+    }
 }

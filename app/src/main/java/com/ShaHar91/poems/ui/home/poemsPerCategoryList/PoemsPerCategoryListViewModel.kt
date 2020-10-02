@@ -1,19 +1,17 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList
 
-import com.shahar91.poems.data.models.Poem
-import com.shahar91.poems.data.repositories.PoemRepository.getPoems
+import be.appwise.core.extensions.viewmodel.singleArgViewModelFactory
+import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
-class PoemsPerCategoryListViewModel : PoemBaseViewModel() {
-    var allPoemsForCategory: List<Poem> = emptyList()
-        private set
+class PoemsPerCategoryListViewModel(categoryId: String) : PoemBaseViewModel() {
+    companion object {
+        val FACTORY = singleArgViewModelFactory(::PoemsPerCategoryListViewModel)
+    }
 
-    fun getAllPoemsPerCategory(categoryId: String, onSuccess: (List<Poem>) -> Unit, onError: (Throwable) -> Unit) {
-        getPoems(categoryId, {
-            this.allPoemsForCategory = it
-            onSuccess(it)
-        }, {
-            onError(it)
-        })
+    var allPoemsForCategoryLive = PoemRepository.getPoemsForCategoryLive(categoryId)
+
+    fun getAllPoemsForCategoryCr(categoryId: String) = launchAndLoad {
+        PoemRepository.getPoemsForCategoryCr(categoryId)
     }
 }

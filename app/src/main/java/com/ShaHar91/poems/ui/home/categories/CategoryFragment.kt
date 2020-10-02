@@ -4,20 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.core.ui.custom.RecyclerViewEnum
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
+import com.shahar91.poems.databinding.FragmentCategoriesBinding
 import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
-import kotlinx.android.synthetic.main.fragment_categories.*
 
 class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var mDataBinding: FragmentCategoriesBinding
 
     private val categoryAdapterListener = object : CategoryInteractionListener {
         override fun onCategoryClicked(category: Category) {
@@ -28,48 +30,55 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_categories, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        mDataBinding = DataBindingUtil.inflate<FragmentCategoriesBinding>(inflater, R.layout.fragment_categories,
+            container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = ViewModelProvider(this@CategoryFragment).get(CategoryViewModel::class.java)
+                    .apply {
+                        mViewModel = this
+                        setDefaultExceptionHandler(::onError)
+                        getAllCategoriesCr()
+                    }
+            }
 
         initViews()
 
-        getAllCategories(true)
+        return mDataBinding.root
     }
 
     private fun initViews() {
         categoryAdapter = CategoryAdapter(requireActivity(), categoryAdapterListener)
 
-        rvCategories.apply {
-            setupRecyclerView(null)
-            emptyStateView = emptyView
-            loadingStateView = loadingView
-            adapter = categoryAdapter
-        }
+        mDataBinding.apply {
+            rvCategories.apply {
+                setupRecyclerView(null)
+                emptyStateView = emptyView
+                loadingStateView = loadingView
+                adapter = categoryAdapter
+                stateView = RecyclerViewEnum.LOADING
+            }
 
-        srlRefreshCategories.apply {
-            setOnRefreshListener { getAllCategories() }
-            setColorSchemeResources(R.color.colorWhite)
-            setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
+            srlRefreshCategories.apply {
+                setOnRefreshListener { viewModel?.getAllCategoriesCr() }
+                setColorSchemeResources(R.color.colorWhite)
+                setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
+            }
+
+            viewModel?.categoriesLive?.observe(viewLifecycleOwner, Observer {
+                srlRefreshCategories.isRefreshing = false
+                categoryAdapter.setItems(it)
+            })
         }
     }
 
-    private fun getAllCategories(showLoadingState: Boolean = false) {
-        // only show the loading state at the start
-        if (showLoadingState) rvCategories.stateView = RecyclerViewEnum.LOADING
-
-        viewModel.getAllCategories({
-            categoryAdapter.setItems(it)
+    override fun onError(throwable: Throwable) {
+        super.onError(throwable)
+        mDataBinding.apply {
+            if (rvCategories.stateView == RecyclerViewEnum.LOADING) {
+                rvCategories.stateView = RecyclerViewEnum.EMPTY_STATE
+            }
             srlRefreshCategories.isRefreshing = false
-        }, { throwable ->
-            // when the response returns an error, show the data saved in the viewModel
-            categoryAdapter.setItems(viewModel.categories)
-            srlRefreshCategories.isRefreshing = false
-
-            loge(null, throwable, "")
-        })
+        }
     }
 }

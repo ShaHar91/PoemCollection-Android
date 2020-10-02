@@ -26,4 +26,12 @@ object CategoryRepository : BaseRepository() {
             onSuccess(categoryDao.findAllCategories())
         }))
     }
+
+    suspend fun getCategoriesCr() {
+       ApiCallsManager.getAllCategoriesCr()?.data?.let {
+            categoryDao.saveAll(it, true)
+        }
+    }
+
+    fun getAllCategoriesLive() = categoryDao.getAllLive()
 }

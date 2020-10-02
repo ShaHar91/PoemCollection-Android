@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.shahar91.poems.data.models.Poem
 import com.shahar91.poems.databinding.ListItemPoemPerCategoryBinding
-import com.shahar91.poems.ui.base.list.BaseAdapter
-import com.shahar91.poems.ui.base.list.BaseViewHolder
+import be.appwise.core.ui.base.list.BaseAdapter
+import be.appwise.core.ui.base.list.BaseViewHolder
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
 
 class PoemsPerCategoryListAdapter(context: Context, listener: PoemsPerCategoryListInteractionListener) :

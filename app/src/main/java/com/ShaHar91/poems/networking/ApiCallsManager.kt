@@ -13,6 +13,8 @@ object ApiCallsManager {
     @JvmStatic
     fun getAllPoems(categoryId: String) = Networking.doCallRx(unprotected?.getPoems(categoryId)!!)
 
+    suspend fun getPoemsForCategoryCr(categoryId: String) = Networking.doCallCr(unprotected?.getPoemsForCategoryId(categoryId)!!)
+
     @JvmStatic
     fun getPoemById(poemId: String, userId: String?) = Networking.doCallRx(unprotected?.getPoemById(poemId, userId)!!)
 
@@ -23,6 +25,8 @@ object ApiCallsManager {
     //<editor-fold desc="Categories">
     @JvmStatic
     fun getAllCategories() = Networking.doCallRx(unprotected?.getCategories()!!)
+
+    suspend fun getAllCategoriesCr() = Networking.doCallCr(unprotected?.getCategoriesCr()!!)
     //</editor-fold>
 
     //<editor-fold desc="Auth">

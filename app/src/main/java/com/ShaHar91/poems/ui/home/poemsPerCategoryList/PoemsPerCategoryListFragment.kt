@@ -4,22 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.core.ui.custom.RecyclerViewEnum
 import com.shahar91.poems.R
+import com.shahar91.poems.databinding.FragmentPoemsPerCategoryBinding
 import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
-import kotlinx.android.synthetic.main.fragment_poems_per_category.*
 
 class PoemsPerCategoryListFragment :
     PoemBaseFragment<PoemsPerCategoryListViewModel>() {
     private val safeArgs: PoemsPerCategoryListFragmentArgs by navArgs()
-
+    private lateinit var mDataBinding: FragmentPoemsPerCategoryBinding
     private lateinit var poemsPerCategoryListAdapter: PoemsPerCategoryListAdapter
 
     private val poemsPerCategoryListAdapterListener =
@@ -32,49 +33,59 @@ class PoemsPerCategoryListFragment :
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_poems_per_category, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(
-            PoemsPerCategoryListViewModel::class.java)
+        mDataBinding = DataBindingUtil.inflate<FragmentPoemsPerCategoryBinding>(inflater,
+            R.layout.fragment_poems_per_category, container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = ViewModelProvider(this@PoemsPerCategoryListFragment,
+                    PoemsPerCategoryListViewModel.FACTORY(safeArgs.categoryId))
+                    .get(
+                        PoemsPerCategoryListViewModel::class.java)
+                    .apply {
+                        mViewModel = this
+                        setDefaultExceptionHandler(::onError)
+                        getAllPoemsForCategoryCr(safeArgs.categoryId)
+                    }
+            }
 
         initViews()
 
-        getAllPoemsForCategory(true)
+        return mDataBinding.root
     }
 
     private fun initViews() {
         poemsPerCategoryListAdapter = PoemsPerCategoryListAdapter(requireActivity(),
             poemsPerCategoryListAdapterListener)
 
-        rvPoemsPerCategory.apply {
-            setupRecyclerView(null)
-            emptyStateView = emptyView
-            loadingStateView = loadingView
-            adapter = poemsPerCategoryListAdapter
-        }
+        mDataBinding.apply {
+            rvPoemsPerCategory.apply {
+                setupRecyclerView(null)
+                emptyStateView = emptyView
+                loadingStateView = loadingView
+                adapter = poemsPerCategoryListAdapter
+                stateView = RecyclerViewEnum.LOADING
+            }
 
-        srlRefreshPoemsPerCategory.run {
-            setOnRefreshListener { getAllPoemsForCategory() }
-            setColorSchemeResources(R.color.colorWhite)
-            setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
+            srlRefreshPoemsPerCategory.run {
+                setOnRefreshListener { viewModel?.getAllPoemsForCategoryCr(safeArgs.categoryId) }
+                setColorSchemeResources(R.color.colorWhite)
+                setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
+            }
+
+            viewModel?.allPoemsForCategoryLive?.observe(viewLifecycleOwner, Observer {
+                srlRefreshPoemsPerCategory.isRefreshing = false
+                poemsPerCategoryListAdapter.setItems(it)
+            })
         }
     }
 
-    private fun getAllPoemsForCategory(showLoadingState: Boolean = false) {
-        // only show the loading state at the start
-        if (showLoadingState) rvPoemsPerCategory.stateView = RecyclerViewEnum.LOADING
-
-        viewModel.getAllPoemsPerCategory(safeArgs.categoryId, {
-            poemsPerCategoryListAdapter.setItems(it)
+    override fun onError(throwable: Throwable) {
+        super.onError(throwable)
+        mDataBinding.apply {
+            if (rvPoemsPerCategory.stateView == RecyclerViewEnum.LOADING) {
+                rvPoemsPerCategory.stateView = RecyclerViewEnum.EMPTY_STATE
+            }
             srlRefreshPoemsPerCategory.isRefreshing = false
-        }, {
-            poemsPerCategoryListAdapter.setItems(viewModel.allPoemsForCategory)
-            srlRefreshPoemsPerCategory.isRefreshing = false
-
-            loge(null, it)
-        })
+        }
     }
 }

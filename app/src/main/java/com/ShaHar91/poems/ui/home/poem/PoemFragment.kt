@@ -11,7 +11,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import be.appwise.core.extensions.logging.loge
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
@@ -39,12 +38,12 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
         }
 
         override fun error(throwable: Throwable) {
-            loge(null, throwable)
+            onError(throwable)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewModel = ViewModelProvider(this@PoemFragment).get(PoemViewModel::class.java).apply {
+        mViewModel = ViewModelProvider(this@PoemFragment).get(PoemViewModel::class.java).apply {
             init(safeArgs.poemId, poemViewModelListener)
 
             getPoemAndAllReviews()
@@ -52,7 +51,7 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
 
         mDataBinding = DataBindingUtil.inflate<FragmentPoemBinding>(inflater, R.layout.fragment_poem, container, false)
             .apply {
-                viewModel = this@PoemFragment.viewModel
+                viewModel = this@PoemFragment.mViewModel
             }
 
         initViews()
@@ -72,8 +71,8 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
 
     private fun showPoem() {
         //TODO: check 2-way databinding!!!!
-        viewModel.poem.get()?.let { poem ->
-            viewModel.ownReview.get()?.let { review ->
+        mViewModel.poem.get()?.let { poem ->
+            mViewModel.ownReview.get()?.let { review ->
                 rhUserHeader.userName = review.user?.username ?: ""
                 rhUserHeader.rating = review.rating
                 tvReviewBody.text = review.text
@@ -87,7 +86,7 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
                                     showEditReviewDialog(review)
                                 }
                                 R.id.review_delete ->
-                                    viewModel.deleteReview(review._id)
+                                    mViewModel.deleteReview(review._id)
                             }
                             true
                         }
@@ -114,39 +113,39 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
 
             tvAverageRating.text = String.format("%.1f", poem.averageRating)
             rbTotalRating.rating = poem.averageRating
-            tvTotalReviews.text = viewModel.totalReviews.toString()
+            tvTotalReviews.text = mViewModel.totalReviews.toString()
 
             listOf(pbOneStarRating, pbTwoStarRating, pbThreeStarRating,
                 pbFourStarRating, pbFiveStarRating).forEachIndexed { i, pb ->
-                pb.max = viewModel.totalReviews
+                pb.max = mViewModel.totalReviews
                 pb.progress = poem.totalRatingCount[i] ?: 0
             }
 
             poemReviewsAdapter.setItems(poem.shortReviewList)
         }
 
-        if (viewModel.delayedRating != null) {
-            if (viewModel.ownReview.get() != null) {
+        if (mViewModel.delayedRating != null) {
+            if (mViewModel.ownReview.get() != null) {
                 showDialogOkCancel(requireActivity(), "Review already exists",
                     "You already have an existing review for this poem, do you want to edit the previous one?", {
-                        showEditReviewDialog(viewModel.ownReview.get()!!)
+                        showEditReviewDialog(mViewModel.ownReview.get()!!)
                     }, {
-                        viewModel.resetRating()
+                        mViewModel.resetRating()
                     })
             } else {
-                showAddReviewDialog(viewModel.delayedRating ?: 0F)
+                showAddReviewDialog(mViewModel.delayedRating ?: 0F)
             }
         }
     }
 
     private fun showAddReviewDialog(rating: Float) {
-        viewModel.resetRating()
-        showDialogToAddReview(requireActivity(), rating, viewModel::saveOrUpdateReview)
+        mViewModel.resetRating()
+        showDialogToAddReview(requireActivity(), rating, mViewModel::saveOrUpdateReview)
     }
 
     private fun showEditReviewDialog(review: Review) {
-        viewModel.resetRating()
-        showDialogToEditReview(requireActivity(), review, viewModel::saveOrUpdateReview)
+        mViewModel.resetRating()
+        showDialogToEditReview(requireActivity(), review, mViewModel::saveOrUpdateReview)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -154,7 +153,7 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
             if (resultCode == Activity.RESULT_OK) {
                 // A user has been logged in successfully
                 // Refresh the poem and all reviews (as the user's review may have been in the preview list)
-                viewModel.getPoemAndAllReviews(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
+                mViewModel.getPoemAndAllReviews(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

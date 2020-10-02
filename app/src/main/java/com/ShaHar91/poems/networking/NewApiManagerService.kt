@@ -36,11 +36,17 @@ interface NewApiManagerService {
     //<editor-fold desc="Categories">
     @GET("categories")
     fun getCategories(): Call<NetworkResponse<JsonArray>>
+
+    @GET("categories")
+    fun getCategoriesCr(): Call<NetworkResponse<JsonArray>>
     //</editor-fold>
 
     //<editor-fold desc="Poems">
     @GET("poems")
     fun getPoems(@Query("categories") categoryId: String): Call<NetworkResponse<JsonArray>>
+
+    @GET("poems")
+    fun getPoemsForCategoryId(@Query("categories") categoryId: String): Call<NetworkResponse<JsonArray>>
 
     @GET("poems/{id}")
     fun getPoemById(

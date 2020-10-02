@@ -1,6 +1,7 @@
 package com.shahar91.poems.data.dao
 
 import be.appwise.core.data.base.BaseDao
+import be.appwise.core.data.realmLiveData.RealmResultsLiveData
 import com.shahar91.poems.data.models.Poem
 import com.shahar91.poems.data.models.PoemFields
 import io.realm.Realm
@@ -19,4 +20,6 @@ class PoemDao(db: Realm) : BaseDao<Poem>(db) {
     fun findPoemById(poemId: String): Poem? {
         return where().equalTo(PoemFields._ID, poemId).findFirst()
     }
+
+    fun getPoemsForCategoryLive(categoryId: String) = RealmResultsLiveData(where().equalTo(PoemFields.CATEGORIES._ID, categoryId).findAllAsync())
 }

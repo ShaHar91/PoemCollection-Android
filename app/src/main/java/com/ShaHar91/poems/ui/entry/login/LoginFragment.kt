@@ -28,7 +28,7 @@ class LoginFragment : PoemBaseFragment<LoginViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         btnLogin.setOnClickListener { checkToLogin() }
         btnLoginFacebook.setOnClickListener { this.listeners.onFacebookClicked() }
@@ -55,20 +55,20 @@ class LoginFragment : PoemBaseFragment<LoginViewModel>() {
         val emailText = tilEmail.editText?.text?.toString() ?: ""
         val passwordText = tilPassword.editText?.text?.toString() ?: ""
 
-        if (viewModel.checkDataValidity(emailText, Patterns.EMAIL_ADDRESS)) {
+        if (mViewModel.checkDataValidity(emailText, Patterns.EMAIL_ADDRESS)) {
             // Email is not valid, show error on emailEditText
             tilEmail.setErrorLayout(getString(R.string.entry_invalid_email))
             isValid = false
         }
 
-        if (viewModel.checkDataValidity(passwordText, Constants.PASSWORD_PATTERN)) {
+        if (mViewModel.checkDataValidity(passwordText, Constants.PASSWORD_PATTERN)) {
             // Password is not valid, show error on passwordEditText
             tilPassword.setErrorLayout(getString(R.string.entry_invalid_password))
             isValid = false
         }
 
         if (isValid) {
-            viewModel.loginUser(emailText, passwordText,
+            mViewModel.loginUser(emailText, passwordText,
                 {
                     listeners.onLoginSuccessful()
                 }, {

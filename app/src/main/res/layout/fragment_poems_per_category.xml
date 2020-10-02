@@ -1,54 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/general_background"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.progressindicator.ProgressIndicator
-        android:id="@+id/loadingView"
-        style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/emptyView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No poems could be loaded for this category"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.shahar91.poems.ui.home.poemsPerCategoryList.PoemsPerCategoryListViewModel" />
+    </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srlRefreshPoemsPerCategory"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/general_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context=".ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment">
 
-        <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
-            android:id="@+id/rvPoemsPerCategory"
+        <com.google.android.material.progressindicator.ProgressIndicator
+            android:id="@+id/loadingView"
+            style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/emptyView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No poems could be loaded for this category"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlRefreshPoemsPerCategory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="6dp"
-            android:paddingBottom="96dp"
-            android:splitMotionEvents="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/list_item_poem_per_category" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
+                android:id="@+id/rvPoemsPerCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="6dp"
+                android:paddingBottom="96dp"
+                android:splitMotionEvents="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_poem_per_category" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

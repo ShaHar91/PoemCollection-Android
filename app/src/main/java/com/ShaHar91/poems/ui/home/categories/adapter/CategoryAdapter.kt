@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.ListItemCategoryBinding
-import com.shahar91.poems.ui.base.list.BaseAdapter
-import com.shahar91.poems.ui.base.list.BaseViewHolder
+import be.appwise.core.ui.base.list.BaseAdapter
+import be.appwise.core.ui.base.list.BaseViewHolder
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 
 class CategoryAdapter(context: Context, listener: CategoryInteractionListener) :

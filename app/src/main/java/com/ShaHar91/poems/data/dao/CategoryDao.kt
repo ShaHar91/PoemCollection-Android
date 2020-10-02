@@ -1,6 +1,7 @@
 package com.shahar91.poems.data.dao
 
 import be.appwise.core.data.base.BaseDao
+import be.appwise.core.data.realmLiveData.RealmResultsLiveData
 import com.google.gson.JsonArray
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.data.models.CategoryFields
@@ -26,4 +27,7 @@ class CategoryDao(db: Realm) : BaseDao<Category>(db) {
             }
             createOrUpdateAllFromJson(Category::class.java, jsonArray.toString())
         }
-    }}
+    }
+
+    fun getAllLive() = RealmResultsLiveData(where().findAllAsync())
+}

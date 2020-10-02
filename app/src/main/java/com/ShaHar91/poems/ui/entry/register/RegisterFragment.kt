@@ -26,7 +26,7 @@ class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
 
         btnRegister.setOnClickListener { checkToRegister() }
         btnLoginFacebook.setOnClickListener { listeners.onFacebookClicked() }
@@ -57,12 +57,12 @@ class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
             isValid = false
         }
 
-        if (viewModel.checkDataValidity(emailText, Patterns.EMAIL_ADDRESS)) {
+        if (mViewModel.checkDataValidity(emailText, Patterns.EMAIL_ADDRESS)) {
             tilEmail.setErrorLayout(getString(R.string.entry_invalid_email))
             isValid = false
         }
 
-        if (viewModel.checkDataValidity(passwordText, Constants.PASSWORD_PATTERN)) {
+        if (mViewModel.checkDataValidity(passwordText, Constants.PASSWORD_PATTERN)) {
             tilPassword.setErrorLayout(getString(R.string.entry_invalid_password))
             isValid = false
         }
@@ -73,7 +73,7 @@ class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
         }
 
         if (isValid) {
-            viewModel.registerUser(usernameText, emailText, passwordText,
+            mViewModel.registerUser(usernameText, emailText, passwordText,
                 {
                     listeners.onRegisterSuccessful()
                 }, {
