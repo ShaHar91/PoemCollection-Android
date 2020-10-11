@@ -11,7 +11,7 @@ object CategoryRepository : BaseRepository() {
 
     @JvmStatic
     fun getCategories(onSuccess: (List<Category>) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getAllCategories().observeOn(AndroidSchedulers.mainThread()).subscribe({
+        ApiCallsManager.getAllCategories().observeOn(AndroidSchedulers.mainThread()).subscribe({
             it.data?.let { data ->
                 categoryDao.saveAll(data, true)
             }
@@ -24,7 +24,7 @@ object CategoryRepository : BaseRepository() {
             //            }
         }, {
             onSuccess(categoryDao.findAllCategories())
-        }))
+        })
     }
 
     suspend fun getCategoriesCr() {

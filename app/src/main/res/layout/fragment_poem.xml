@@ -67,7 +67,16 @@
                     android:visibility="@{viewModel.ownReview == null ? View.GONE : View.VISIBLE }"
                     tools:visibility="gone" />
 
-                <include layout="@layout/list_item_global_rating" />
+                <include
+                    android:id="@+id/globalRating"
+                    layout="@layout/list_item_global_rating"
+                    app:averageRating="@{viewModel.poem.averageRating}"
+                    app:fiveStarRating="@{viewModel.poem.getFiveStarRating()}"
+                    app:fourStarRating="@{viewModel.poem.getFourStarRating()}"
+                    app:oneStarRating="@{viewModel.poem.getOneStarRating()}"
+                    app:threeStarRating="@{viewModel.poem.getThreeStarRating()}"
+                    app:totalRating="@{viewModel.poem.getTotal()}"
+                    app:twoStarRating="@{viewModel.poem.getTwoStarRating()}" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPoemReviews"

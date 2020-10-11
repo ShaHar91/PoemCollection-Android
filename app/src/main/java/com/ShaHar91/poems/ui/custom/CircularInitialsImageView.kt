@@ -18,6 +18,7 @@ import com.bumptech.glide.request.target.Target
 import com.shahar91.poems.R
 import kotlinx.android.synthetic.main.custom_circular_profile_image.view.*
 
+// https://medium.com/@Zielony/guide-to-android-custom-views-constructors-df47476e334c
 class CircularInitialsImageView : ConstraintLayout {
     constructor(context: Context) : super(context) {
         init(context, null)

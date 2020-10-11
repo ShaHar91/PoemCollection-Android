@@ -1,98 +1,60 @@
 package com.shahar91.poems.ui.home.poem
 
-import androidx.databinding.ObservableField
-import com.shahar91.poems.data.models.Poem
+import androidx.lifecycle.LiveData
+import be.appwise.core.extensions.viewmodel.singleArgViewModelFactory
+import be.appwise.core.util.SingleLiveEvent
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 import com.shahar91.poems.utils.HawkUtils.hawkCurrentUserId
 
-class PoemViewModel : PoemBaseViewModel() {
-    private lateinit var poemId: String
-    private lateinit var listener: ViewModelCallbacks
+class PoemViewModel(private val poemId: String) : PoemBaseViewModel() {
+    companion object {
+        val FACTORY = singleArgViewModelFactory(::PoemViewModel)
+    }
 
-    var totalReviews = 0
-        private set
+    private val refreshLayout = SingleLiveEvent<Boolean>()
+    fun getRefreshLayout(): SingleLiveEvent<Boolean> {
+        return refreshLayout
+    }
 
-    var poem: ObservableField<Poem?> = ObservableField()
+    var poem = PoemRepository.getPoemByIdLive(poemId)
 
-    var ownReview: ObservableField<Review?> = ObservableField()
+    //    private val _ownReview = MutableLiveData<Boolean>().apply { value = false }
+    //    val ownReview get() = _ownReview as LiveData<Boolean>
+
+    var ownReview: LiveData<Review?> = ReviewRepository.getOwnReviewForPoemLive(poemId)
+
+    fun getPoemAndAllDataCr(rating: Float? = null) = launchAndLoad {
+        this.delayedRating = rating
+        PoemRepository.getPoemByIdCr(poemId)
+        if (hawkCurrentUserId != null && hawkCurrentUserId!!.isNotEmpty()) {
+            ReviewRepository.getOwnReviewForPoemCr(poemId)
+        }
+        refreshLayout.value = true
+    }
 
     var delayedRating: Float? = null
         private set
 
-    fun init(poemId: String, listener: ViewModelCallbacks) {
-        this.poemId = poemId
-        this.listener = listener
-    }
-
-    interface ViewModelCallbacks {
-        fun refreshLayout()
-
-        fun error(throwable: Throwable)
-    }
-
-    fun getPoemAndAllReviews(rating: Float? = null) {
-        getPoemFromBackend {
-            if (hawkCurrentUserId != null && hawkCurrentUserId!!.isNotEmpty()) {
-                ReviewRepository.getOwnReviewForPoem(poemId, {
-                    ownReview.set(it)
-                    if (rating != null && rating > 0) {
-                        delayedRating = rating
-                    }
-                    listener.refreshLayout()
-                }, {
-                    listener.error(it)
-                })
-            } else {
-                listener.refreshLayout()
-            }
-        }
-    }
-
-    private fun getPoemFromBackend(onSuccess: () -> Unit) {
-        PoemRepository.getPoemById(poemId, {
-            this.totalReviews = 0
-            it?.totalRatingCount?.forEach { ratingCount ->
-                totalReviews += ratingCount
-            }
-
-            this.poem.set(it)
-
-            onSuccess()
-        }, {
-            listener.error(it)
-        })
-    }
-
-    fun saveOrUpdateReview(reviewId: String?, newReviewText: String?, newRating: Float) {
+    fun saveOrUpdateReview(reviewId: String?, newReviewText: String, newRating: Float) = launchAndLoad {
         if (reviewId != null) {
-            // Update review
-            ReviewRepository.updateReview(poemId, reviewId, newReviewText!!, newRating, {
-                this.ownReview.set(it)
-                getPoemFromBackend { listener.refreshLayout() }
-            }, {
-                listener.error(it)
-            })
+            // Update Review
+            ReviewRepository.updateReviewCr(reviewId, newReviewText, newRating)
         } else {
-            // new review
-            ReviewRepository.createReview(poemId, newReviewText!!, newRating, {
-                this.ownReview.set(it)
-                getPoemFromBackend { listener.refreshLayout() }
-            }, {
-                listener.error(it)
-            })
+            // New Review
+            //TODO: create a new Review does not update the layout
+            ReviewRepository.createReviewCr(poemId, newReviewText, newRating)
         }
+        refreshLayout.value = true
     }
 
-    fun deleteReview(reviewId: String?) {
-        ReviewRepository.deleteReview(reviewId!!, {
-            ownReview.set(null)
-            getPoemFromBackend { listener.refreshLayout() }
-        }, {
-            listener.error(it)
-        })
+
+    fun deleteReview(reviewId: String) = launchAndLoad {
+        //TODO: deleting a Review does not update the layout
+        ReviewRepository.deleteReviewCr(reviewId)
+        refreshLayout.value = true
     }
 
     fun resetRating() {

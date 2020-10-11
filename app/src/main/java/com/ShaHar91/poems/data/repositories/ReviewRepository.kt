@@ -1,7 +1,6 @@
 package com.shahar91.poems.data.repositories
 
 import be.appwise.core.data.base.BaseRepository
-import be.appwise.core.extensions.logging.logd
 import com.shahar91.poems.data.dao.ReviewDao
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.networking.ApiCallsManager
@@ -13,7 +12,7 @@ object ReviewRepository : BaseRepository() {
 
     @JvmStatic
     fun getReviews(poemId: String, onSuccess: (List<Review>) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getAllReviewsForPoem(poemId).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        ApiCallsManager.getAllReviewsForPoem(poemId).observeOn(AndroidSchedulers.mainThread()).subscribe({
             if (it.data != null) {
                 reviewDao.createOrUpdateAllFromJson(Review::class.java, it.data!!.toString())
             }
@@ -21,60 +20,42 @@ object ReviewRepository : BaseRepository() {
             onError(it)
         }, {
             onSuccess(reviewDao.findAllReviewsForPoem(poemId))
-        }))
+        })
     }
 
-    @JvmStatic
-    fun getOwnReviewForPoem(poemId: String, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getOwnReviewForPoem(poemId, HawkUtils.hawkCurrentUserId).observeOn(AndroidSchedulers.mainThread()).subscribe({
+    fun getOwnReviewForPoemLive(poemId: String) = reviewDao.getOwnReviewForPoemLive(poemId, HawkUtils.hawkCurrentUserId)
+
+    suspend fun getOwnReviewForPoemCr(poemId: String) {
+        ApiCallsManager.getOwnReviewForPoemCr(poemId, HawkUtils.hawkCurrentUserId)?.let {
             if (it.data != null && it.data?.size()?.equals(0) == false) {
                 reviewDao.createOrUpdateAllFromJson(Review::class.java, it.data!!.toString())
             } else {
                 reviewDao.findAndDeleteReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId)
             }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(reviewDao.findReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId))
-        }))
+        }
     }
 
-    @JvmStatic
-    fun createReview(poemId: String, reviewText: String, reviewRating: Float, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.createReview(poemId, reviewText, reviewRating).observeOn(AndroidSchedulers.mainThread()).subscribe({
+    suspend fun updateReviewCr(reviewId: String, reviewText: String, reviewRating: Float) {
+        ApiCallsManager.updateReviewCr(reviewId, reviewText, reviewRating)?.let {
             if (it.data != null) {
                 reviewDao.createOrUpdateObjectFromJson(Review::class.java, it.data!!.toString())
             }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(reviewDao.findReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId))
-        }))
+        }
     }
 
-    @JvmStatic
-    fun updateReview(poemId: String, reviewId: String, reviewText: String, reviewRating: Float, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.editReview(reviewId, reviewText, reviewRating).observeOn(AndroidSchedulers.mainThread()).subscribe({
+    suspend fun createReviewCr(poemId: String, reviewText: String, reviewRating: Float) {
+        ApiCallsManager.createReviewCr(poemId, reviewText, reviewRating)?.let {
             if (it.data != null) {
                 reviewDao.createOrUpdateObjectFromJson(Review::class.java, it.data!!.toString())
             }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(reviewDao.findReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId))
-        }))
+        }
     }
 
-    @JvmStatic
-    fun deleteReview(reviewId: String, onSuccess: () -> Unit, onError:(Throwable) -> Unit) {
-        addCall(ApiCallsManager.deleteReview(reviewId).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it?.success == true){
+    suspend fun deleteReviewCr(reviewId: String) {
+        ApiCallsManager.deleteReviewCr(reviewId)?.let {
+            if (it.success) {
                 reviewDao.findAndDeleteReviewById(reviewId)
             }
-        }, {
-            onError(it)
-        }, {
-            onSuccess()
-        }))
+        }
     }
 }

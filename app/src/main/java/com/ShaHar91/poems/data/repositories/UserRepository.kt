@@ -13,7 +13,7 @@ object UserRepository : BaseRepository() {
     
     @JvmStatic
     fun getCurrentUser(onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getCurrentUser().observeOn(AndroidSchedulers.mainThread()).subscribe({
+        ApiCallsManager.getCurrentUser().observeOn(AndroidSchedulers.mainThread()).subscribe({
             logd(null,"refreshUserFlow call okay")
 
             //Save current user id in Hawk
@@ -23,6 +23,6 @@ object UserRepository : BaseRepository() {
             onError(it)
         }, {
             onSuccess()
-        }))
+        })
     }
 }

@@ -17,7 +17,7 @@ import retrofit2.http.Query
 interface NewApiManagerService {
     //<editor-fold desc="Auth">
     @FormUrlEncoded
-    @POST("auth/login")
+    @POST("https:bjklmmauth/login")
     fun loginUser(
         @Field("email") email: String,
         @Field("password") password: String): Call<AccessToken>
@@ -36,9 +36,6 @@ interface NewApiManagerService {
     //<editor-fold desc="Categories">
     @GET("categories")
     fun getCategories(): Call<NetworkResponse<JsonArray>>
-
-    @GET("categories")
-    fun getCategoriesCr(): Call<NetworkResponse<JsonArray>>
     //</editor-fold>
 
     //<editor-fold desc="Poems">

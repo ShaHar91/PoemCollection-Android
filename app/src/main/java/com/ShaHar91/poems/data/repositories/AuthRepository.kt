@@ -11,7 +11,7 @@ object AuthRepository : BaseRepository() {
 
     @JvmStatic
     fun loginUser(email: String, password: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.loginUser(email, password).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        ApiCallsManager.loginUser(email, password).observeOn(AndroidSchedulers.mainThread()).subscribe({
             logv(null, "Successfully logged in")
 
             //Save token
@@ -20,19 +20,21 @@ object AuthRepository : BaseRepository() {
             UserRepository.getCurrentUser(onSuccess, onError)
         }, {
             onError(it)
-        }))
+        })
     }
 
-    fun registerUser(userName: String, email: String, password: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.registerUser(userName, email, password).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            logv(null, "Successfully logged in")
+    fun registerUser(userName: String, email: String, password: String, onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit) {
+        ApiCallsManager.registerUser(userName, email, password).observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                logv(null, "Successfully logged in")
 
-            //Save token
-            Networking.saveAccessToken(it.apply { token_type = NetworkConstants.BEARER.trim() })
+                //Save token
+                Networking.saveAccessToken(it.apply { token_type = NetworkConstants.BEARER.trim() })
 
-            UserRepository.getCurrentUser(onSuccess, onError)
-        }, {
-            onError(it)
-        }))
+                UserRepository.getCurrentUser(onSuccess, onError)
+            }, {
+                onError(it)
+            })
     }
 }

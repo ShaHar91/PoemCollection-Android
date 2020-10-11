@@ -23,4 +23,32 @@ open class Poem(
                 poem.averageRating, poem.totalRatingCount, poem.shortReviewList, poem.createdAt)
         }
     }
+
+    fun getFiveStarRating(): Int {
+        return totalRatingCount[4] ?: 0
+    }
+
+    fun getFourStarRating(): Int {
+        return totalRatingCount[3] ?: 0
+    }
+
+    fun getThreeStarRating(): Int {
+        return totalRatingCount[2] ?: 0
+    }
+
+    fun getTwoStarRating(): Int {
+        return totalRatingCount[1] ?: 0
+    }
+
+    fun getOneStarRating(): Int {
+        return totalRatingCount[0] ?: 0
+    }
+
+    fun getTotal(): Int {
+        var total = 0
+        totalRatingCount.forEach { ratingCount ->
+            total += ratingCount
+        }
+        return total
+    }
 }

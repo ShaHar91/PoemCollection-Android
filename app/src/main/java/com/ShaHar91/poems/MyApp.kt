@@ -32,7 +32,6 @@ class MyApp : Application() {
             .setApplicationId(BuildConfig.APPLICATION_ID)
 
         init(this)
-            .initializeHawk()
             .initializeLogger(getString(R.string.app_name), BuildConfig.DEBUG)
             .initializeNetworking(networkBuilder, NewApiManagerService::class.java)
             .initializeErrorActivity(

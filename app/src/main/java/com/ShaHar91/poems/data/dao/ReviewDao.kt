@@ -1,6 +1,7 @@
 package com.shahar91.poems.data.dao
 
 import be.appwise.core.data.base.BaseDao
+import be.appwise.core.data.realmLiveData.RealmLiveData
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.models.ReviewFields
 import io.realm.Realm
@@ -31,4 +32,6 @@ class ReviewDao(db: Realm) : BaseDao<Review>(db) {
     fun findAndDeleteReviewForPoemByUserId(poemId: String, userId: String?) {
         findReviewForPoemByUserId(poemId, userId)?.apply { delete(this) }
     }
+
+    fun getOwnReviewForPoemLive(poemId: String, userId: String?) = RealmLiveData(where().equalTo(ReviewFields.POEM._ID, poemId).and().equalTo(ReviewFields.USER._ID, userId).findFirstAsync())
 }

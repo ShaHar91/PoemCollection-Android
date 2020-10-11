@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
@@ -23,35 +24,24 @@ import com.shahar91.poems.ui.home.poem.adapter.PoemReviewsAdapter
 import com.shahar91.poems.utils.DialogFactory.showDialogOkCancel
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
-import kotlinx.android.synthetic.main.list_item_global_rating.*
-import kotlinx.android.synthetic.main.list_item_review.*
 
 class PoemFragment : PoemBaseFragment<PoemViewModel>() {
-    private lateinit var poemReviewsAdapter: PoemReviewsAdapter
     private val safeArgs: PoemFragmentArgs by navArgs()
     private lateinit var mDataBinding: FragmentPoemBinding
-
-    private val poemViewModelListener: PoemViewModel.ViewModelCallbacks = object :
-        PoemViewModel.ViewModelCallbacks {
-        override fun refreshLayout() {
-            showPoem()
-        }
-
-        override fun error(throwable: Throwable) {
-            onError(throwable)
-        }
-    }
+    private lateinit var poemReviewsAdapter: PoemReviewsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mViewModel = ViewModelProvider(this@PoemFragment).get(PoemViewModel::class.java).apply {
-            init(safeArgs.poemId, poemViewModelListener)
-
-            getPoemAndAllReviews()
-        }
-
         mDataBinding = DataBindingUtil.inflate<FragmentPoemBinding>(inflater, R.layout.fragment_poem, container, false)
             .apply {
-                viewModel = this@PoemFragment.mViewModel
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = ViewModelProvider(this@PoemFragment, PoemViewModel.FACTORY(safeArgs.poemId))
+                    .get(PoemViewModel::class.java)
+                    .apply {
+                        mViewModel = this
+                        setDefaultExceptionHandler(::onError)
+
+                        getPoemAndAllDataCr()
+                    }
             }
 
         initViews()
@@ -67,85 +57,91 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
             setupRecyclerView(null)
             adapter = poemReviewsAdapter
         }
+
+        mViewModel.getRefreshLayout().observe(this, Observer {
+            if (it) {
+                showPoem()
+            }
+        })
+    }
+
+    override fun onError(throwable: Throwable) {
+        super.onError(throwable)
+        mViewModel.resetRating()
     }
 
     private fun showPoem() {
-        //TODO: check 2-way databinding!!!!
-        mViewModel.poem.get()?.let { poem ->
-            mViewModel.ownReview.get()?.let { review ->
-                rhUserHeader.userName = review.user?.username ?: ""
-                rhUserHeader.rating = review.rating
-                tvReviewBody.text = review.text
+        mDataBinding.apply {
+            mViewModel.poem.value?.let { poem ->
+                mViewModel.ownReview.value?.let { review ->
+                    ownReviewLayout.rhUserHeader.userName = review.user?.username ?: ""
+                    ownReviewLayout.rhUserHeader.rating = review.rating
+                    ownReviewLayout.tvReviewBody.text = review.text
 
-                ivReviewMenu.setOnClickListener {
-                    PopupMenu(requireContext(), it).apply {
-                        menuInflater.inflate(R.menu.menu_review, this.menu)
-                        setOnMenuItemClickListener { item ->
-                            when (item.itemId) {
-                                R.id.review_edit -> {
-                                    showEditReviewDialog(review)
+                    ownReviewLayout.ivReviewMenu.setOnClickListener {
+                        PopupMenu(requireContext(), it).apply {
+                            menuInflater.inflate(R.menu.menu_review, this.menu)
+                            setOnMenuItemClickListener { item ->
+                                when (item.itemId) {
+                                    R.id.review_edit -> {
+                                        showEditReviewDialog(review)
+                                    }
+                                    R.id.review_delete ->
+                                        mViewModel.deleteReview(review._id)
                                 }
-                                R.id.review_delete ->
-                                    mViewModel.deleteReview(review._id)
+                                true
                             }
-                            true
+                            show()
                         }
-                        show()
+                    }
+                } ?: run {
+                    mDataBinding.noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
+                        if (fromUser) {
+                            if (isLoggedIn()) {
+                                showAddReviewDialog(rating)
+                            } else {
+                                // start the EntryActivity to make sure the user gets logged in
+                                startActivityForResult(startWithIntent(requireContext(), rating),
+                                    Constants.REQUEST_CODE_NEW_USER)
+                            }
+
+                            Handler().postDelayed({
+                                ratingBar.rating = 0f
+                            }, 500)
+                        }
                     }
                 }
-            } ?: run {
-                mDataBinding.noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
-                    if (fromUser) {
-                        if (isLoggedIn()) {
-                            showAddReviewDialog(rating)
-                        } else {
-                            // start the EntryActivity to make sure the user gets logged in
-                            startActivityForResult(startWithIntent(requireContext(), rating),
-                                Constants.REQUEST_CODE_NEW_USER)
-                        }
 
-                        Handler().postDelayed({
-                            ratingBar.rating = 0f
-                        }, 500)
-                    }
+                poemReviewsAdapter.setItems(poem.shortReviewList)
+            }
+
+            if (mViewModel.delayedRating != null) {
+                if (mViewModel.ownReview.value != null) {
+                    showDialogOkCancel(requireActivity(), "Review already exists",
+                        "You already have an existing review for this poem, do you want to edit the previous one?", {
+                            showEditReviewDialog(mViewModel.ownReview.value!!)
+                        }, {
+                            mViewModel.resetRating()
+                        })
+                } else {
+                    showAddReviewDialog(mViewModel.delayedRating ?: 0F)
                 }
-            }
-
-            tvAverageRating.text = String.format("%.1f", poem.averageRating)
-            rbTotalRating.rating = poem.averageRating
-            tvTotalReviews.text = mViewModel.totalReviews.toString()
-
-            listOf(pbOneStarRating, pbTwoStarRating, pbThreeStarRating,
-                pbFourStarRating, pbFiveStarRating).forEachIndexed { i, pb ->
-                pb.max = mViewModel.totalReviews
-                pb.progress = poem.totalRatingCount[i] ?: 0
-            }
-
-            poemReviewsAdapter.setItems(poem.shortReviewList)
-        }
-
-        if (mViewModel.delayedRating != null) {
-            if (mViewModel.ownReview.get() != null) {
-                showDialogOkCancel(requireActivity(), "Review already exists",
-                    "You already have an existing review for this poem, do you want to edit the previous one?", {
-                        showEditReviewDialog(mViewModel.ownReview.get()!!)
-                    }, {
-                        mViewModel.resetRating()
-                    })
-            } else {
-                showAddReviewDialog(mViewModel.delayedRating ?: 0F)
             }
         }
     }
 
     private fun showAddReviewDialog(rating: Float) {
         mViewModel.resetRating()
-        showDialogToAddReview(requireActivity(), rating, mViewModel::saveOrUpdateReview)
+        showDialogToAddReview(requireActivity(), rating) { reviewId, reviewText, newRating ->
+            mViewModel.saveOrUpdateReview(reviewId, reviewText, newRating)
+        }
     }
 
     private fun showEditReviewDialog(review: Review) {
         mViewModel.resetRating()
-        showDialogToEditReview(requireActivity(), review, mViewModel::saveOrUpdateReview)
+        showDialogToEditReview(requireActivity(), review) { reviewId, reviewText, newRating ->
+            mViewModel.saveOrUpdateReview(reviewId, reviewText, newRating)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -153,7 +149,7 @@ class PoemFragment : PoemBaseFragment<PoemViewModel>() {
             if (resultCode == Activity.RESULT_OK) {
                 // A user has been logged in successfully
                 // Refresh the poem and all reviews (as the user's review may have been in the preview list)
-                mViewModel.getPoemAndAllReviews(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
+                mViewModel.getPoemAndAllDataCr(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

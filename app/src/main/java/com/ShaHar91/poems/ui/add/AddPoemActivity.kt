@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.activity_add_poem.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
-    lateinit var adapter: ArrayAdapter<String>
-
     companion object {
         @JvmStatic
         fun start(context: Context) {

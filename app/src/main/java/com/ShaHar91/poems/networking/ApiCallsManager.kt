@@ -1,9 +1,11 @@
 package com.shahar91.poems.networking
 
 import be.appwise.core.networking.Networking
-import io.reactivex.disposables.Disposable
-import retrofit2.http.Field
-import retrofit2.http.Path
+import be.appwise.core.networking.models.AccessToken
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.shahar91.poems.data.models.Poem
+import io.reactivex.Observable
 
 object ApiCallsManager {
     private val unprotected = Networking.getUnProtectedApiManager<NewApiManagerService>()
@@ -11,49 +13,61 @@ object ApiCallsManager {
 
     //<editor-fold desc="Poems">
     @JvmStatic
-    fun getAllPoems(categoryId: String) = Networking.doCallRx(unprotected?.getPoems(categoryId)!!)
+    fun getAllPoems(categoryId: String): Observable<NetworkResponse<JsonArray>> = Observable.empty()
 
-    suspend fun getPoemsForCategoryCr(categoryId: String) = Networking.doCallCr(unprotected?.getPoemsForCategoryId(categoryId)!!)
-
-    @JvmStatic
-    fun getPoemById(poemId: String, userId: String?) = Networking.doCallRx(unprotected?.getPoemById(poemId, userId)!!)
+    suspend fun getPoemsForCategoryCr(categoryId: String) =
+        Networking.doCall(unprotected?.getPoemsForCategoryId(categoryId)!!)
 
     @JvmStatic
-    fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) = Networking.doCallRx(protected?.createPoem(poemTitle, poemBody, categoryList)!!)
+    fun getPoemById(poemId: String, userId: String?): Observable<NetworkResponse<Poem>> = Observable.empty()
+
+    suspend fun getPoemByIdCr(poemId: String, userId: String?) =
+        Networking.doCall(unprotected?.getPoemById(poemId, userId)!!)
+
+    @JvmStatic
+    fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>): Observable<NetworkResponse<Poem>> =
+        Observable.empty()
     //</editor-fold>
 
     //<editor-fold desc="Categories">
     @JvmStatic
-    fun getAllCategories() = Networking.doCallRx(unprotected?.getCategories()!!)
+    fun getAllCategories(): Observable<NetworkResponse<JsonArray>> = Observable.empty()
 
-    suspend fun getAllCategoriesCr() = Networking.doCallCr(unprotected?.getCategoriesCr()!!)
+    suspend fun getAllCategoriesCr() = Networking.doCall(unprotected?.getCategories()!!)
     //</editor-fold>
 
     //<editor-fold desc="Auth">
     @JvmStatic
-    fun loginUser(email: String, password: String) = Networking.doCallRx(unprotected?.loginUser(email, password)!!)
+    fun loginUser(email: String, password: String): Observable<AccessToken> = Observable.empty()
 
     @JvmStatic
-    fun registerUser(userName: String, email: String, password: String) = Networking.doCallRx(protected?.registerUser(userName, email, password)!!)
+    fun registerUser(userName: String, email: String, password: String): Observable<AccessToken> = Observable.empty()
 
     @JvmStatic
-    fun getCurrentUser() = Networking.doCallRx(protected?.getCurrentUser()!!)
+    fun getCurrentUser(): Observable<NetworkResponse<JsonObject>> = Observable.empty()
     //</editor-fold>
 
     //<editor-fold desc="Reviews">
     @JvmStatic
-    fun getAllReviewsForPoem(poemId: String) = Networking.doCallRx(unprotected?.getReviewsByPoemId(poemId, 1)!!)
+    fun getAllReviewsForPoem(poemId: String): Observable<NetworkResponse<JsonArray>> = Observable.empty()
 
     @JvmStatic
-    fun getOwnReviewForPoem(poemId: String, userId: String?) = Networking.doCallRx(unprotected?.getOwnReviewForPoem(poemId, userId)!!)
+    fun getOwnReviewForPoem(poemId: String, userId: String?): Observable<NetworkResponse<JsonArray>> =
+        Observable.empty()
+
+    suspend fun getOwnReviewForPoemCr(poemId: String, userId: String?) =
+        Networking.doCall(unprotected?.getOwnReviewForPoem(poemId, userId)!!)
 
     @JvmStatic
-    fun createReview(poemId: String, reviewText: String, reviewRating: Float) = Networking.doCallRx(protected?.createReview(poemId, reviewText, reviewRating)!!)
+    suspend fun createReviewCr(poemId: String, reviewText: String, reviewRating: Float) =
+        Networking.doCall(protected?.createReview(poemId, reviewText, reviewRating)!!)
 
     @JvmStatic
-    fun editReview(reviewId: String, reviewText: String, reviewRating: Float) = Networking.doCallRx(protected?.editReview(reviewId, reviewText, reviewRating)!!)
+    suspend fun updateReviewCr(reviewId: String, reviewText: String, reviewRating: Float) =
+        Networking.doCall(protected?.editReview(reviewId, reviewText, reviewRating)!!)
 
     @JvmStatic
-    fun deleteReview(reviewId:String) = Networking.doCallRx(protected?.deleteReview(reviewId)!!)
+    suspend fun deleteReviewCr(reviewId: String) =
+        Networking.doCall(protected?.deleteReview(reviewId)!!)
     //</editor-fold>
 }
