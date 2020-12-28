@@ -33,5 +33,9 @@ class ReviewDao(db: Realm) : BaseDao<Review>(db) {
         findReviewForPoemByUserId(poemId, userId)?.apply { delete(this) }
     }
 
-    fun getOwnReviewForPoemLive(poemId: String, userId: String?) = RealmLiveData(where().equalTo(ReviewFields.POEM._ID, poemId).and().equalTo(ReviewFields.USER._ID, userId).findFirstAsync())
+    fun getOwnReviewForPoemLive(poemId: String, userId: String?) = RealmLiveData(
+        where().equalTo(ReviewFields.POEM._ID, poemId).and().equalTo(ReviewFields.USER._ID, userId).findFirstAsync())
+
+    fun getOwnReviewForPoemRealm(poemId: String, userId: String) =
+        where().equalTo(ReviewFields.POEM._ID, poemId).and().equalTo(ReviewFields.USER._ID, userId).findFirst()
 }

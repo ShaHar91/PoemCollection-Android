@@ -8,9 +8,8 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.Spanned
 import android.text.style.ImageSpan
-import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import be.appwise.core.extensions.activity.snackBar
 import be.appwise.core.extensions.view.optionalCallbacks
 import be.appwise.core.extensions.view.setErrorLayout
@@ -35,18 +34,19 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
         }
     }
 
+    override fun getViewModel() = AddPoemViewModel::class.java
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_poem)
-
-        viewModel = ViewModelProvider(this).get(AddPoemViewModel::class.java)
 
         initViews()
     }
 
     private fun initViews() {
         configureToolbar(toolbar, true, R.string.add_poem_toolbar_title, R.drawable.ic_close)
-        toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorWhite), PorterDuff.Mode.SRC_IN)
+        toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorWhite),
+            PorterDuff.Mode.SRC_IN)
 
         tilPoemTitle.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
         tilPoemBody.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
@@ -56,7 +56,9 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
             checkToSavePoem()
         }
 
-        viewModel.getAllCategories { categories ->
+        viewModel.getAllCategoriesCr()
+
+        viewModel.categoriesLive.observe(this, Observer { categories ->
             tilPoemCategory.editText?.setOnClickListener {
                 DialogFactory.showDialogToAddCategories(this, categories, viewModel.checkedCategories) {
                     viewModel.checkedCategories = it
@@ -64,7 +66,7 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
                     it.forEach { category -> addChip(category) }
                 }
             }
-        }
+        })
     }
 
     private fun addChip(category: Category) {

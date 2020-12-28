@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.shahar91.poems.data.models.Poem
@@ -9,9 +8,8 @@ import be.appwise.core.ui.base.list.BaseAdapter
 import be.appwise.core.ui.base.list.BaseViewHolder
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
 
-class PoemsPerCategoryListAdapter(context: Context, listener: PoemsPerCategoryListInteractionListener) :
-    BaseAdapter<Poem, PoemsPerCategoryListInteractionListener, BaseViewHolder<Poem, PoemsPerCategoryListInteractionListener>>(
-        context, listener) {
+class PoemsPerCategoryListAdapter(private val listener: PoemsPerCategoryListInteractionListener) :
+    BaseAdapter<Poem, PoemsPerCategoryListInteractionListener, BaseViewHolder<Poem>>() {
 
     interface PoemsPerCategoryListInteractionListener {
         fun onPoemClicked(poemId: String)
@@ -22,10 +20,10 @@ class PoemsPerCategoryListAdapter(context: Context, listener: PoemsPerCategoryLi
             ListItemPoemPerCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    class PoemsPerCategoryListViewHolder(private val binding: ListItemPoemPerCategoryBinding) :
-        BaseViewHolder<Poem, PoemsPerCategoryListInteractionListener>(binding.root) {
+    inner class PoemsPerCategoryListViewHolder(private val binding: ListItemPoemPerCategoryBinding) :
+        BaseViewHolder<Poem>(binding.root) {
 
-        override fun bind(position: Int, item: Poem, listener: PoemsPerCategoryListInteractionListener) {
+        override fun bind(item: Poem) {
             binding.poem = item
             binding.root.setOnClickListener { listener.onPoemClicked(item._id) }
         }

@@ -25,4 +25,5 @@ class PoemDao(db: Realm) : BaseDao<Poem>(db) {
     fun getPoemsForCategoryLive(categoryId: String) = RealmResultsLiveData(where().equalTo(PoemFields.CATEGORIES._ID, categoryId).findAllAsync())
 
     fun getPoemByIdLive(poemId: String) = RealmLiveData(where().equalTo(PoemFields._ID, poemId).findFirstAsync())
+    fun getPoemByIdRealm(poemId: String) = where().equalTo(PoemFields._ID, poemId).findFirst()
 }

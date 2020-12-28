@@ -1,6 +1,7 @@
 package com.shahar91.poems.networking
 
-import be.appwise.core.networking.models.AccessToken
+import be.appwise.core.networking.NetworkConstants
+import be.appwise.core.networking.model.AccessToken
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.shahar91.poems.data.models.Poem
@@ -17,7 +18,7 @@ import retrofit2.http.Query
 interface NewApiManagerService {
     //<editor-fold desc="Auth">
     @FormUrlEncoded
-    @POST("https:bjklmmauth/login")
+    @POST("auth/login")
     fun loginUser(
         @Field("email") email: String,
         @Field("password") password: String): Call<AccessToken>
@@ -28,6 +29,15 @@ interface NewApiManagerService {
         @Field("username") userName: String,
         @Field("email") email: String,
         @Field("password") password: String): Call<AccessToken>
+
+    @FormUrlEncoded
+    @POST("auth/token")
+    fun refreshToken(
+        @Field(NetworkConstants.KEY_GRANT_TYPE) grantType: String,
+        @Field(NetworkConstants.KEY_CLIENT_ID) clientId: String,
+        @Field(NetworkConstants.KEY_CLIENT_SECRET) client_secret: String,
+        @Field(NetworkConstants.FIELD_IDENTIFIER_REFRESH_TOKEN) refreshToken: String
+    ): Call<AccessToken>
 
     @GET("auth/me")
     fun getCurrentUser(): Call<NetworkResponse<JsonObject>>

@@ -5,9 +5,8 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.extensions.view.setErrorLayout
+import be.appwise.core.ui.base.BaseFragment.Companion.SHOW_BACK_ICON
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.PoemBaseActivity
@@ -19,7 +18,19 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
 
 class LoginFragment : PoemBaseFragment<LoginViewModel>() {
+    companion object {
+        @JvmStatic
+        fun newInstance(showBackIcon: Boolean) =
+            LoginFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(SHOW_BACK_ICON, showBackIcon)
+                }
+            }
+    }
+
     lateinit var listeners: EntryListeners
+
+    override fun getViewModel() = LoginViewModel::class.java
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -28,7 +39,6 @@ class LoginFragment : PoemBaseFragment<LoginViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         btnLogin.setOnClickListener { checkToLogin() }
         btnLoginFacebook.setOnClickListener { this.listeners.onFacebookClicked() }
@@ -68,22 +78,9 @@ class LoginFragment : PoemBaseFragment<LoginViewModel>() {
         }
 
         if (isValid) {
-            mViewModel.loginUser(emailText, passwordText,
-                {
-                    listeners.onLoginSuccessful()
-                }, {
-                    it.message?.let { message -> snackBar(message) }
-                })
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(showBackIcon: Boolean) =
-            LoginFragment().apply {
-                arguments = Bundle().apply {
-                    putBoolean(SHOW_BACK_ICON, showBackIcon)
-                }
+            mViewModel.loginUser(emailText, passwordText) {
+                listeners.onLoginSuccessful()
             }
+        }
     }
 }

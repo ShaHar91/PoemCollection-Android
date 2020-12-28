@@ -3,23 +3,24 @@ package com.shahar91.poems.ui.home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import be.appwise.core.networking.Networking.isLoggedIn
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.entry.EntryActivity
+import com.shahar91.poems.utils.HawkUtils
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class HomeActivity : PoemBaseActivity<HomeViewModel>() {
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    override fun getViewModel() = HomeViewModel::class.java
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // replace the startup 'Splash Theme' with the default AppTheme
@@ -27,8 +28,6 @@ class HomeActivity : PoemBaseActivity<HomeViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
-
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         val host = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
         val navController = host.navController
@@ -38,7 +37,7 @@ class HomeActivity : PoemBaseActivity<HomeViewModel>() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         fabAddPoem.setOnClickListener {
-            if (isLoggedIn()) {
+            if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
                 startAddPoem()
             } else {
                 // start the EntryActivity to make sure the user gets logged in

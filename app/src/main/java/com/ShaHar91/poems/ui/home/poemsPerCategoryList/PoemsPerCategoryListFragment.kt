@@ -31,21 +31,22 @@ class PoemsPerCategoryListFragment :
             }
         }
 
+    override fun getViewModel() = PoemsPerCategoryListViewModel::class.java
+
+    override fun getViewModelFactory(): ViewModelProvider.NewInstanceFactory {
+        return PoemsPerCategoryListViewModel.FACTORY(safeArgs.categoryId)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
         mDataBinding = DataBindingUtil.inflate<FragmentPoemsPerCategoryBinding>(inflater,
             R.layout.fragment_poems_per_category, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                viewModel = ViewModelProvider(this@PoemsPerCategoryListFragment,
-                    PoemsPerCategoryListViewModel.FACTORY(safeArgs.categoryId))
-                    .get(
-                        PoemsPerCategoryListViewModel::class.java)
-                    .apply {
-                        mViewModel = this
-                        setDefaultExceptionHandler(::onError)
-                        getAllPoemsForCategoryCr(safeArgs.categoryId)
-                    }
+                viewModel = mViewModel.apply {
+                    setDefaultExceptionHandler(::onError)
+                    getAllPoemsForCategoryCr(safeArgs.categoryId)
+                }
             }
 
         initViews()
@@ -54,8 +55,7 @@ class PoemsPerCategoryListFragment :
     }
 
     private fun initViews() {
-        poemsPerCategoryListAdapter = PoemsPerCategoryListAdapter(requireActivity(),
-            poemsPerCategoryListAdapterListener)
+        poemsPerCategoryListAdapter = PoemsPerCategoryListAdapter(poemsPerCategoryListAdapterListener)
 
         mDataBinding.apply {
             rvPoemsPerCategory.apply {

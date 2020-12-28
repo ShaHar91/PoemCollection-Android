@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.core.ui.custom.RecyclerViewEnum
@@ -29,17 +28,17 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
         }
     }
 
+    override fun getViewModel() = CategoryViewModel::class.java
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mDataBinding = DataBindingUtil.inflate<FragmentCategoriesBinding>(inflater, R.layout.fragment_categories,
             container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                viewModel = ViewModelProvider(this@CategoryFragment).get(CategoryViewModel::class.java)
-                    .apply {
-                        mViewModel = this
-                        setDefaultExceptionHandler(::onError)
-                        getAllCategoriesCr()
-                    }
+                viewModel = mViewModel.apply {
+                    setDefaultExceptionHandler(::onError)
+                    getAllCategoriesCr()
+                }
             }
 
         initViews()
@@ -48,7 +47,7 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
     }
 
     private fun initViews() {
-        categoryAdapter = CategoryAdapter(requireActivity(), categoryAdapterListener)
+        categoryAdapter = CategoryAdapter(categoryAdapterListener)
 
         mDataBinding.apply {
             rvCategories.apply {

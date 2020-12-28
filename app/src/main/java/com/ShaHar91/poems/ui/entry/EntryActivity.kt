@@ -5,9 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import be.appwise.core.extensions.logging.logd
 import com.google.android.material.appbar.AppBarLayout
+import com.orhanobut.logger.Logger
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.PoemBaseActivity
@@ -52,11 +51,11 @@ class EntryActivity : PoemBaseActivity<EntryViewModel>() {
         }
     }
 
+    override fun getViewModel() = EntryViewModel::class.java
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_entry)
-
-        viewModel = ViewModelProvider(this).get(EntryViewModel::class.java)
 
         initToolbar()
 
@@ -96,7 +95,7 @@ class EntryActivity : PoemBaseActivity<EntryViewModel>() {
         if (savedInstanceState == null) {
             replaceFragment(R.id.flEntryContainer, loginFragment, TAG_LOGIN, false)
         } else {
-            logd("FragmentByTag", "Find Login Fragment By Tag")
+            Logger.t("FragmentByTag").d("Find Login Fragment By Tag")
             loginFragment = supportFragmentManager.findFragmentByTag(TAG_LOGIN) as LoginFragment
         }
         loginFragment.listeners = entryListeners

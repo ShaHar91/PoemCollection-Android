@@ -1,40 +1,26 @@
 package com.shahar91.poems.data.repositories
 
 import be.appwise.core.data.base.BaseRepository
-import be.appwise.core.extensions.logging.logv
-import be.appwise.core.networking.NetworkConstants
 import be.appwise.core.networking.Networking
-import com.shahar91.poems.networking.ApiCallsManager
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.shahar91.poems.Constants
+import com.shahar91.poems.networking.UnProtectedRestClient
 
 object AuthRepository : BaseRepository() {
+    private val unprotectedService = UnProtectedRestClient.getService
 
-    @JvmStatic
-    fun loginUser(email: String, password: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        ApiCallsManager.loginUser(email, password).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            logv(null, "Successfully logged in")
+    suspend fun loginUserCr(email: String, password: String) {
+        doCall(unprotectedService.loginUser(email, password)).let {
+            Networking.saveAccessToken(it.apply { token_type = Constants.NETWORK_BEARER.trim() })
+        }
 
-            //Save token
-            Networking.saveAccessToken(it.apply { token_type = NetworkConstants.BEARER.trim() })
-
-            UserRepository.getCurrentUser(onSuccess, onError)
-        }, {
-            onError(it)
-        })
+        UserRepository.getCurrentUserCr()
     }
 
-    fun registerUser(userName: String, email: String, password: String, onSuccess: () -> Unit,
-        onError: (Throwable) -> Unit) {
-        ApiCallsManager.registerUser(userName, email, password).observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                logv(null, "Successfully logged in")
+    suspend fun registerUserCr(userName: String, email: String, password: String) {
+        val accessToken = doCall(unprotectedService.registerUser(userName, email, password))
 
-                //Save token
-                Networking.saveAccessToken(it.apply { token_type = NetworkConstants.BEARER.trim() })
+        Networking.saveAccessToken(accessToken.apply { token_type = Constants.NETWORK_BEARER.trim() })
 
-                UserRepository.getCurrentUser(onSuccess, onError)
-            }, {
-                onError(it)
-            })
+        UserRepository.getCurrentUserCr()
     }
 }

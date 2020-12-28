@@ -5,9 +5,8 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.extensions.view.setErrorLayout
+import be.appwise.core.ui.base.BaseFragment.Companion.SHOW_BACK_ICON
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.PoemBaseFragment
@@ -17,7 +16,19 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
 
 class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
+    companion object {
+        @JvmStatic
+        fun newInstance(showBackIcon: Boolean) =
+            RegisterFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(SHOW_BACK_ICON, showBackIcon)
+                }
+            }
+    }
+
     lateinit var listeners: EntryListeners
+
+    override fun getViewModel() = RegisterViewModel::class.java
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -26,7 +37,6 @@ class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
 
         btnRegister.setOnClickListener { checkToRegister() }
         btnLoginFacebook.setOnClickListener { listeners.onFacebookClicked() }
@@ -73,22 +83,9 @@ class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
         }
 
         if (isValid) {
-            mViewModel.registerUser(usernameText, emailText, passwordText,
-                {
-                    listeners.onRegisterSuccessful()
-                }, {
-                    it.message?.let { message -> snackBar(message) }
-                })
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(showBackIcon: Boolean) =
-            RegisterFragment().apply {
-                arguments = Bundle().apply {
-                    putBoolean(SHOW_BACK_ICON, showBackIcon)
-                }
+            mViewModel.registerUser(usernameText, emailText, passwordText) {
+                listeners.onRegisterSuccessful()
             }
+        }
     }
 }

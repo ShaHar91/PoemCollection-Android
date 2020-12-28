@@ -1,42 +1,39 @@
 package com.shahar91.poems.ui.home.poem
 
-import androidx.lifecycle.LiveData
+import androidx.databinding.ObservableField
 import be.appwise.core.extensions.viewmodel.singleArgViewModelFactory
 import be.appwise.core.util.SingleLiveEvent
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
-import com.shahar91.poems.utils.HawkUtils.hawkCurrentUserId
+import com.shahar91.poems.utils.HawkUtils
 
 class PoemViewModel(private val poemId: String) : PoemBaseViewModel() {
     companion object {
         val FACTORY = singleArgViewModelFactory(::PoemViewModel)
     }
 
+    var poem = PoemRepository.getPoemByIdRealm(poemId)
+    var ownReview: ObservableField<Review?> = ObservableField()
+
+    var delayedRating: Float? = null
+        private set
+
     private val refreshLayout = SingleLiveEvent<Boolean>()
     fun getRefreshLayout(): SingleLiveEvent<Boolean> {
         return refreshLayout
     }
 
-    var poem = PoemRepository.getPoemByIdLive(poemId)
-
-    //    private val _ownReview = MutableLiveData<Boolean>().apply { value = false }
-    //    val ownReview get() = _ownReview as LiveData<Boolean>
-
-    var ownReview: LiveData<Review?> = ReviewRepository.getOwnReviewForPoemLive(poemId)
-
     fun getPoemAndAllDataCr(rating: Float? = null) = launchAndLoad {
         this.delayedRating = rating
         PoemRepository.getPoemByIdCr(poemId)
-        if (hawkCurrentUserId != null && hawkCurrentUserId!!.isNotEmpty()) {
+        if (HawkUtils.hawkCurrentUserId != null && HawkUtils.hawkCurrentUserId!!.isNotEmpty()) {
             ReviewRepository.getOwnReviewForPoemCr(poemId)
+            ownReview.set(ReviewRepository.getOwnReviewForPoemRealm(poemId, HawkUtils.hawkCurrentUserId!!))
         }
         refreshLayout.value = true
     }
-
-    var delayedRating: Float? = null
-        private set
 
     fun saveOrUpdateReview(reviewId: String?, newReviewText: String, newRating: Float) = launchAndLoad {
         if (reviewId != null) {

@@ -1,6 +1,5 @@
 package com.shahar91.poems.ui.home.categories.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.shahar91.poems.data.models.Category
@@ -9,9 +8,8 @@ import be.appwise.core.ui.base.list.BaseAdapter
 import be.appwise.core.ui.base.list.BaseViewHolder
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 
-class CategoryAdapter(context: Context, listener: CategoryInteractionListener) :
-    BaseAdapter<Category, CategoryInteractionListener, BaseViewHolder<Category, CategoryInteractionListener>>(
-        context, listener) {
+class CategoryAdapter(private val listener: CategoryInteractionListener) :
+    BaseAdapter<Category, CategoryInteractionListener, BaseViewHolder<Category>>() {
 
     interface CategoryInteractionListener {
         fun onCategoryClicked(category: Category)
@@ -22,10 +20,9 @@ class CategoryAdapter(context: Context, listener: CategoryInteractionListener) :
     }
 
     inner class CategoryViewHolder(private val binding: ListItemCategoryBinding) :
-        BaseViewHolder<Category, CategoryInteractionListener>(binding.root) {
+        BaseViewHolder<Category>(binding.root) {
 
-        override fun bind(position: Int, item: Category,
-            listener: CategoryInteractionListener) {
+        override fun bind(item: Category) {
             binding.category = item
             binding.root.setOnClickListener { listener.onCategoryClicked(item) }
         }

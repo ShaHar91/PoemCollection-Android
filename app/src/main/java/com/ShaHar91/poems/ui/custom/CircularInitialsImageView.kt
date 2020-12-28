@@ -52,7 +52,7 @@ class CircularInitialsImageView : ConstraintLayout {
     fun setImage(url: String?, initials: String, color: Int) {
         tvInitials.text = initials
         tvInitials.visibility = View.VISIBLE
-        ivCircle.setImageDrawable(context.getDrawable(R.drawable.ic_circular_image_color))
+        ivCircle.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_circular_image_color))
         ivCircle.imageTintList = ColorStateList.valueOf(color)
 
         if (url != null) {
