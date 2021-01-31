@@ -117,11 +117,9 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
         }
 
         if (isValid) {
-            viewModel.addNewPoem(poemTitle, poemBody, {
+            viewModel.addNewPoem(poemTitle, poemBody) {
                 finishThisActivity(Activity.RESULT_OK)
-            }, {
-                snackBar(it.message ?: "")
-            })
+            }
         }
     }
 }

@@ -10,15 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
+import be.appwise.core.ui.base.BaseVMFragment
 import be.appwise.core.ui.custom.RecyclerViewEnum
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentPoemsPerCategoryBinding
-import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
 
 class PoemsPerCategoryListFragment :
-    PoemBaseFragment<PoemsPerCategoryListViewModel>() {
+    BaseVMFragment<PoemsPerCategoryListViewModel>() {
     private val safeArgs: PoemsPerCategoryListFragmentArgs by navArgs()
     private lateinit var mDataBinding: FragmentPoemsPerCategoryBinding
     private lateinit var poemsPerCategoryListAdapter: PoemsPerCategoryListAdapter

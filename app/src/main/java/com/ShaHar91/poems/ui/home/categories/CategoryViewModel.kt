@@ -7,6 +7,6 @@ class CategoryViewModel : PoemBaseViewModel() {
     var categoriesLive = CategoryRepository.getAllCategoriesLive()
 
     fun getAllCategoriesCr() = launchAndLoad {
-        CategoryRepository.getCategoriesCr()
+        CategoryRepository.getCategories()
     }
 }

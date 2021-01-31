@@ -72,8 +72,8 @@ interface NewApiManagerService {
     // TODO: this will be used to retrieve the complete list (paged) of reviews for a poem
     @GET("reviews")
     fun getReviewsByPoemId(
-        @Query("poem") poemId: String,
-        @Query("limit") limit: Int): Call<NetworkResponse<JsonArray>>
+        @Query("poem") poemId: String/*,
+        @Query("limit") limit: Int*/): Call<NetworkResponse<JsonArray>>
 
     @GET("reviews")
     fun getOwnReviewForPoem(

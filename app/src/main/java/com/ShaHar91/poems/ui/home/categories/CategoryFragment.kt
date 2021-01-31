@@ -1,24 +1,20 @@
 package com.shahar91.poems.ui.home.categories
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
+import be.appwise.core.ui.base.BaseBindingVMFragment
 import be.appwise.core.ui.custom.RecyclerViewEnum
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
-import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 
-class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
+class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCategoriesBinding>() {
     private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var mDataBinding: FragmentCategoriesBinding
 
     private val categoryAdapterListener = object : CategoryInteractionListener {
         override fun onCategoryClicked(category: Category) {
@@ -28,28 +24,28 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
         }
     }
 
+    override fun getLayout() = R.layout.fragment_categories
+
     override fun getViewModel() = CategoryViewModel::class.java
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mDataBinding = DataBindingUtil.inflate<FragmentCategoriesBinding>(inflater, R.layout.fragment_categories,
-            container, false)
-            .apply {
-                lifecycleOwner = viewLifecycleOwner
-                viewModel = mViewModel.apply {
-                    setDefaultExceptionHandler(::onError)
-                    getAllCategoriesCr()
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mBinding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = mViewModel.apply {
+                setDefaultExceptionHandler(::onError)
+                getAllCategoriesCr()
             }
+        }
 
         initViews()
-
-        return mDataBinding.root
     }
 
     private fun initViews() {
         categoryAdapter = CategoryAdapter(categoryAdapterListener)
 
-        mDataBinding.apply {
+        mBinding.apply {
             rvCategories.apply {
                 setupRecyclerView(null)
                 emptyStateView = emptyView
@@ -73,7 +69,7 @@ class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
 
     override fun onError(throwable: Throwable) {
         super.onError(throwable)
-        mDataBinding.apply {
+        mBinding.apply {
             if (rvCategories.stateView == RecyclerViewEnum.LOADING) {
                 rvCategories.stateView = RecyclerViewEnum.EMPTY_STATE
             }

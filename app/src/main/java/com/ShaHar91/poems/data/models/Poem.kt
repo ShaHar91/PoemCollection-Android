@@ -25,23 +25,43 @@ open class Poem(
     }
 
     fun getFiveStarRating(): Int {
-        return totalRatingCount[4] ?: 0
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[4] ?: 0
+        } else {
+            0
+        }
     }
 
     fun getFourStarRating(): Int {
-        return totalRatingCount[3] ?: 0
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[3] ?: 0
+        } else {
+            0
+        }
     }
 
     fun getThreeStarRating(): Int {
-        return totalRatingCount[2] ?: 0
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[2] ?: 0
+        } else {
+            0
+        }
     }
 
     fun getTwoStarRating(): Int {
-        return totalRatingCount[1] ?: 0
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[1] ?: 0
+        } else {
+            0
+        }
     }
 
     fun getOneStarRating(): Int {
-        return totalRatingCount[0] ?: 0
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[0] ?: 0
+        } else {
+            0
+        }
     }
 
     fun getTotal(): Int {

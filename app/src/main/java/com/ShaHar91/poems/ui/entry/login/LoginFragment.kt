@@ -7,17 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import be.appwise.core.extensions.view.setErrorLayout
 import be.appwise.core.ui.base.BaseFragment.Companion.SHOW_BACK_ICON
+import be.appwise.core.ui.base.BaseVMFragment
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.PoemBaseActivity
-import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.ui.entry.EntryListeners
 import com.shahar91.poems.ui.entry.register.RegisterFragment
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
 
-class LoginFragment : PoemBaseFragment<LoginViewModel>() {
+class LoginFragment : BaseVMFragment<LoginViewModel>() {
     companion object {
         @JvmStatic
         fun newInstance(showBackIcon: Boolean) =

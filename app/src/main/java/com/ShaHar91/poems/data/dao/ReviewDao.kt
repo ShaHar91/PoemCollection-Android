@@ -2,6 +2,9 @@ package com.shahar91.poems.data.dao
 
 import be.appwise.core.data.base.BaseDao
 import be.appwise.core.data.realmLiveData.RealmLiveData
+import com.google.gson.JsonArray
+import com.shahar91.poems.data.models.Category
+import com.shahar91.poems.data.models.CategoryFields
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.models.ReviewFields
 import io.realm.Realm
@@ -38,4 +41,15 @@ class ReviewDao(db: Realm) : BaseDao<Review>(db) {
 
     fun getOwnReviewForPoemRealm(poemId: String, userId: String) =
         where().equalTo(ReviewFields.POEM._ID, poemId).and().equalTo(ReviewFields.USER._ID, userId).findFirst()
+
+    fun saveAll(jsonArray: JsonArray, deleteOthers: Boolean = false) {
+        db.executeTransaction {
+            if (deleteOthers) {
+                val ids =
+                    jsonArray.map { it.asJsonObject.get(ReviewFields._ID).asString }.toTypedArray()
+                where().not().`in`(ReviewFields._ID, ids).findAll().deleteAllFromRealm()
+            }
+            createOrUpdateAllFromJson(Review::class.java, jsonArray.toString())
+        }
+    }
 }

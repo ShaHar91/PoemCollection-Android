@@ -27,8 +27,8 @@ class PoemViewModel(private val poemId: String) : PoemBaseViewModel() {
 
     fun getPoemAndAllDataCr(rating: Float? = null) = launchAndLoad {
         this.delayedRating = rating
-        PoemRepository.getPoemByIdCr(poemId)
-        if (HawkUtils.hawkCurrentUserId != null && HawkUtils.hawkCurrentUserId!!.isNotEmpty()) {
+        PoemRepository.getPoemById(poemId)
+        if (HawkUtils.hawkCurrentUserId?.isNotEmpty() == true) {
             ReviewRepository.getOwnReviewForPoemCr(poemId)
             ownReview.set(ReviewRepository.getOwnReviewForPoemRealm(poemId, HawkUtils.hawkCurrentUserId!!))
         }
@@ -44,7 +44,8 @@ class PoemViewModel(private val poemId: String) : PoemBaseViewModel() {
             //TODO: create a new Review does not update the layout
             ReviewRepository.createReviewCr(poemId, newReviewText, newRating)
         }
-        refreshLayout.value = true
+
+        getPoemAndAllDataCr()
     }
 
 

@@ -13,11 +13,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
+import be.appwise.core.ui.base.BaseVMFragment
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.databinding.FragmentPoemBinding
-import com.shahar91.poems.ui.base.PoemBaseFragment
 import com.shahar91.poems.ui.entry.EntryActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.home.poem.adapter.PoemReviewsAdapter
 import com.shahar91.poems.utils.DialogFactory.showDialogOkCancel
@@ -25,7 +25,7 @@ import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
 import com.shahar91.poems.utils.HawkUtils
 
-class PoemFragment : PoemBaseFragment<PoemViewModel>() {
+class PoemFragment : BaseVMFragment<PoemViewModel>() {
     private val safeArgs: PoemFragmentArgs by navArgs()
     private lateinit var mDataBinding: FragmentPoemBinding
     private lateinit var poemReviewsAdapter: PoemReviewsAdapter

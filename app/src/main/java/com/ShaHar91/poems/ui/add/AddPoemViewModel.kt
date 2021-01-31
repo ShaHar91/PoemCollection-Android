@@ -10,11 +10,11 @@ class AddPoemViewModel : PoemBaseViewModel() {
     var categoriesLive = CategoryRepository.getAllCategoriesLive()
 
     fun getAllCategoriesCr() = launchAndLoad {
-        CategoryRepository.getCategoriesCr()
+        CategoryRepository.getCategories()
     }
 
-    fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit,
-        onError: (Throwable) -> Unit) {
-        PoemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it._id }, onSuccess, onError)
+    fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit) = launchAndLoad {
+        PoemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it._id })
+        onSuccess()
     }
 }
