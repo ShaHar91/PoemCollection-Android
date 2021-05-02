@@ -12,29 +12,28 @@ import com.shahar91.poems.R
 import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*
-import timber.log.Timber
 
 class EntryActivity : PoemBaseActivity<EntryViewModel>() {
     private var loginFragment: LoginFragment = LoginFragment.newInstance(false)
 
     private var entryListeners = object : EntryListeners {
         override fun onLoginSuccessful() {
-            Timber.tag("entryListeners").d("onLoginClicked")
+            Logger.t("entryListeners").d("onLoginClicked")
             finishThisActivity(Activity.RESULT_OK, intent)
         }
 
         override fun onRegisterSuccessful() {
-            Timber.tag("entryListeners").d("onRegisterClicked")
+            Logger.t("entryListeners").d("onRegisterClicked")
             finishThisActivity(Activity.RESULT_OK, intent)
         }
 
         override fun onGoogleClicked() {
-            Timber.tag("entryListeners").d("onGoogleClicked")
+            Logger.t("entryListeners").d("onGoogleClicked")
             finishThisActivity(Activity.RESULT_CANCELED, intent)
         }
 
         override fun onFacebookClicked() {
-            Timber.tag("entryListeners").d("onFacebookClicked")
+            Logger.t("entryListeners").d("onFacebookClicked")
             finishThisActivity(Activity.RESULT_CANCELED, intent)
         }
     }

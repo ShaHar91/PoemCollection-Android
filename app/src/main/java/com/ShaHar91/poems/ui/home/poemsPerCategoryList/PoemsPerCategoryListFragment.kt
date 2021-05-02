@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.core.ui.base.BaseVMFragment
 import be.appwise.core.ui.custom.RecyclerViewEnum
+import com.orhanobut.logger.Logger
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentPoemsPerCategoryBinding
 import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter
@@ -26,8 +27,9 @@ class PoemsPerCategoryListFragment :
     private val poemsPerCategoryListAdapterListener =
         object : PoemsPerCategoryListInteractionListener {
             override fun onPoemClicked(poemId: String) {
-                PoemsPerCategoryListFragmentDirections.actionPoemsPerCategoryListFragmentToPoemFragment(poemId)
-                    .run(findNavController()::navigate)
+//                PoemsPerCategoryListFragmentDirections.actionPoemsPerCategoryListFragmentToPoemFragment(poemId)
+//                    .run(findNavController()::navigate)
+                mViewModel.getPoemsWithRelations(poemId)
             }
         }
 
@@ -61,7 +63,7 @@ class PoemsPerCategoryListFragment :
             rvPoemsPerCategory.apply {
                 setupRecyclerView(null)
                 emptyStateView = emptyView
-                loadingStateView = loadingView
+//                loadingStateView = loadingView
                 adapter = poemsPerCategoryListAdapter
                 stateView = RecyclerViewEnum.LOADING
             }

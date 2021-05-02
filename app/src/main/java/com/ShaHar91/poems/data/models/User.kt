@@ -1,11 +1,17 @@
 package com.shahar91.poems.data.models
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import be.appwise.core.data.base.BaseEntity
+import com.google.gson.annotations.SerializedName
+import com.shahar91.poems.data.DBConstants
 
-open class User(
+@Entity(tableName = DBConstants.USER_TABLE_NAME)
+data class User(
     @PrimaryKey
-    var _id: String = "",
+    @SerializedName("_id")
+    override val id: String = "",
     var email: String = "",
     var username: String = "",
-    var pictureUrl: String? = null) : RealmObject()
+    var pictureUrl: String? = null) : BaseEntity()

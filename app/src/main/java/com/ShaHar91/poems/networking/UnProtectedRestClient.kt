@@ -7,4 +7,6 @@ object UnProtectedRestClient : BaseRestClient<NewApiManagerService>() {
     override val apiService = NewApiManagerService::class.java
     override val protectedClient = false
     override fun getBaseUrl() = BuildConfig.API_HOST
+
+    override fun enableBagelInterceptor() = true
 }

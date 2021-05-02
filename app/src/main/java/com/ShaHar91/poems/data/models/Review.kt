@@ -1,21 +1,21 @@
 package com.shahar91.poems.data.models
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import be.appwise.core.data.base.BaseEntity
+import com.google.gson.annotations.SerializedName
+import com.shahar91.poems.data.DBConstants
 import java.util.*
 
-open class Review(
+@Entity(tableName = DBConstants.REVIEW_TABLE_NAME)
+data class Review(
     @PrimaryKey
-    var _id: String = "",
+    @SerializedName("_id")
+    override var id: String = "",
     var text: String = "",
     var rating: Float = 0F,
     var createdAt: Date? = null,
-    var poem: Poem? = null,
-    var user: User? = null) : RealmObject() {
-    companion object {
-        fun createNewReview(review: Review): Review {
-            return Review(review._id, review.text, review.rating, review.createdAt, review.poem,
-                review.user)
-        }
-    }
-}
+    @Ignore var poem: Poem? = null,
+    var poemId: String = "",
+    var user: User? = null) : BaseEntity()

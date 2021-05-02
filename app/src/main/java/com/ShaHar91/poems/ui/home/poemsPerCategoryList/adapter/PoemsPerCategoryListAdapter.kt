@@ -25,7 +25,7 @@ class PoemsPerCategoryListAdapter(private val listener: PoemsPerCategoryListInte
 
         override fun bind(item: Poem) {
             binding.poem = item
-            binding.root.setOnClickListener { listener.onPoemClicked(item._id) }
+            binding.root.setOnClickListener { listener.onPoemClicked(item.id) }
         }
     }
 }

@@ -2,11 +2,11 @@ package com.shahar91.poems.ui.home.categories
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.core.ui.base.BaseBindingVMFragment
 import be.appwise.core.ui.custom.RecyclerViewEnum
+import com.orhanobut.logger.Logger
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
@@ -14,18 +14,17 @@ import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 
 class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCategoriesBinding>() {
-    private lateinit var categoryAdapter: CategoryAdapter
 
     private val categoryAdapterListener = object : CategoryInteractionListener {
         override fun onCategoryClicked(category: Category) {
             findNavController().navigate(
-                CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category._id,
+                CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category.id,
                     category.name))
         }
     }
 
+    private val categoryAdapter = CategoryAdapter(categoryAdapterListener)
     override fun getLayout() = R.layout.fragment_categories
-
     override fun getViewModel() = CategoryViewModel::class.java
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,8 +33,7 @@ class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCatego
         mBinding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = mViewModel.apply {
-                setDefaultExceptionHandler(::onError)
-                getAllCategoriesCr()
+                getAllCategories()
             }
         }
 
@@ -43,8 +41,6 @@ class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCatego
     }
 
     private fun initViews() {
-        categoryAdapter = CategoryAdapter(categoryAdapterListener)
-
         mBinding.apply {
             rvCategories.apply {
                 setupRecyclerView(null)
@@ -55,14 +51,20 @@ class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCatego
             }
 
             srlRefreshCategories.apply {
-                setOnRefreshListener { viewModel?.getAllCategoriesCr() }
+                setOnRefreshListener {
+                    mViewModel.getAllCategories()
+                }
                 setColorSchemeResources(R.color.colorWhite)
                 setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
             }
 
-            viewModel?.categoriesLive?.observe(viewLifecycleOwner, Observer {
+            mViewModel.categoriesLive.observe(viewLifecycleOwner, {
+                Logger.d(it)
                 srlRefreshCategories.isRefreshing = false
-                categoryAdapter.setItems(it)
+                categoryAdapter.submitList(it)
+                if (it.isNotEmpty()) {
+                    rvCategories.stateView = RecyclerViewEnum.NORMAL
+                }
             })
         }
     }

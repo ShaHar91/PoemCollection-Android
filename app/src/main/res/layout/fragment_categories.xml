@@ -16,12 +16,11 @@
         android:background="@color/general_background"
         tools:context=".ui.home.categories.CategoryFragment">
 
-        <com.google.android.material.progressindicator.ProgressIndicator
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loadingView"
-            style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
             android:layout_width="wrap_content"
+            android:indeterminate="true"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

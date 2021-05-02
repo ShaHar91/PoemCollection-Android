@@ -18,16 +18,15 @@
         android:orientation="vertical"
         tools:context=".ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment">
 
-        <com.google.android.material.progressindicator.ProgressIndicator
-            android:id="@+id/loadingView"
-            style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <com.google.android.material.progressindicator.ProgressIndicator-->
+<!--            android:id="@+id/loadingView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="gone"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/emptyView"

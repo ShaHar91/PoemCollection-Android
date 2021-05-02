@@ -1,20 +1,19 @@
 package com.shahar91.poems.ui.add
 
+import com.shahar91.poems.MyApp
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.data.repositories.CategoryRepository
-import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
 class AddPoemViewModel : PoemBaseViewModel() {
     var checkedCategories: List<Category> = emptyList()
-    var categoriesLive = CategoryRepository.getAllCategoriesLive()
+    var categoriesLive = MyApp.categoryRepository.getAllCategoriesLive()
 
     fun getAllCategoriesCr() = launchAndLoad {
-        CategoryRepository.getCategories()
+        MyApp.categoryRepository.getCategories()
     }
 
     fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit) = launchAndLoad {
-        PoemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it._id })
+        MyApp.poemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it.id })
         onSuccess()
     }
 }

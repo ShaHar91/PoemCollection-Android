@@ -90,7 +90,7 @@ class PoemFragment : BaseVMFragment<PoemViewModel>() {
                                         showEditReviewDialog(review)
                                     }
                                     R.id.review_delete ->
-                                        mViewModel.deleteReview(review._id)
+                                        mViewModel.deleteReview(review.id)
                                 }
                                 true
                             }
@@ -115,7 +115,7 @@ class PoemFragment : BaseVMFragment<PoemViewModel>() {
                     }
                 }
 
-                poemReviewsAdapter.setItems(poem!!.shortReviewList)
+//                poemReviewsAdapter.setItems(poem?.shortReviewList ?: emptyList())
             }
 
             if (mViewModel.delayedRating != null) {

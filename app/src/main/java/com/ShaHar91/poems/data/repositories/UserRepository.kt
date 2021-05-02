@@ -1,19 +1,22 @@
 package com.shahar91.poems.data.repositories
 
 import be.appwise.core.data.base.BaseRepository
+import com.google.gson.Gson
 import com.shahar91.poems.data.dao.UserDao
 import com.shahar91.poems.data.models.User
+import com.shahar91.poems.networking.NewApiManagerService
 import com.shahar91.poems.utils.HawkUtils
-import com.shahar91.poems.utils.protectedClient
 
-object UserRepository : BaseRepository() {
-    private val userDao = UserDao(realm)
+class UserRepository(
+    private val userDao: UserDao,
+    private val protectedService: NewApiManagerService
+) : BaseRepository() {
 
-    suspend fun getCurrentUserCr() {
-        doCall(protectedClient().getCurrentUser()).data?.let {
-            //Save current user id in Hawk
-            val currentUser = userDao.createOrUpdateObjectFromJson(User::class.java, it.toString())
-            HawkUtils.hawkCurrentUserId = currentUser._id
+    suspend fun getCurrentUser() {
+        doCall(protectedService.getCurrentUser()).data?.let {
+            val user = Gson().fromJson(it, User::class.java)
+            userDao.insert(user)
+            HawkUtils.hawkCurrentUserId = user.id
         }
     }
 }

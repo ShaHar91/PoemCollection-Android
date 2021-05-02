@@ -1,34 +1,46 @@
 package com.shahar91.poems.data.repositories
 
 import be.appwise.core.data.base.BaseRepository
+import com.google.gson.Gson
+import com.shahar91.poems.data.dao.PoemCategoryCrossRefDao
 import com.shahar91.poems.data.dao.PoemDao
+import com.shahar91.poems.data.dao.ReviewDao
+import com.shahar91.poems.data.dao.UserDao
 import com.shahar91.poems.data.models.Poem
+import com.shahar91.poems.data.models.PoemCategoryCrossRef
+import com.shahar91.poems.networking.NewApiManagerService
 import com.shahar91.poems.utils.HawkUtils
-import com.shahar91.poems.utils.protectedClient
-import com.shahar91.poems.utils.unprotectedClient
 
-object PoemRepository : BaseRepository() {
-    private val poemDao = PoemDao(realm)
-
-    fun getPoemsForCategoryLive(categoryId: String) = poemDao.getPoemsForCategoryLive(categoryId)
+class PoemRepository(
+    private val poemDao: PoemDao,
+    private val userDao: UserDao,
+    private val reviewDao: ReviewDao,
+    private val poemCategoryCrossRefDao: PoemCategoryCrossRefDao,
+    private val protectedService: NewApiManagerService,
+    private val unProtectedService: NewApiManagerService
+) : BaseRepository() {
+    fun getPoemsForCategoryLive(categoryId: String) = poemDao.getPoemsForCategoryLive()
     fun getPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
-    fun getPoemByIdRealm(poemId: String) = poemDao.getPoemByIdRealm(poemId)
+    suspend fun getPoemByIdRealm(poemId: String) = poemDao.getPoemByIdRealm(poemId)
+
+    suspend fun getPoemWithRelations() = poemDao.getPoemWithRelations()
 
     suspend fun getPoemsForCategory(categoryId: String) {
-        doCall(unprotectedClient().getPoemsForCategoryId(categoryId)).data?.let {
-            poemDao.createOrUpdateAllFromJson(Poem::class.java, it.toString())
+        doCall(unProtectedService.getPoemsForCategoryId(categoryId)).data?.let {
+            val poems = Gson().fromJson(it, Array<Poem>::class.java).toList()
+            poemDao.insertPoemsWithRelations(poems, userDao, poemCategoryCrossRefDao, reviewDao)
         }
     }
 
     suspend fun getPoemById(poemId: String) {
-        doCall(unprotectedClient().getPoemById(poemId, HawkUtils.hawkCurrentUserId)).data?.let {
-            poemDao.copyOrUpdate(it)
+        doCall(unProtectedService.getPoemById(poemId, HawkUtils.hawkCurrentUserId)).data?.let {
+            poemDao.insertPoemWithRelations(it, userDao, poemCategoryCrossRefDao, reviewDao)
         }
     }
 
     suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) {
-        doCall(protectedClient().createPoem(poemTitle, poemBody, categoryList)).data?.let {
-            poemDao.copyOrUpdate(it)
+        doCall(protectedService.createPoem(poemTitle, poemBody, categoryList)).data?.let {
+            poemDao.insert(it)
         }
     }
 }
