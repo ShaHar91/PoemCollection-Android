@@ -8,12 +8,9 @@ import be.appwise.core.ui.base.list.BaseViewHolder
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.ListItemCategoryBinding
 
-class CategoryAdapter(private val listener: CategoryInteractionListener) :
-    ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
-
-    interface CategoryInteractionListener {
-        fun onCategoryClicked(category: Category)
-    }
+class CategoryAdapter(
+    private val onCategoryClicked: (category: Category) -> Unit
+) : ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         return CategoryViewHolder(ListItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -29,7 +26,7 @@ class CategoryAdapter(private val listener: CategoryInteractionListener) :
 
         override fun bind(item: Category) {
             binding.category = item
-            binding.root.setOnClickListener { listener.onCategoryClicked(item) }
+            binding.root.setOnClickListener { onCategoryClicked(item) }
         }
     }
 }

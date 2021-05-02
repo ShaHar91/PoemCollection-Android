@@ -6,24 +6,17 @@ import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.core.ui.base.BaseBindingVMFragment
 import be.appwise.core.ui.custom.RecyclerViewEnum
-import com.orhanobut.logger.Logger
 import com.shahar91.poems.R
-import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
-import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 
 class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCategoriesBinding>() {
 
-    private val categoryAdapterListener = object : CategoryInteractionListener {
-        override fun onCategoryClicked(category: Category) {
-            findNavController().navigate(
-                CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category.id,
-                    category.name))
-        }
+    private val categoryAdapter = CategoryAdapter {
+        findNavController()
+            .navigate(CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(it.id, it.name))
     }
 
-    private val categoryAdapter = CategoryAdapter(categoryAdapterListener)
     override fun getLayout() = R.layout.fragment_categories
     override fun getViewModel() = CategoryViewModel::class.java
 
@@ -38,6 +31,7 @@ class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCatego
         }
 
         initViews()
+        initObservers()
     }
 
     private fun initViews() {
@@ -51,22 +45,19 @@ class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCatego
             }
 
             srlRefreshCategories.apply {
-                setOnRefreshListener {
-                    mViewModel.getAllCategories()
-                }
                 setColorSchemeResources(R.color.colorWhite)
                 setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
             }
-
-            mViewModel.categoriesLive.observe(viewLifecycleOwner, {
-                Logger.d(it)
-                srlRefreshCategories.isRefreshing = false
-                categoryAdapter.submitList(it)
-                if (it.isNotEmpty()) {
-                    rvCategories.stateView = RecyclerViewEnum.NORMAL
-                }
-            })
         }
+    }
+
+    private fun initObservers() {
+        mViewModel.categoriesLive.observe(viewLifecycleOwner, {
+            categoryAdapter.submitList(it)
+            if (it.isNotEmpty()) {
+                mBinding.rvCategories.stateView = RecyclerViewEnum.NORMAL
+            }
+        })
     }
 
     override fun onError(throwable: Throwable) {
@@ -75,7 +66,7 @@ class CategoryFragment : BaseBindingVMFragment<CategoryViewModel, FragmentCatego
             if (rvCategories.stateView == RecyclerViewEnum.LOADING) {
                 rvCategories.stateView = RecyclerViewEnum.EMPTY_STATE
             }
-            srlRefreshCategories.isRefreshing = false
+            mViewModel.setIsRefreshing(false)
         }
     }
 }

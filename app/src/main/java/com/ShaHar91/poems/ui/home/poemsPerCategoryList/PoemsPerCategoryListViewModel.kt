@@ -1,5 +1,6 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import be.appwise.core.extensions.viewmodel.singleArgViewModelFactory
 import com.orhanobut.logger.Logger
@@ -7,14 +8,20 @@ import com.shahar91.poems.MyApp
 import com.shahar91.poems.data.models.Poem
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
-class PoemsPerCategoryListViewModel(categoryId: String) : PoemBaseViewModel() {
+class PoemsPerCategoryListViewModel(private val categoryId: String) : PoemBaseViewModel() {
     companion object {
         val FACTORY = singleArgViewModelFactory(::PoemsPerCategoryListViewModel)
     }
 
-    var allPoemsForCategoryLive = MutableLiveData(listOf(Poem(id = "5d725a037b292f5f8ceff787"))) // MyApp.poemRepository.getPoemsForCategoryLive(categoryId)
+    private val _isRefreshing = MutableLiveData(false)
+    val isRefreshing: LiveData<Boolean> get() = _isRefreshing
+    fun setIsRefreshing(refreshing: Boolean) {
+        _isRefreshing.postValue(refreshing)
+    }
 
-    fun getAllPoemsForCategoryCr(categoryId: String) = launchAndLoad {
+    var allPoemsForCategoryLive = MyApp.poemRepository.getPoemsForCategoryLive(categoryId)
+
+    fun getAllPoemsForCategoryId() = launchAndLoad {
         MyApp.poemRepository.getPoemsForCategory(categoryId)
     }
 

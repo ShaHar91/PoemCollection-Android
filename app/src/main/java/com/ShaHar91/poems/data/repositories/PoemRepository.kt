@@ -19,7 +19,7 @@ class PoemRepository(
     private val protectedService: NewApiManagerService,
     private val unProtectedService: NewApiManagerService
 ) : BaseRepository() {
-    fun getPoemsForCategoryLive(categoryId: String) = poemDao.getPoemsForCategoryLive()
+    fun getPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
     fun getPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
     suspend fun getPoemByIdRealm(poemId: String) = poemDao.getPoemByIdRealm(poemId)
 

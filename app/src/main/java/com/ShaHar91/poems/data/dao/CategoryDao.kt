@@ -12,5 +12,5 @@ abstract class CategoryDao : BaseRoomDao<Category>(DBConstants.CATEGORY_TABLE_NA
     override val idColumnInfo = DBConstants.COLUMN_ID_CATEGORY
 
     @Query("SELECT * FROM ${DBConstants.CATEGORY_TABLE_NAME} ORDER BY UPPER(name)")
-    abstract fun getAllLive(): LiveData<List<Category>>
+    abstract fun findAllLive(): LiveData<List<Category>>
 }

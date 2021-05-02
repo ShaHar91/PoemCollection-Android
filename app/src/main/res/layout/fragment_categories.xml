@@ -40,9 +40,11 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srlRefreshCategories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:onRefreshListener="@{() -> viewModel.getAllCategories()}"
+            app:refreshing="@{viewModel.isRefreshing}">
 
-            <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
+        <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
                 android:id="@+id/rvCategories"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

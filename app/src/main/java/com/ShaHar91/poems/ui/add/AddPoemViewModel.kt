@@ -6,7 +6,7 @@ import com.shahar91.poems.ui.base.PoemBaseViewModel
 
 class AddPoemViewModel : PoemBaseViewModel() {
     var checkedCategories: List<Category> = emptyList()
-    var categoriesLive = MyApp.categoryRepository.getAllCategoriesLive()
+    var categoriesLive = MyApp.categoryRepository.findAllLive()
 
     fun getAllCategoriesCr() = launchAndLoad {
         MyApp.categoryRepository.getCategories()

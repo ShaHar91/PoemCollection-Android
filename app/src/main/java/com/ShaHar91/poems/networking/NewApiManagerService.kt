@@ -4,6 +4,7 @@ import be.appwise.core.networking.NetworkConstants
 import be.appwise.core.networking.model.AccessToken
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.data.models.Poem
 import retrofit2.Call
 import retrofit2.http.DELETE
@@ -45,13 +46,10 @@ interface NewApiManagerService {
 
     //<editor-fold desc="Categories">
     @GET("categories")
-    fun getCategories(): Call<NetworkResponse<JsonArray>>
+    fun getCategories(): Call<NetworkResponse<List<Category>>>
     //</editor-fold>
 
     //<editor-fold desc="Poems">
-    @GET("poems")
-    fun getPoems(@Query("categories") categoryId: String): Call<NetworkResponse<JsonArray>>
-
     @GET("poems")
     fun getPoemsForCategoryId(@Query("categories") categoryId: String): Call<NetworkResponse<JsonArray>>
 
