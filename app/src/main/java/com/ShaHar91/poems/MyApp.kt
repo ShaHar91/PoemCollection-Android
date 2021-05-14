@@ -30,7 +30,7 @@ class MyApp : Application() {
         }
 
         val poemRepository: PoemRepository by lazy {
-            PoemRepository(poemDatabase.poemDao(), poemDatabase.userDao(), poemDatabase.reviewDao(), poemDatabase.poemCategoryCrossRefDao(), ProtectedRestClient.getService, UnProtectedRestClient.getService)
+            PoemRepository(poemDatabase/*, userRepository, categoryRepository, reviewRepository*/, ProtectedRestClient.getService, UnProtectedRestClient.getService)
         }
 
         val authRepository: AuthRepository by lazy {

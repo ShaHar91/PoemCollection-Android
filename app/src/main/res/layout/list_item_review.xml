@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="review"
-            type="com.shahar91.poems.data.models.Review" />
+            name="reviewWithUser"
+            type="com.shahar91.poems.data.models.ReviewWithUser" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -35,7 +35,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{review.text}"
+                android:text="@{reviewWithUser.review.text}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

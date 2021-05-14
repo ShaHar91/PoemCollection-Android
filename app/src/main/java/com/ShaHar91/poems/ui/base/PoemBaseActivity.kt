@@ -14,7 +14,7 @@ import com.shahar91.poems.R
  *
  * @param <VM> The ViewModel working with the Activity
 </VM> */
-abstract class PoemBaseActivity<VM : PoemBaseViewModel> : BaseVMActivity<VM>() {
+abstract class PoemBaseActivity : BaseVMActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!isTablet) {

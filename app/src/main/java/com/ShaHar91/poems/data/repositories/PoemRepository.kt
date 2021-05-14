@@ -1,46 +1,69 @@
 package com.shahar91.poems.data.repositories
 
+import androidx.room.withTransaction
 import be.appwise.core.data.base.BaseRepository
-import com.google.gson.Gson
-import com.shahar91.poems.data.dao.PoemCategoryCrossRefDao
-import com.shahar91.poems.data.dao.PoemDao
-import com.shahar91.poems.data.dao.ReviewDao
-import com.shahar91.poems.data.dao.UserDao
-import com.shahar91.poems.data.models.Poem
+import com.shahar91.poems.data.database.PoemDatabase
 import com.shahar91.poems.data.models.PoemCategoryCrossRef
 import com.shahar91.poems.networking.NewApiManagerService
+import com.shahar91.poems.networking.models.PoemResponse
 import com.shahar91.poems.utils.HawkUtils
 
 class PoemRepository(
-    private val poemDao: PoemDao,
-    private val userDao: UserDao,
-    private val reviewDao: ReviewDao,
-    private val poemCategoryCrossRefDao: PoemCategoryCrossRefDao,
+    private val poemDatabase: PoemDatabase,
+//    private val userRepository: UserRepository,
+//    private val categoryRepository: CategoryRepository,
+//    private val reviewRepository: ReviewRepository,
     private val protectedService: NewApiManagerService,
     private val unProtectedService: NewApiManagerService
 ) : BaseRepository() {
+    private val poemDao = poemDatabase.poemDao()
+    private val categoryDao = poemDatabase.categoryDao()
+    private val userDao = poemDatabase.userDao()
+    private val reviewDao = poemDatabase.reviewDao()
+    private val poemCategoryCrossRefDao = poemDatabase.poemCategoryCrossRefDao()
+
     fun getPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
     fun getPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
-    suspend fun getPoemByIdRealm(poemId: String) = poemDao.getPoemByIdRealm(poemId)
-
-    suspend fun getPoemWithRelations() = poemDao.getPoemWithRelations()
 
     suspend fun getPoemsForCategory(categoryId: String) {
-        doCall(unProtectedService.getPoemsForCategoryId(categoryId)).data?.let {
-            val poems = Gson().fromJson(it, Array<Poem>::class.java).toList()
-            poemDao.insertPoemsWithRelations(poems, userDao, poemCategoryCrossRefDao, reviewDao)
+        doCall(unProtectedService.getPoemsForCategoryId(categoryId)).data?.let { poemResponseList ->
+            poemDatabase.withTransaction {
+                poemResponseList.forEach {
+                    //TODO: delete other poems/reviews/poemCategoryCrossRef that are saved in Room but did not came with the Response
+                    savePoem(it)
+                }
+            }
         }
     }
 
     suspend fun getPoemById(poemId: String) {
-        doCall(unProtectedService.getPoemById(poemId, HawkUtils.hawkCurrentUserId)).data?.let {
-            poemDao.insertPoemWithRelations(it, userDao, poemCategoryCrossRefDao, reviewDao)
+        doCall(unProtectedService.getPoemById(poemId, HawkUtils.hawkCurrentUserId)).data?.let { poemResponse ->
+            poemDatabase.withTransaction {
+                savePoem(poemResponse)
+            }
         }
     }
 
     suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) {
-        doCall(protectedService.createPoem(poemTitle, poemBody, categoryList)).data?.let {
-            poemDao.insert(it)
+        doCall(protectedService.createPoem(poemTitle, poemBody, categoryList)).data?.let { poemResponse ->
+            poemDatabase.withTransaction {
+                savePoem(poemResponse)
+            }
+        }
+    }
+
+    suspend fun savePoem(poemResponse: PoemResponse) {
+        poemDatabase.withTransaction {
+            poemDao.insert(poemResponse.getAsEntity())
+            userDao.insert(poemResponse.getUserAsEntity())
+            categoryDao.insertMany(poemResponse.getCategoriesAsEntities())
+            reviewDao.insertMany(poemResponse.getReviewsAsEntities())
+
+            val list = poemResponse.categories.map {
+                PoemCategoryCrossRef(poemResponse._id, it._id)
+            }
+
+            poemCategoryCrossRefDao.insertManyPoemCategoryCrossRef(list)
         }
     }
 }

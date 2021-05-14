@@ -14,9 +14,8 @@ class UserRepository(
 
     suspend fun getCurrentUser() {
         doCall(protectedService.getCurrentUser()).data?.let {
-            val user = Gson().fromJson(it, User::class.java)
-            userDao.insert(user)
-            HawkUtils.hawkCurrentUserId = user.id
+            userDao.insert(it.getAsEntity())
+            HawkUtils.hawkCurrentUserId = it._id
         }
     }
 }

@@ -5,6 +5,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import be.appwise.core.extensions.view.setErrorLayout
 import be.appwise.core.ui.base.BaseFragment.Companion.SHOW_BACK_ICON
 import be.appwise.core.ui.base.BaseVMFragment
@@ -15,20 +16,20 @@ import com.shahar91.poems.ui.entry.EntryListeners
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
 
-class RegisterFragment : BaseVMFragment<RegisterViewModel>() {
+class RegisterFragment : BaseVMFragment() {
     companion object {
         @JvmStatic
         fun newInstance(showBackIcon: Boolean) =
-            RegisterFragment().apply {
-                arguments = Bundle().apply {
-                    putBoolean(SHOW_BACK_ICON, showBackIcon)
+                RegisterFragment().apply {
+                    arguments = Bundle().apply {
+                        putBoolean(SHOW_BACK_ICON, showBackIcon)
+                    }
                 }
-            }
     }
 
     lateinit var listeners: EntryListeners
 
-    override fun getViewModel() = RegisterViewModel::class.java
+    override val mViewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment

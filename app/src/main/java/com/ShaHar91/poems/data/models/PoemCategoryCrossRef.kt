@@ -23,41 +23,6 @@ data class CategoryWithPoems(
         associateBy = Junction(
             value = PoemCategoryCrossRef::class,
             parentColumn = "categoryId",
-            entityColumn = "poemId"))
-    var poems: List<Poem>
+            entityColumn = "poemId"),)
+    var poems: List<PoemWithUser>
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

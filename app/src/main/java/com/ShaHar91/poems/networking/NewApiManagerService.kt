@@ -2,19 +2,12 @@ package com.shahar91.poems.networking
 
 import be.appwise.core.networking.NetworkConstants
 import be.appwise.core.networking.model.AccessToken
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.data.models.Poem
+import com.shahar91.poems.networking.models.CategoryResponse
+import com.shahar91.poems.networking.models.PoemResponse
+import com.shahar91.poems.networking.models.ReviewResponse
+import com.shahar91.poems.networking.models.UserResponse
 import retrofit2.Call
-import retrofit2.http.DELETE
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface NewApiManagerService {
     //<editor-fold desc="Auth">
@@ -41,29 +34,29 @@ interface NewApiManagerService {
     ): Call<AccessToken>
 
     @GET("auth/me")
-    fun getCurrentUser(): Call<NetworkResponse<JsonObject>>
+    fun getCurrentUser(): Call<NetworkResponse<UserResponse>>
     //</editor-fold>
 
     //<editor-fold desc="Categories">
     @GET("categories")
-    fun getCategories(): Call<NetworkResponse<List<Category>>>
+    fun getCategories(): Call<NetworkResponse<List<CategoryResponse>>>
     //</editor-fold>
 
     //<editor-fold desc="Poems">
     @GET("poems")
-    fun getPoemsForCategoryId(@Query("categories") categoryId: String): Call<NetworkResponse<JsonArray>>
+    fun getPoemsForCategoryId(@Query("categories") categoryId: String): Call<NetworkResponse<List<PoemResponse>>>
 
     @GET("poems/{id}")
     fun getPoemById(
         @Path("id") poemId: String,
-        @Query("userId") userId: String?): Call<NetworkResponse<Poem>>
+        @Query("userId") userId: String?): Call<NetworkResponse<PoemResponse>>
 
     @FormUrlEncoded
     @POST("poems")
     fun createPoem(
         @Field("title") poemTitle: String,
         @Field("body") poemBody: String,
-        @Field("categories") categoryList: List<String>): Call<NetworkResponse<Poem>>
+        @Field("categories") categoryList: List<String>): Call<NetworkResponse<PoemResponse>>
     //</editor-fold>
 
     //<editor-fold desc="Reviews">
@@ -71,29 +64,29 @@ interface NewApiManagerService {
     @GET("reviews")
     fun getReviewsByPoemId(
         @Query("poem") poemId: String/*,
-        @Query("limit") limit: Int*/): Call<NetworkResponse<JsonArray>>
+        @Query("limit") limit: Int*/): Call<NetworkResponse<List<ReviewResponse>>>
 
     @GET("reviews")
     fun getOwnReviewForPoem(
         @Query("poem") poemId: String,
-        @Query("user") userId: String?): Call<NetworkResponse<JsonArray>>
+        @Query("user") userId: String?): Call<NetworkResponse<List<ReviewResponse>>>
 
     @FormUrlEncoded
     @POST("poems/{id}/reviews")
     fun createReview(
         @Path("id") poemId: String,
         @Field("text") reviewText: String,
-        @Field("rating") reviewRating: Float): Call<NetworkResponse<JsonObject>>
+        @Field("rating") reviewRating: Float): Call<NetworkResponse<ReviewResponse>>
 
     @FormUrlEncoded
     @PUT("reviews/{id}")
     fun editReview(
         @Path("id") reviewId: String,
         @Field("text") reviewText: String,
-        @Field("rating") reviewRating: Float): Call<NetworkResponse<JsonObject>>
+        @Field("rating") reviewRating: Float): Call<NetworkResponse<ReviewResponse>>
 
     @DELETE("reviews/{id}")
     fun deleteReview(
-        @Path("id") reviewId: String): Call<NetworkResponse<JsonObject>>
+        @Path("id") reviewId: String): Call<NetworkResponse<ReviewResponse>>
     //</editor-fold>
 }

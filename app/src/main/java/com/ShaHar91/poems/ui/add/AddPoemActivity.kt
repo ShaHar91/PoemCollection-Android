@@ -8,9 +8,9 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.Spanned
 import android.text.style.ImageSpan
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import be.appwise.core.extensions.activity.snackBar
 import be.appwise.core.extensions.view.optionalCallbacks
 import be.appwise.core.extensions.view.setErrorLayout
 import com.google.android.material.chip.ChipDrawable
@@ -21,7 +21,7 @@ import com.shahar91.poems.utils.DialogFactory
 import kotlinx.android.synthetic.main.activity_add_poem.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
+class AddPoemActivity : PoemBaseActivity() {
     companion object {
         @JvmStatic
         fun start(context: Context) {
@@ -34,7 +34,7 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
         }
     }
 
-    override fun getViewModel() = AddPoemViewModel::class.java
+    override val mViewModel: AddPoemViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
     private fun initViews() {
         configureToolbar(toolbar, true, R.string.add_poem_toolbar_title, R.drawable.ic_close)
         toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorWhite),
-            PorterDuff.Mode.SRC_IN)
+                PorterDuff.Mode.SRC_IN)
 
         tilPoemTitle.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
         tilPoemBody.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
@@ -56,12 +56,12 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
             checkToSavePoem()
         }
 
-        viewModel.getAllCategoriesCr()
+        mViewModel.getAllCategoriesCr()
 
-        viewModel.categoriesLive.observe(this, Observer { categories ->
+        mViewModel.categoriesLive.observe(this, Observer { categories ->
             tilPoemCategory.editText?.setOnClickListener {
-                DialogFactory.showDialogToAddCategories(this, categories, viewModel.checkedCategories) {
-                    viewModel.checkedCategories = it
+                DialogFactory.showDialogToAddCategories(this, categories, mViewModel.checkedCategories) {
+                    mViewModel.checkedCategories = it
                     atvCategory.text = null
                     it.forEach { category -> addChip(category) }
                 }
@@ -117,7 +117,7 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
         }
 
         if (isValid) {
-            viewModel.addNewPoem(poemTitle, poemBody) {
+            mViewModel.addNewPoem(poemTitle, poemBody) {
                 finishThisActivity(Activity.RESULT_OK)
             }
         }

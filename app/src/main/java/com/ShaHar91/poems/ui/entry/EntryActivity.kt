@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.orhanobut.logger.Logger
@@ -13,7 +14,7 @@ import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.entry.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_entry.*
 
-class EntryActivity : PoemBaseActivity<EntryViewModel>() {
+class EntryActivity : PoemBaseActivity() {
     private var loginFragment: LoginFragment = LoginFragment.newInstance(false)
 
     private var entryListeners = object : EntryListeners {
@@ -50,7 +51,7 @@ class EntryActivity : PoemBaseActivity<EntryViewModel>() {
         }
     }
 
-    override fun getViewModel() = EntryViewModel::class.java
+    override val mViewModel: EntryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,9 +108,9 @@ class EntryActivity : PoemBaseActivity<EntryViewModel>() {
      */
     fun setHomeUpIcon(icNavigationBack: Int) {
         supportActionBar?.setHomeAsUpIndicator(
-            ContextCompat.getDrawable(this, icNavigationBack)?.apply {
-                setTint(ContextCompat.getColor(this@EntryActivity, R.color.colorWhite))
-            }
+                ContextCompat.getDrawable(this, icNavigationBack)?.apply {
+                    setTint(ContextCompat.getColor(this@EntryActivity, R.color.colorWhite))
+                }
         )
     }
 }

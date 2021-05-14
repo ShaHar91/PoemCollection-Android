@@ -1,11 +1,8 @@
 package com.shahar91.poems.data.repositories
 
 import be.appwise.core.data.base.BaseRepository
-import com.google.gson.Gson
 import com.shahar91.poems.data.dao.ReviewDao
-import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.networking.NewApiManagerService
-import com.shahar91.poems.networking.ProtectedRestClient
 import com.shahar91.poems.utils.HawkUtils
 
 class ReviewRepository(
@@ -13,22 +10,21 @@ class ReviewRepository(
     private val protectedService: NewApiManagerService
 ) : BaseRepository() {
 
-    fun getOwnReviewForPoemLive(poemId: String) = reviewDao.getOwnReviewForPoemLive(poemId, HawkUtils.hawkCurrentUserId)
-    fun getOwnReviewForPoemRealm(poemId: String, userId: String) = reviewDao.getOwnReviewForPoemRealm(poemId, userId)
+    fun findOwnReviewForPoemLive(poemId: String) = reviewDao.findOwnReviewForPoemLive(poemId, HawkUtils.hawkCurrentUserId)
 
     suspend fun getReviews(poemId: String) {
-        doCall(protectedService.getReviewsByPoemId(poemId)).data?.let {
-            val reviews = Gson().fromJson(it, Array<Review>::class.java).toList()
-            reviewDao.insertManyDeleteOthers(reviews)
+        doCall(protectedService.getReviewsByPoemId(poemId)).data?.let { reviewResponseList ->
+            reviewDao.insertManyDeleteOthers(reviewResponseList.map { it.getAsEntity() })
         }
     }
 
     suspend fun getOwnReviewForPoemCr(poemId: String) {
-        doCall(protectedService.getOwnReviewForPoem(poemId, HawkUtils.hawkCurrentUserId)).let {
-            if (it.data != null && it.data?.size()?.equals(0) == false) {
-                val reviews = Gson().fromJson(it.data, Array<Review>::class.java).toList()
-                reviewDao.insertMany(reviews)
+        doCall(protectedService.getOwnReviewForPoem(poemId, HawkUtils.hawkCurrentUserId)).data?.let { reviewResponseList ->
+            if (reviewResponseList.isNotEmpty()) {
+                reviewDao.insertMany(reviewResponseList.map { it.getAsEntity() })
             } else {
+                // In case the user's review has not been returned, we should the delete the one we have in Room
+                // maybe the user deleted it on another device, or an admin deleted the review
                 reviewDao.findAndDeleteReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId)
             }
         }
@@ -36,15 +32,13 @@ class ReviewRepository(
 
     suspend fun createReviewCr(poemId: String, reviewText: String, reviewRating: Float) {
         doCall(protectedService.createReview(poemId, reviewText, reviewRating)).data?.let {
-            val review = Gson().fromJson(it, Review::class.java)
-            reviewDao.insert(review)
+            reviewDao.insert(it.getAsEntity())
         }
     }
 
     suspend fun updateReviewCr(reviewId: String, reviewText: String, reviewRating: Float) {
         doCall(protectedService.editReview(reviewId, reviewText, reviewRating)).data?.let {
-            val review = Gson().fromJson(it, Review::class.java)
-            reviewDao.insert(review)
+            reviewDao.insert(it.getAsEntity())
         }
     }
 

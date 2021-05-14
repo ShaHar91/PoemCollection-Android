@@ -4,17 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
-import be.appwise.core.ui.base.BaseVMFragment
+import be.appwise.core.ui.base.BaseBindingVMFragment
 import com.shahar91.poems.Constants
+import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.databinding.FragmentPoemBinding
@@ -25,47 +22,71 @@ import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
 import com.shahar91.poems.utils.HawkUtils
 
-class PoemFragment : BaseVMFragment<PoemViewModel>() {
+class PoemFragment : BaseBindingVMFragment<FragmentPoemBinding>() {
     private val safeArgs: PoemFragmentArgs by navArgs()
-    private lateinit var mDataBinding: FragmentPoemBinding
-    private lateinit var poemReviewsAdapter: PoemReviewsAdapter
+    private val poemReviewsAdapter = PoemReviewsAdapter {}
 
-    override fun getViewModel() = PoemViewModel::class.java
+    override fun getLayout() = R.layout.fragment_poem
+    override val mViewModel: PoemViewModel by viewModels { getViewModelFactory() }
+    override fun getViewModelFactory() = PoemViewModel.FACTORY(safeArgs.poemId, MyApp.poemRepository, MyApp.reviewRepository)
 
-    override fun getViewModelFactory(): ViewModelProvider.NewInstanceFactory {
-        return PoemViewModel.FACTORY(safeArgs.poemId)
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mDataBinding = DataBindingUtil.inflate<FragmentPoemBinding>(inflater, R.layout.fragment_poem, container, false)
-            .apply {
-                lifecycleOwner = viewLifecycleOwner
-                viewModel = mViewModel.apply {
-                    setDefaultExceptionHandler(::onError)
-
-                    getPoemAndAllDataCr()
-                }
+        mBinding.apply {
+            viewModel = mViewModel.apply {
+                getPoemAndAllDataCr()
             }
+        }
 
         initViews()
-
-        return mDataBinding.root
     }
 
     private fun initViews() {
-        poemReviewsAdapter = PoemReviewsAdapter(
-            object : PoemReviewsAdapter.ReviewInteractionListener {})
-
-        mDataBinding.rvPoemReviews.apply {
-            setupRecyclerView(null)
-            adapter = poemReviewsAdapter
-        }
-
-        mViewModel.getRefreshLayout().observe(this, Observer {
-            if (it) {
-                showPoem()
+        mBinding.run {
+            rvPoemReviews.run {
+                setupRecyclerView(null)
+                adapter = poemReviewsAdapter
             }
-        })
+
+            ownReviewLayout.ivReviewMenu.setOnClickListener {
+                PopupMenu(requireContext(), it).run {
+                    menuInflater.inflate(R.menu.menu_review, this.menu)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.review_edit -> {
+                                mViewModel.ownReview.value?.review?.let { review ->
+                                    showEditReviewDialog(review)
+                                }
+                            }
+                            R.id.review_delete -> {
+                                mViewModel.ownReview.value?.review?.let { review ->
+                                    mViewModel.deleteReview(review.id)
+                                }
+                            }
+                        }
+                        true
+                    }
+                    show()
+                }
+            }
+
+            noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
+                if (fromUser) {
+                    if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
+                        showAddReviewDialog(rating)
+                    } else {
+                        // start the EntryActivity to make sure the user gets logged in
+                        startActivityForResult(startWithIntent(requireContext(), rating),
+                            Constants.REQUEST_CODE_NEW_USER)
+                    }
+
+                    Handler().postDelayed({
+                        ratingBar.rating = 0f
+                    }, 500)
+                }
+            }
+        }
     }
 
     override fun onError(throwable: Throwable) {
@@ -74,58 +95,58 @@ class PoemFragment : BaseVMFragment<PoemViewModel>() {
     }
 
     private fun showPoem() {
-        mDataBinding.apply {
-            mViewModel.poem.let { poem ->
-                mViewModel.ownReview.get()?.let { review ->
-                    ownReviewLayout.rhUserHeader.userName = review.user?.username ?: ""
-                    ownReviewLayout.rhUserHeader.rating = review.rating
-                    ownReviewLayout.tvReviewBody.text = review.text
-
-                    ownReviewLayout.ivReviewMenu.setOnClickListener {
-                        PopupMenu(requireContext(), it).apply {
-                            menuInflater.inflate(R.menu.menu_review, this.menu)
-                            setOnMenuItemClickListener { item ->
-                                when (item.itemId) {
-                                    R.id.review_edit -> {
-                                        showEditReviewDialog(review)
-                                    }
-                                    R.id.review_delete ->
-                                        mViewModel.deleteReview(review.id)
-                                }
-                                true
-                            }
-                            show()
-                        }
-                    }
-                } ?: run {
-                    mDataBinding.noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
-                        if (fromUser) {
-                            if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
-                                showAddReviewDialog(rating)
-                            } else {
-                                // start the EntryActivity to make sure the user gets logged in
-                                startActivityForResult(startWithIntent(requireContext(), rating),
-                                    Constants.REQUEST_CODE_NEW_USER)
-                            }
-
-                            Handler().postDelayed({
-                                ratingBar.rating = 0f
-                            }, 500)
-                        }
-                    }
-                }
-
-//                poemReviewsAdapter.setItems(poem?.shortReviewList ?: emptyList())
-            }
+        mBinding.apply {
+//            mViewModel.poem.let { poem ->
+//                mViewModel.ownReview.value?.let { review ->
+////                    ownReviewLayout.rhUserHeader.userName = review.user?.username ?: ""
+//                    ownReviewLayout.rhUserHeader.rating = review.rating
+//                    ownReviewLayout.tvReviewBody.text = review.text
+//
+//                    ownReviewLayout.ivReviewMenu.setOnClickListener {
+//                        PopupMenu(requireContext(), it).apply {
+//                            menuInflater.inflate(R.menu.menu_review, this.menu)
+//                            setOnMenuItemClickListener { item ->
+//                                when (item.itemId) {
+//                                    R.id.review_edit -> {
+//                                        showEditReviewDialog(review)
+//                                    }
+//                                    R.id.review_delete ->
+//                                        mViewModel.deleteReview(review.id)
+//                                }
+//                                true
+//                            }
+//                            show()
+//                        }
+//                    }
+//                } ?: run {
+//                    mBinding.noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
+//                        if (fromUser) {
+//                            if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
+//                                showAddReviewDialog(rating)
+//                            } else {
+//                                // start the EntryActivity to make sure the user gets logged in
+//                                startActivityForResult(startWithIntent(requireContext(), rating),
+//                                        Constants.REQUEST_CODE_NEW_USER)
+//                            }
+//
+//                            Handler().postDelayed({
+//                                ratingBar.rating = 0f
+//                            }, 500)
+//                        }
+//                    }
+//                }
+//
+////                poemReviewsAdapter.setItems(poem?.shortReviewList ?: emptyList())
+//            }
 
             if (mViewModel.delayedRating != null) {
-                if (mViewModel.ownReview.get() != null) {
+                if (mViewModel.ownReview.value != null) {
                     showDialogOkCancel(requireActivity(), "Review already exists",
                         "You already have an existing review for this poem, do you want to edit the previous one?", {
-                            showEditReviewDialog(mViewModel.ownReview.get()!!)
-                        }, {
-                            mViewModel.resetRating()
-                        })
+                        mViewModel.ownReview.value?.review?.let { showEditReviewDialog(it) }
+                    }, {
+                        mViewModel.resetRating()
+                    })
                 } else {
                     showAddReviewDialog(mViewModel.delayedRating ?: 0F)
                 }

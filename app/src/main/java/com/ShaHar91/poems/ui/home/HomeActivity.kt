@@ -3,6 +3,7 @@ package com.shahar91.poems.ui.home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,10 +18,10 @@ import com.shahar91.poems.utils.HawkUtils
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class HomeActivity : PoemBaseActivity<HomeViewModel>() {
+class HomeActivity : PoemBaseActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    override fun getViewModel() = HomeViewModel::class.java
+    override val mViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // replace the startup 'Splash Theme' with the default AppTheme
@@ -42,7 +43,7 @@ class HomeActivity : PoemBaseActivity<HomeViewModel>() {
             } else {
                 // start the EntryActivity to make sure the user gets logged in
                 startActivityForResult(EntryActivity.startWithIntent(this),
-                    Constants.REQUEST_CODE_NEW_USER)
+                        Constants.REQUEST_CODE_NEW_USER)
             }
         }
     }
@@ -52,7 +53,7 @@ class HomeActivity : PoemBaseActivity<HomeViewModel>() {
      */
     private fun startAddPoem() {
         startActivityForResult(startWithIntent(this),
-            Constants.REQUEST_CODE_ADD_POEM)
+                Constants.REQUEST_CODE_ADD_POEM)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

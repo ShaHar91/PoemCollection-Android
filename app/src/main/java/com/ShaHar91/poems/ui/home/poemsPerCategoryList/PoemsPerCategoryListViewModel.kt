@@ -2,15 +2,17 @@ package com.shahar91.poems.ui.home.poemsPerCategoryList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import be.appwise.core.extensions.viewmodel.singleArgViewModelFactory
-import com.orhanobut.logger.Logger
-import com.shahar91.poems.MyApp
-import com.shahar91.poems.data.models.Poem
+import be.appwise.core.extensions.viewmodel.doubleArgsViewModelFactory
+import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
-class PoemsPerCategoryListViewModel(private val categoryId: String) : PoemBaseViewModel() {
+class PoemsPerCategoryListViewModel(
+    private val poemRepository: PoemRepository,
+    private val categoryId: String
+) : PoemBaseViewModel() {
+
     companion object {
-        val FACTORY = singleArgViewModelFactory(::PoemsPerCategoryListViewModel)
+        val FACTORY = doubleArgsViewModelFactory(::PoemsPerCategoryListViewModel)
     }
 
     private val _isRefreshing = MutableLiveData(false)
@@ -19,16 +21,10 @@ class PoemsPerCategoryListViewModel(private val categoryId: String) : PoemBaseVi
         _isRefreshing.postValue(refreshing)
     }
 
-    var allPoemsForCategoryLive = MyApp.poemRepository.getPoemsForCategoryLive(categoryId)
+    var allPoemsForCategoryLive = poemRepository.getPoemsForCategoryLive(categoryId)
 
     fun getAllPoemsForCategoryId() = launchAndLoad {
-        MyApp.poemRepository.getPoemsForCategory(categoryId)
-    }
-
-    fun getPoemsWithRelations(poemId: String) = launchAndLoad {
-        MyApp.poemRepository.getPoemById(poemId)
-
-//        val poemsWithRelations = MyApp.poemRepository.getPoemWithRelations()
-//        Logger.d(poemsWithRelations)
+        poemRepository.getPoemsForCategory(categoryId)
+        setIsRefreshing(false)
     }
 }

@@ -12,8 +12,8 @@ class CategoryRepository(
     fun findAllLive() = categoryDao.findAllLive()
 
     suspend fun getCategories() {
-        doCall(unprotectedService.getCategories()).data?.let {
-            categoryDao.insertManyDeleteOthers(it)
+        doCall(unprotectedService.getCategories()).data?.let { categoryResponseList ->
+            categoryDao.insertManyDeleteOthers(categoryResponseList.map { it.getAsEntity() })
         }
     }
 }

@@ -9,4 +9,6 @@ object DBConstants {
 
     const val COLUMN_ID_POEM = "poemId"
     const val COLUMN_ID_CATEGORY = "categoryId"
+    const val COLUMN_ID_REVIEW = "reviewId"
+//    const val COLUMN_ID_USER = "userId"
 }

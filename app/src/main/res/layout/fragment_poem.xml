@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/general_background"
-            android:visibility="@{viewModel.poem == null ? View.GONE : View.VISIBLE }"
+            android:visibility="@{viewModel.poemWithUser == null ? View.GONE : View.VISIBLE }"
             tools:visibility="visible">
 
             <LinearLayout
@@ -40,9 +40,9 @@
                 <include
                     android:id="@+id/poemDetail"
                     layout="@layout/reuse_poem_detail"
-                    app:author="@{viewModel.poem.user.username}"
-                    app:poem="@{viewModel.poem.body}"
-                    app:title="@{viewModel.poem.title}" />
+                    app:poem="@{viewModel.poemWithUser.poem.body}"
+                    app:author="@{viewModel.poemWithUser.user.username}"
+                    app:title="@{viewModel.poemWithUser.poem.title}" />
 
                 <com.shahar91.poems.ui.custom.NoReview
                     android:id="@+id/noReview"
@@ -52,7 +52,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginBottom="12dp"
-                    android:visibility="@{viewModel.ownReview == null ? View.VISIBLE : View.GONE }" />
+                    android:visibility="@{viewModel.ownReview.review == null ? View.VISIBLE : View.GONE }" />
 
                 <include
                     android:id="@+id/ownReviewLayout"
@@ -63,19 +63,20 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginBottom="12dp"
-                    android:visibility="@{viewModel.ownReview == null ? View.GONE : View.VISIBLE }"
+                    android:visibility="@{viewModel.ownReview.review == null ? View.GONE : View.VISIBLE }"
+                    app:reviewWithUser="@{viewModel.ownReview}"
                     tools:visibility="gone" />
 
                 <include
                     android:id="@+id/globalRating"
                     layout="@layout/list_item_global_rating"
-                    app:averageRating="@{viewModel.poem.averageRating}"
-                    app:fiveStarRating="@{viewModel.poem.getFiveStarRating()}"
-                    app:fourStarRating="@{viewModel.poem.getFourStarRating()}"
-                    app:oneStarRating="@{viewModel.poem.getOneStarRating()}"
-                    app:threeStarRating="@{viewModel.poem.getThreeStarRating()}"
-                    app:totalRating="@{viewModel.poem.getTotal()}"
-                    app:twoStarRating="@{viewModel.poem.getTwoStarRating()}" />
+                    app:averageRating="@{viewModel.poemWithUser.poem.averageRating}"
+                    app:fiveStarRating="@{viewModel.poemWithUser.poem.getFiveStarRating()}"
+                    app:fourStarRating="@{viewModel.poemWithUser.poem.getFourStarRating()}"
+                    app:oneStarRating="@{viewModel.poemWithUser.poem.getOneStarRating()}"
+                    app:threeStarRating="@{viewModel.poemWithUser.poem.getThreeStarRating()}"
+                    app:totalRating="@{viewModel.poemWithUser.poem.getTotal()}"
+                    app:twoStarRating="@{viewModel.poemWithUser.poem.getTwoStarRating()}" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPoemReviews"

@@ -5,19 +5,22 @@ import be.appwise.core.networking.base.BaseRestClient
 import be.appwise.core.networking.model.AccessToken
 import com.shahar91.poems.BuildConfig
 
-object ProtectedRestClient : BaseRestClient<NewApiManagerService>() {
-    override val apiService = NewApiManagerService::class.java
+object ProtectedRestClient : BaseRestClient() {
     override val protectedClient = true
     override fun getBaseUrl() = BuildConfig.API_HOST
 
     override fun enableBagelInterceptor() = true
 
+    val getService: NewApiManagerService by lazy {
+        getRetrofit.create(NewApiManagerService::class.java)
+    }
+
     override fun onRefreshToken(refreshToken: String): AccessToken? {
         return UnProtectedRestClient.getService.refreshToken(
-            NetworkConstants.FIELD_IDENTIFIER_REFRESH_TOKEN,
-            clientId,
-            clientSecret,
-            refreshToken
+                NetworkConstants.FIELD_IDENTIFIER_REFRESH_TOKEN,
+                clientId,
+                clientSecret,
+                refreshToken
         ).execute().body()
     }
 }
