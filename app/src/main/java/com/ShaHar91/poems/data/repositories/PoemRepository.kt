@@ -58,6 +58,7 @@ class PoemRepository(
             userDao.insert(poemResponse.getUserAsEntity())
             categoryDao.insertMany(poemResponse.getCategoriesAsEntities())
             reviewDao.insertMany(poemResponse.getReviewsAsEntities())
+            userDao.insertMany(poemResponse.shortReviewList.map { it.getUserAsEntity() })
 
             val list = poemResponse.categories.map {
                 PoemCategoryCrossRef(poemResponse._id, it._id)

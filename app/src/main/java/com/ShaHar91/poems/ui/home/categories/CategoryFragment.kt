@@ -5,21 +5,24 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
-import be.appwise.core.ui.base.BaseBindingVMFragment
 import be.appwise.core.ui.custom.RecyclerViewEnum
+import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
+import com.shahar91.poems.ui.base.PoemBaseBindingVMFragment
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 
-class CategoryFragment : BaseBindingVMFragment<FragmentCategoriesBinding>() {
+class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() {
 
     private val categoryAdapter = CategoryAdapter {
-        findNavController()
-                .navigate(CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(it.id, it.name))
+       CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(it.id, it.name)
+           .run(findNavController()::navigate)
     }
 
     override fun getLayout() = R.layout.fragment_categories
-    override val mViewModel: CategoryViewModel by viewModels()
+    override fun getToolbar() = mBinding.mergeToolbar.toolbar
+    override val mViewModel: CategoryViewModel by viewModels { getViewModelFactory() }
+    override fun getViewModelFactory() = CategoryViewModel.FACTORY(MyApp.categoryRepository)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

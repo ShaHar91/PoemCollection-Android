@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.shahar91.poems.ui.home.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.profile.ProfileFragment">
+
+        <include
+            android:id="@+id/mergeToolbar"
+            layout="@layout/toolbar" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.General"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/entry_button_height"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/colorRed_500"
+            android:text="logout"
+            android:onClick="@{() -> viewModel.logout()}"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

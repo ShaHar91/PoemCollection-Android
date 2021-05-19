@@ -1,73 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:paddingBottom="48dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilEmail"
-        style="@style/CommonTextInput"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.shahar91.poems.ui.entry.EntryViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingBottom="48dp">
 
-        <!-- The padding is needed because of the custom height of the inputLayout -->
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmail"
+            style="@style/CommonTextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/common_hint_email"
-            android:inputType="textEmailAddress"
-            android:paddingTop="12dp"
-            android:paddingBottom="10dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPassword"
-        style="@style/CommonTextInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@+id/tilEmail"
-        app:passwordToggleEnabled="true">
+            <!-- The padding is needed because of the custom height of the inputLayout -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/common_hint_email"
+                android:text="@={viewModel.email}"
+                android:inputType="textEmailAddress"
+                android:paddingTop="12dp"
+                android:paddingBottom="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- The padding is needed because of the custom height of the inputLayout -->
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPassword"
+            style="@style/CommonTextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/common_hint_password"
-            android:inputType="textPassword"
-            android:paddingTop="12dp"
-            android:paddingBottom="10dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/tilEmail"
+            app:passwordToggleEnabled="true">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
-        style="@style/Widget.MaterialComponents.Button.General"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/entry_button_height"
-        android:layout_marginTop="12dp"
-        android:text="@string/entry_button_login"
-        app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+            <!-- The padding is needed because of the custom height of the inputLayout -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/common_hint_password"
+                android:inputType="textPassword"
+                android:text="@={viewModel.password}"
+                android:paddingTop="12dp"
+                android:paddingBottom="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Has to be the same name as the one in fragment_register.xml, just so the reuse_entry_social_footer.xml won't break -->
-    <TextView
-        android:id="@+id/tvLoginOrRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="?selectableItemBackground"
-        android:gravity="center"
-        android:padding="4dp"
-        android:text="@string/common_no_account_yet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            style="@style/Widget.MaterialComponents.Button.General"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/entry_button_height"
+            android:layout_marginTop="12dp"
+            android:text="@string/entry_button_login"
+            app:layout_constraintTop_toBottomOf="@id/tilPassword" />
 
-    <include layout="@layout/reuse_entry_social_footer" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Has to be the same name as the one in fragment_register.xml, just so the reuse_entry_social_footer.xml won't break -->
+        <TextView
+            android:id="@+id/tvLoginOrRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/common_no_account_yet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+        <include layout="@layout/reuse_entry_social_footer"
+            android:id="@+id/socialFooter"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -12,4 +12,6 @@ data class ReviewResponse(
     var user: UserResponse = UserResponse()
 ) {
     fun getAsEntity(poemId: String? = null) = Review(_id, text, rating, createdAt, poemId ?: poem._id, user._id)
+
+    fun getUserAsEntity() = user.getAsEntity()
 }

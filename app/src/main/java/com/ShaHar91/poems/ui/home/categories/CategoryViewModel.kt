@@ -2,10 +2,19 @@ package com.shahar91.poems.ui.home.categories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import be.appwise.core.extensions.viewmodel.doubleArgsViewModelFactory
+import be.appwise.core.extensions.viewmodel.singleArgViewModelFactory
 import com.shahar91.poems.MyApp
+import com.shahar91.poems.data.repositories.CategoryRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
-class CategoryViewModel : PoemBaseViewModel() {
+class CategoryViewModel(
+    private val categoryRepository: CategoryRepository
+) : PoemBaseViewModel() {
+
+    companion object {
+        val FACTORY = singleArgViewModelFactory(::CategoryViewModel)
+    }
 
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> get() = _isRefreshing
@@ -13,10 +22,10 @@ class CategoryViewModel : PoemBaseViewModel() {
         _isRefreshing.postValue(refreshing)
     }
 
-    var categoriesLive = MyApp.categoryRepository.findAllLive()
+    var categoriesLive = categoryRepository.findAllLive()
 
     fun getAllCategories() = launchAndLoad {
-        MyApp.categoryRepository.getCategories()
+        categoryRepository.getCategories()
         setIsRefreshing(false)
     }
 }

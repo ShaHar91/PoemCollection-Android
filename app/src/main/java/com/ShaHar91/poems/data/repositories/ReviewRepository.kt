@@ -1,7 +1,9 @@
 package com.shahar91.poems.data.repositories
 
+import androidx.lifecycle.LiveData
 import be.appwise.core.data.base.BaseRepository
 import com.shahar91.poems.data.dao.ReviewDao
+import com.shahar91.poems.data.models.ReviewWithUser
 import com.shahar91.poems.networking.NewApiManagerService
 import com.shahar91.poems.utils.HawkUtils
 
@@ -11,6 +13,9 @@ class ReviewRepository(
 ) : BaseRepository() {
 
     fun findOwnReviewForPoemLive(poemId: String) = reviewDao.findOwnReviewForPoemLive(poemId, HawkUtils.hawkCurrentUserId)
+    fun findReviewsForPoem(poemId: String): LiveData<List<ReviewWithUser>> {
+        return reviewDao.findAllReviewsForPoem(poemId, HawkUtils.hawkCurrentUserId ?: "")
+    }
 
     suspend fun getReviews(poemId: String) {
         doCall(protectedService.getReviewsByPoemId(poemId)).data?.let { reviewResponseList ->

@@ -1,5 +1,6 @@
 package com.shahar91.poems.ui.add
 
+import androidx.lifecycle.MutableLiveData
 import com.shahar91.poems.MyApp
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.ui.base.PoemBaseViewModel
@@ -7,6 +8,9 @@ import com.shahar91.poems.ui.base.PoemBaseViewModel
 class AddPoemViewModel : PoemBaseViewModel() {
     var checkedCategories: List<Category> = emptyList()
     var categoriesLive = MyApp.categoryRepository.findAllLive()
+
+    val poemTitle = MutableLiveData("")
+    val poemBody = MutableLiveData("")
 
     fun getAllCategoriesCr() = launchAndLoad {
         MyApp.categoryRepository.getCategories()

@@ -1,48 +1,25 @@
 package com.shahar91.poems.ui.entry
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
-import com.google.android.material.appbar.AppBarLayout
-import com.orhanobut.logger.Logger
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import be.appwise.core.ui.base.BaseVMActivity
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.PoemBaseActivity
-import com.shahar91.poems.ui.entry.login.LoginFragment
-import kotlinx.android.synthetic.main.activity_entry.*
+import com.shahar91.poems.databinding.ActivityEntryBinding
 
-class EntryActivity : PoemBaseActivity() {
-    private var loginFragment: LoginFragment = LoginFragment.newInstance(false)
-
-    private var entryListeners = object : EntryListeners {
-        override fun onLoginSuccessful() {
-            Logger.t("entryListeners").d("onLoginClicked")
-            finishThisActivity(Activity.RESULT_OK, intent)
-        }
-
-        override fun onRegisterSuccessful() {
-            Logger.t("entryListeners").d("onRegisterClicked")
-            finishThisActivity(Activity.RESULT_OK, intent)
-        }
-
-        override fun onGoogleClicked() {
-            Logger.t("entryListeners").d("onGoogleClicked")
-            finishThisActivity(Activity.RESULT_CANCELED, intent)
-        }
-
-        override fun onFacebookClicked() {
-            Logger.t("entryListeners").d("onFacebookClicked")
-            finishThisActivity(Activity.RESULT_CANCELED, intent)
-        }
-    }
-
+class EntryActivity : BaseVMActivity() {
     companion object {
-        private const val TAG_LOGIN = "TagLogin"
 
-        fun startWithIntent(context: Context, rating: Float? = null): Intent {
+        fun newIntent(context: Context, rating: Float? = null): Intent {
             val intent = Intent(context, EntryActivity::class.java)
             if (rating != null) {
                 intent.putExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, rating)
@@ -51,66 +28,72 @@ class EntryActivity : PoemBaseActivity() {
         }
     }
 
+    private lateinit var mBinding: ActivityEntryBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
     override val mViewModel: EntryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_entry)
 
-        initToolbar()
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_entry)
+        mBinding.lifecycleOwner = this
 
-        showLoginFragment(savedInstanceState)
+        setSupportActionBar(mBinding.tbEntry)
 
-        //TODO: when softKeyboard opens, resize full screen to not be behind the keyboard!!!
+        val host = supportFragmentManager.findFragmentById(R.id.entry_nav_host_fragment) as NavHostFragment
+        val navController = host.navController
+
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        initObservers()
     }
 
-    private fun initToolbar() {
-        setSupportActionBar(tbEntry)
-        setAppBarLayoutListener()
-        // This navigationListener should be after the actionBar has been set
-        tbEntry.setNavigationOnClickListener { onBackPressed() }
-    }
-
-    /**
-     * The toolbar title should only be filled when the toolbar is collapsed.
-     */
-    private fun setAppBarLayoutListener() {
-        var isShow = true
-        var scrollRange = -1
-        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
-            if (scrollRange == -1) {
-                scrollRange = barLayout?.totalScrollRange!!
-            }
-            if (scrollRange + verticalOffset == 0) {
-                collapsing_toolbar.title = resources.getString(R.string.app_name)
-                isShow = true
-            } else if (isShow) {
-                collapsing_toolbar.title = " " //careful, there should a space between double quote otherwise this hack wont work
-                isShow = false
-            }
-        })
-    }
-
-    private fun showLoginFragment(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            replaceFragment(R.id.flEntryContainer, loginFragment, TAG_LOGIN, false)
-        } else {
-            Logger.t("FragmentByTag").d("Find Login Fragment By Tag")
-            loginFragment = supportFragmentManager.findFragmentByTag(TAG_LOGIN) as LoginFragment
+    private fun initObservers() {
+        mViewModel.facebookLoginClicked.observe(this) {
+            Log.d("SomethingTag", "Facebook Login clicked: $it")
         }
-        loginFragment.listeners = entryListeners
+
+        mViewModel.googleLoginClicked.observe(this) {
+            Log.d("SomethingTag", "Google Login clicked: $it")
+        }
     }
 
-    /**
-     * Set a custom icon for Up-navigation depending on login or register fragment being active
-     *
-     * @param icNavigationBack icon identifier to be set in the toolbar
-     */
-    fun setHomeUpIcon(icNavigationBack: Int) {
-        supportActionBar?.setHomeAsUpIndicator(
-                ContextCompat.getDrawable(this, icNavigationBack)?.apply {
-                    setTint(ContextCompat.getColor(this@EntryActivity, R.color.colorWhite))
-                }
-        )
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.entry_nav_host_fragment).navigateUp(appBarConfiguration)
     }
+
+    //    /**
+    //     * The toolbar title should only be filled when the toolbar is collapsed.
+    //     */
+    //    private fun setAppBarLayoutListener() {
+    //        var isShow = true
+    //        var scrollRange = -1
+    //        mBinding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
+    //            if (scrollRange == -1) {
+    //                scrollRange = barLayout?.totalScrollRange!!
+    //            }
+    //            if (scrollRange + verticalOffset == 0) {
+    //                mBinding.collapsingToolbar.title = resources.getString(R.string.app_name)
+    //                isShow = true
+    //            } else if (isShow) {
+    //                mBinding.collapsingToolbar.title = " " //careful, there should a space between double quote otherwise this hack wont work
+    //                isShow = false
+    //            }
+    //        })
+    //    }
+    //
+    //    /**
+    //     * Set a custom icon for Up-navigation depending on login or register fragment being active
+    //     *
+    //     * @param icNavigationBack icon identifier to be set in the toolbar
+    //     */
+    //    fun setHomeUpIcon(icNavigationBack: Int) {
+    //        supportActionBar?.setHomeAsUpIndicator(
+    //                ContextCompat.getDrawable(this, icNavigationBack)?.apply {
+    //                    setTint(ContextCompat.getColor(this@EntryActivity, R.color.colorWhite))
+    //                }
+    //        )
+    //    }
 }

@@ -28,6 +28,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                app:userName="@{reviewWithUser.user.username}"
+                app:rating="@{reviewWithUser.review.rating}"
+                app:reviewTimestamp="@{reviewWithUser.review.getRelativeCreatedDate()}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView

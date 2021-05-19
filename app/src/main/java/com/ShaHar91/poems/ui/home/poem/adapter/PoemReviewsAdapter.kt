@@ -14,8 +14,7 @@ class PoemReviewsAdapter(
     private val onReviewClicked: (review: ReviewWithUser) -> Unit
 ): ListAdapter<ReviewWithUser, PoemReviewsAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup,
-        viewType: Int): ReviewViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         return ReviewViewHolder(ListItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
@@ -28,8 +27,6 @@ class PoemReviewsAdapter(
         override fun bind(item: ReviewWithUser) {
             binding.reviewWithUser = item
             itemView.ivReviewMenu.isGone = true
-            itemView.rhUserHeader.userName = item.user.username
-            itemView.rhUserHeader.rating = item.review.rating
             binding.root.setOnClickListener { onReviewClicked(item) }
         }
     }

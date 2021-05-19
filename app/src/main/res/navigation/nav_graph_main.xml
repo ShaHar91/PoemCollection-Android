@@ -28,11 +28,11 @@
 
         <argument
             android:name="categoryId"
-            app:argType="string"/>
+            app:argType="string" />
 
         <argument
             android:name="categoryName"
-            app:argType="string"/>
+            app:argType="string" />
 
         <action
             android:id="@+id/action_poemsPerCategoryListFragment_to_poemFragment"
@@ -51,6 +51,18 @@
 
         <argument
             android:name="poemId"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.shahar91.poems.ui.home.profile.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+
+    <action
+        android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment" />
+
+
 </navigation>

@@ -1,8 +1,9 @@
 package com.shahar91.poems.ui.home.poem
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import be.appwise.core.extensions.viewmodel.tripleArgsViewModelFactory
-import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
@@ -18,19 +19,25 @@ class PoemViewModel(
     }
 
     var poemWithUser = poemRepository.getPoemByIdLive(poemId)
-    var ownReview = reviewRepository.findOwnReviewForPoemLive(poemId)
+    var ownReview = Transformations.switchMap(poemWithUser) {
+        reviewRepository.findOwnReviewForPoemLive(poemId)
+    }
 
-    var delayedRating: Float? = null
-        private set
+    var shortReviewList = Transformations.switchMap(poemWithUser) {
+        reviewRepository.findReviewsForPoem(poemId)
+    }
+
+    private val _delayedRating = MutableLiveData<Float?>(null)
+    val delayedRating: LiveData<Float?> get() = _delayedRating
 
     fun getPoemAndAllDataCr(rating: Float? = null) = launchAndLoad {
-        this.delayedRating = rating
-
         poemRepository.getPoemById(poemId)
 
         if (HawkUtils.hawkCurrentUserId?.isNotEmpty() == true) {
             reviewRepository.getOwnReviewForPoemCr(poemId)
         }
+
+        _delayedRating.value = rating
     }
 
     fun saveOrUpdateReview(reviewId: String?, newReviewText: String, newRating: Float) = launchAndLoad {
@@ -52,6 +59,6 @@ class PoemViewModel(
     }
 
     fun resetRating() {
-        delayedRating = null
+        _delayedRating.value = null
     }
 }

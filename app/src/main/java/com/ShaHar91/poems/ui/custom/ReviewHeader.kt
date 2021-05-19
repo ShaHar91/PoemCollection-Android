@@ -14,23 +14,27 @@ class ReviewHeader(context: Context, attrs: AttributeSet) :
 
     private var view: View
 
-    var userName: String = ""
+    var userName: String? = ""
         set(value) {
             field = value
             view.tvUsername.text = value
-            setImage(initials = value[0].toString())
+            value?.let {
+                setImage(initials = it[0].toString())
+            }
         }
 
-    var reviewTimestamp: Long = 0
+    var reviewTimestamp: String? = ""
         set(value) {
             field = value
             view.tvReviewTimestamp.text = "$value"
         }
 
-    var rating: Float = 0f
+    var rating: Float? = 0f
         set(value) {
             field = value
-            view.rbOwnRating.rating = value
+            value?.let {
+                view.rbOwnRating.rating = it
+            }
         }
 
     init {

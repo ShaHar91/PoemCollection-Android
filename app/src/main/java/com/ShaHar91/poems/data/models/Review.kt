@@ -1,5 +1,7 @@
 package com.shahar91.poems.data.models
 
+import android.content.Context
+import android.text.format.DateUtils
 import androidx.room.*
 import be.appwise.core.data.base.BaseEntity
 import com.shahar91.poems.data.DBConstants
@@ -14,7 +16,13 @@ data class Review(
     var rating: Float = 0F,
     var createdAt: Date? = null,
     var poemId: String = "",
-    var userId: String = "") : BaseEntity()
+    var userId: String = ""
+) : BaseEntity() {
+
+    fun getRelativeCreatedDate(): String {
+        return DateUtils.getRelativeTimeSpanString(createdAt?.time ?: 0L).toString()
+    }
+}
 
 data class ReviewWithUser(
     @Embedded var review: Review,

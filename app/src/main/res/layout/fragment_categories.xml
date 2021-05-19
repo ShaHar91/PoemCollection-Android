@@ -16,15 +16,19 @@
         android:background="@color/general_background"
         tools:context=".ui.home.categories.CategoryFragment">
 
+        <include
+            android:id="@+id/mergeToolbar"
+            layout="@layout/toolbar" />
+
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loadingView"
             android:layout_width="wrap_content"
-            android:indeterminate="true"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="@id/srlRefreshCategories"
+            app:layout_constraintEnd_toEndOf="@id/srlRefreshCategories"
+            app:layout_constraintStart_toStartOf="@id/srlRefreshCategories"
+            app:layout_constraintTop_toTopOf="@id/srlRefreshCategories" />
 
         <TextView
             android:id="@+id/emptyView"
@@ -32,19 +36,22 @@
             android:layout_height="wrap_content"
             android:text="No categories could be loaded"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/srlRefreshCategories"
+            app:layout_constraintEnd_toEndOf="@id/srlRefreshCategories"
+            app:layout_constraintStart_toStartOf="@id/srlRefreshCategories"
+            app:layout_constraintTop_toTopOf="@id/srlRefreshCategories" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srlRefreshCategories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:onRefreshListener="@{() -> viewModel.getAllCategories()}"
-            app:refreshing="@{viewModel.isRefreshing}">
+            app:refreshing="@{viewModel.isRefreshing}"
+            tools:ignore="UnknownIdInLayout">
 
-        <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
+            <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
                 android:id="@+id/rvCategories"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

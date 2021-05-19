@@ -1,7 +1,6 @@
 package com.shahar91.poems.utils
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -11,7 +10,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.data.models.Review
-import com.wajahatkarim3.easyvalidation.core.view_ktx.textEqualTo
 import kotlinx.android.synthetic.main.custom_dialog_add_review.view.*
 
 object DialogFactory {
@@ -70,7 +68,7 @@ object DialogFactory {
                 val newReviewText = dialogReviewEditText?.text?.toString() ?: ""
 
                 // No need for to make a call to the backend when both new values are unchanged
-                if (review != null && newReviewText.textEqualTo(review.text) && dialogRatingBar.rating.equals(
+                if (review != null && newReviewText == review.text && dialogRatingBar.rating.equals(
                         review.rating)
                 ) {
                     dialog.dismiss()
@@ -92,7 +90,7 @@ object DialogFactory {
         }
 
         dialogReviewEditText?.optionalCallbacks { s ->
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = !s.isBlank()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = s.isNotBlank()
         }
     }
 
