@@ -5,6 +5,8 @@ import be.appwise.core.util.SingleLiveEvent
 import com.shahar91.poems.MyApp
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
+// Using a "sharedViewModel", followed this 'tutorial'
+// https://developer.android.google.cn/codelabs/basic-android-kotlin-training-shared-viewmodel#0
 class EntryViewModel : PoemBaseViewModel() {
 
     val username = MutableLiveData<String>()

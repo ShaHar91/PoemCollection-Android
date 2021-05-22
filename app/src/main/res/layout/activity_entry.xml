@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.shahar91.poems.ui.entry.EntryViewModel" />
@@ -12,8 +13,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.entry.EntryActivity"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        tools:context=".ui.entry.EntryActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -26,25 +27,21 @@
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                app:scrimAnimationDuration="300"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleGravity="center_vertical"
-                app:expandedTitleTextAppearance="@style/Some"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+                app:expandedTitleTextAppearance="@style/Some">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
-                    android:fitsSystemWindows="true"
-                    app:layout_collapseMode="parallax">
+                    android:fitsSystemWindows="true">
 
                     <ImageView
                         android:id="@+id/ivEntryHeader"
                         android:layout_width="match_parent"
                         android:layout_height="240dp"
                         android:scaleType="centerCrop"
-                        app:layout_collapseMode="parallax"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/entry_header_back" />
 
@@ -60,16 +57,14 @@
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/tbEntry"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                    android:layout_height="?attr/actionBarSize" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.fragment.app.FragmentContainerView
@@ -79,7 +74,6 @@
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/nav_graph_entry" />
-
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

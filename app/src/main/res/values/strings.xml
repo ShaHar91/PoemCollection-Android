@@ -10,6 +10,7 @@
     <string name="common_hint_username">Username</string>
     <string name="common_hint_re_enter_password">Re-enter Password</string>
     <string name="common_no_account_yet">No account yet? Create one here!</string>
+    <string name="common_already_an_account">Already have an account? Login here!</string>
     <string name="common_google" translatable="false">Google</string>
     <string name="common_facebook" translatable="false">Facebook</string>
 

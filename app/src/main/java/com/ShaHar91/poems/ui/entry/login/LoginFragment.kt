@@ -4,7 +4,10 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import be.appwise.core.extensions.fragment.hideKeyboard
+import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.ui.base.BaseBindingVMFragment
+import com.google.android.material.snackbar.Snackbar
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentLoginBinding
 import com.shahar91.poems.ui.entry.EntryViewModel
@@ -54,7 +57,6 @@ class LoginFragment : BaseBindingVMFragment<FragmentLoginBinding>() {
             socialFooter.btnLoginGoogle.setOnClickListener { mViewModel.googleLoginClicked.postValue(true) }
 
             tvLoginOrRegister.setOnClickListener {
-                //TODO: when error shows the snackBar is behind the keyboard because the layout is not resizing when keyboard opens up
                 LoginFragmentDirections.actionLoginFragmentToRegisterFragment().run(findNavController()::navigate)
             }
         }
@@ -62,6 +64,8 @@ class LoginFragment : BaseBindingVMFragment<FragmentLoginBinding>() {
 
     private fun checkToLogin() {
         if (validation.validate(requireActivity())) {
+            hideKeyboard()
+
             mViewModel.loginUser(mViewModel.email.value!!, mViewModel.password.value!!) {
                 requireActivity().run {
                     setResult(Activity.RESULT_OK, intent)
@@ -69,5 +73,10 @@ class LoginFragment : BaseBindingVMFragment<FragmentLoginBinding>() {
                 }
             }
         }
+    }
+
+    override fun onError(throwable: Throwable) {
+        super.onError(throwable)
+        snackBar(throwable.message ?: "Something went wrong.")
     }
 }

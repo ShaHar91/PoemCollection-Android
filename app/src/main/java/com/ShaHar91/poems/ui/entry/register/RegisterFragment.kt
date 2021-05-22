@@ -4,6 +4,8 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import be.appwise.core.extensions.fragment.hideKeyboard
+import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.ui.base.BaseBindingVMFragment
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentRegisterBinding
@@ -69,6 +71,8 @@ class RegisterFragment : BaseBindingVMFragment<FragmentRegisterBinding>() {
 
     private fun checkToRegister() {
         if (validation.validate(requireActivity())) {
+            hideKeyboard()
+
             mViewModel.registerUser(
                 mViewModel.username.value!!,
                 mViewModel.email.value!!,
@@ -80,5 +84,10 @@ class RegisterFragment : BaseBindingVMFragment<FragmentRegisterBinding>() {
                 }
             }
         }
+    }
+
+    override fun onError(throwable: Throwable) {
+        super.onError(throwable)
+        snackBar(throwable.message ?: "Something went wrong.")
     }
 }
