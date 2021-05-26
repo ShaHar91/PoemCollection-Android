@@ -10,6 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import be.appwise.core.ui.base.BaseBindingVMFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.shahar91.poems.NavGraphMainDirections
@@ -57,5 +58,12 @@ abstract class PoemBaseBindingVMFragment<B : ViewDataBinding> : BaseBindingVMFra
         super.onResume()
 
         requireActivity().invalidateOptionsMenu()
+    }
+
+    fun themeSwipeToRefresh(srl: SwipeRefreshLayout) {
+        srl.run {
+            setColorSchemeResources(R.color.colorWhite)
+            setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
+        }
     }
 }

@@ -18,7 +18,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUsername"
-            style="@style/CommonTextInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -37,7 +38,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEmail"
-            style="@style/CommonTextInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -56,7 +58,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPassword"
-            style="@style/CommonTextInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -76,7 +79,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilReEnterPassword"
-            style="@style/CommonTextInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -96,7 +100,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
-            style="@style/Widget.MaterialComponents.Button.General"
+            android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/entry_button_height"
             android:layout_marginTop="12dp"

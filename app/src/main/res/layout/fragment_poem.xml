@@ -19,14 +19,6 @@
             android:id="@+id/mergeToolbar"
             layout="@layout/toolbar" />
 
-        <!--        <com.google.android.material.progressindicator.ProgressIndicator-->
-        <!--            android:id="@+id/loadingView"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="center"-->
-        <!--            android:visibility="@{viewModel.poem == null ? View.VISIBLE : View.GONE }"-->
-        <!--            tools:visibility="gone" />-->
-
         <androidx.core.widget.NestedScrollView
             android:id="@+id/poemLayout"
             android:layout_width="match_parent"

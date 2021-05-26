@@ -13,22 +13,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/general_background"
         tools:context=".ui.home.categories.CategoryFragment">
 
         <include
             android:id="@+id/mergeToolbar"
             layout="@layout/toolbar" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/loadingView"
+        <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
             app:layout_constraintBottom_toBottomOf="@id/srlRefreshCategories"
             app:layout_constraintEnd_toEndOf="@id/srlRefreshCategories"
             app:layout_constraintStart_toStartOf="@id/srlRefreshCategories"
-            app:layout_constraintTop_toTopOf="@id/srlRefreshCategories" />
+            app:layout_constraintTop_toTopOf="@id/srlRefreshCategories"
+            android:id="@+id/loadingView"
+            layout="@layout/reuse_circular_progress"/>
 
         <TextView
             android:id="@+id/emptyView"
@@ -60,6 +59,7 @@
                 android:paddingBottom="96dp"
                 android:splitMotionEvents="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="7"
                 tools:listitem="@layout/list_item_category" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

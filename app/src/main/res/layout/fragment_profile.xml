@@ -22,7 +22,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
-            style="@style/Widget.MaterialComponents.Button.General"
+            android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/entry_button_height"
             android:layout_marginBottom="12dp"

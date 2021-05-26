@@ -17,8 +17,7 @@
             android:id="@+id/viewDividerStart"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginHorizontal="16dp"
             android:background="@color/entry_divider_line"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvDividerContent"
@@ -41,8 +40,7 @@
             android:id="@+id/viewDividerEnd"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginHorizontal="16dp"
             android:background="@color/entry_divider_line"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvDividerContent"
@@ -52,9 +50,9 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLoginGoogle"
-            style="@style/Widget.MaterialComponents.Button.General"
             android:layout_width="match_parent"
             android:layout_height="@dimen/entry_button_height"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="12dp"
             android:text="@string/common_google"
             android:textColor="@color/colorBlack_1000"
@@ -67,9 +65,9 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLoginFacebook"
-            style="@style/Widget.MaterialComponents.Button.General"
             android:layout_width="match_parent"
             android:layout_height="@dimen/entry_button_height"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/common_facebook"
             android:visibility="gone"

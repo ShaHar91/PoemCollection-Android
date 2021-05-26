@@ -15,8 +15,8 @@ import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
 class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() {
 
     private val categoryAdapter = CategoryAdapter {
-       CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(it.id, it.name)
-           .run(findNavController()::navigate)
+        CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(it.id, it.name)
+            .run(findNavController()::navigate)
     }
 
     override fun getLayout() = R.layout.fragment_categories
@@ -47,10 +47,7 @@ class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() 
                 stateView = RecyclerViewEnum.LOADING
             }
 
-            srlRefreshCategories.run {
-                setColorSchemeResources(R.color.colorWhite)
-                setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
-            }
+            themeSwipeToRefresh(srlRefreshCategories)
         }
     }
 

@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import be.appwise.core.ui.base.BaseActivity
 import com.shahar91.poems.Constants
+import com.shahar91.poems.NavGraphMainDirections
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.ActivityHomeBinding
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
@@ -15,6 +17,7 @@ import com.shahar91.poems.utils.HawkUtils
 
 class HomeActivity : BaseActivity() {
     private lateinit var mBinding: ActivityHomeBinding
+    private lateinit var host: NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // replace the startup 'Splash Theme' with the default AppTheme
@@ -38,7 +41,7 @@ class HomeActivity : BaseActivity() {
             }
         }
 
-        val host = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment
+        host = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment
         host.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.profileFragment -> mBinding.fabAddPoem.hide()

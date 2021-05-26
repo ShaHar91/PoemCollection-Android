@@ -50,10 +50,7 @@ class PoemsPerCategoryListFragment : PoemBaseBindingVMFragment<FragmentPoemsPerC
                 stateView = RecyclerViewEnum.LOADING
             }
 
-            srlRefreshPoemsPerCategory.run {
-                setColorSchemeResources(R.color.colorWhite)
-                setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
-            }
+            themeSwipeToRefresh(srlRefreshPoemsPerCategory)
         }
     }
 
