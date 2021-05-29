@@ -58,9 +58,11 @@ class PoemsPerCategoryListFragment : PoemBaseBindingVMFragment<FragmentPoemsPerC
         mViewModel.allPoemsForCategoryLive.observe(viewLifecycleOwner, {
             val poems = it.poems.sortedBy { poem -> poem.poem.title }
 
-            if (poems.isNotEmpty()) {
+            mBinding.rvPoemsPerCategory.stateView = if (poems.isNotEmpty()) {
                 poemsPerCategoryListAdapter.submitList(poems)
-                mBinding.rvPoemsPerCategory.stateView = RecyclerViewEnum.NORMAL
+                RecyclerViewEnum.NORMAL
+            } else {
+                RecyclerViewEnum.EMPTY_STATE
             }
         })
     }

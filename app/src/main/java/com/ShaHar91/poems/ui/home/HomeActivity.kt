@@ -4,11 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import be.appwise.core.ui.base.BaseActivity
 import com.shahar91.poems.Constants
-import com.shahar91.poems.NavGraphMainDirections
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.ActivityHomeBinding
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent

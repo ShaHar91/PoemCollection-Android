@@ -19,7 +19,7 @@ class ReviewHeader(context: Context, attrs: AttributeSet) :
             field = value
             view.tvUsername.text = value
             value?.let {
-                setImage(initials = it[0].toString())
+                setImage(imageUrl, it[0].toString())
             }
         }
 
@@ -35,6 +35,12 @@ class ReviewHeader(context: Context, attrs: AttributeSet) :
             value?.let {
                 view.rbOwnRating.rating = it
             }
+        }
+
+    var imageUrl: String? = ""
+        set(value) {
+            field = value
+            setImage(value, userName?.get(0).toString())
         }
 
     init {

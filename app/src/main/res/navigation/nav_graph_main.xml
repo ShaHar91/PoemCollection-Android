@@ -13,11 +13,7 @@
 
         <action
             android:id="@+id/action_categoryFragment_to_poemsPerCategoryListFragment"
-            app:destination="@id/poemsPerCategoryListFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/poemsPerCategoryListFragment" />
     </fragment>
 
     <fragment
@@ -36,11 +32,7 @@
 
         <action
             android:id="@+id/action_poemsPerCategoryListFragment_to_poemFragment"
-            app:destination="@id/poemFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/poemFragment" />
     </fragment>
 
     <fragment
@@ -63,6 +55,5 @@
     <action
         android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment" />
-
 
 </navigation>

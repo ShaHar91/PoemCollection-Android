@@ -7,7 +7,6 @@ import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.fragment.hideKeyboard
 import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.ui.base.BaseBindingVMFragment
-import com.google.android.material.snackbar.Snackbar
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentLoginBinding
 import com.shahar91.poems.ui.entry.EntryViewModel

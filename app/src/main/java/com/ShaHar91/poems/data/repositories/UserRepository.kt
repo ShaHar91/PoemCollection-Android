@@ -11,6 +11,8 @@ class UserRepository(
     private val userDao: UserDao,
     private val protectedService: NewApiManagerService
 ) : BaseRepository() {
+    
+    fun findCurrentUser() = userDao.findFirstById(HawkUtils.hawkCurrentUserId ?: "")
 
     suspend fun getCurrentUser() {
         doCall(protectedService.getCurrentUser()).data?.let {

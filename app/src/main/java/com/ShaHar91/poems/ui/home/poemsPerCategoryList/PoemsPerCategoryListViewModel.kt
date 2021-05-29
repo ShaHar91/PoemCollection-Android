@@ -21,7 +21,7 @@ class PoemsPerCategoryListViewModel(
         _isRefreshing.postValue(refreshing)
     }
 
-    var allPoemsForCategoryLive = poemRepository.getPoemsForCategoryLive(categoryId)
+    var allPoemsForCategoryLive = poemRepository.findAllPoemsForCategoryLive(categoryId)
 
     fun getAllPoemsForCategoryId() = launchAndLoad {
         poemRepository.getPoemsForCategory(categoryId)

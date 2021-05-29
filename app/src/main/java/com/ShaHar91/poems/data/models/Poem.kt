@@ -19,7 +19,7 @@ data class Poem(
 
     fun getFiveStarRating(): Int {
         return if (!totalRatingCount.isNullOrEmpty()) {
-            totalRatingCount[4] ?: 0
+            totalRatingCount[4]
         } else {
             0
         }
@@ -27,7 +27,7 @@ data class Poem(
 
     fun getFourStarRating(): Int {
         return if (!totalRatingCount.isNullOrEmpty()) {
-            totalRatingCount[3] ?: 0
+            totalRatingCount[3]
         } else {
             0
         }
@@ -35,7 +35,7 @@ data class Poem(
 
     fun getThreeStarRating(): Int {
         return if (!totalRatingCount.isNullOrEmpty()) {
-            totalRatingCount[2] ?: 0
+            totalRatingCount[2]
         } else {
             0
         }
@@ -43,7 +43,7 @@ data class Poem(
 
     fun getTwoStarRating(): Int {
         return if (!totalRatingCount.isNullOrEmpty()) {
-            totalRatingCount[1] ?: 0
+            totalRatingCount[1]
         } else {
             0
         }
@@ -51,7 +51,7 @@ data class Poem(
 
     fun getOneStarRating(): Int {
         return if (!totalRatingCount.isNullOrEmpty()) {
-            totalRatingCount[0] ?: 0
+            totalRatingCount[0]
         } else {
             0
         }

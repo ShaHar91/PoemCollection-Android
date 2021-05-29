@@ -18,7 +18,7 @@ class PoemViewModel(
         val FACTORY = tripleArgsViewModelFactory(::PoemViewModel)
     }
 
-    var poemWithUser = poemRepository.getPoemByIdLive(poemId)
+    var poemWithUser = poemRepository.findPoemByIdLive(poemId)
     var ownReview = Transformations.switchMap(poemWithUser) {
         reviewRepository.findOwnReviewForPoemLive(poemId)
     }
@@ -34,7 +34,7 @@ class PoemViewModel(
         poemRepository.getPoemById(poemId)
 
         if (HawkUtils.hawkCurrentUserId?.isNotEmpty() == true) {
-            reviewRepository.getOwnReviewForPoemCr(poemId)
+            reviewRepository.getOwnReviewForPoem(poemId)
         }
 
         _delayedRating.value = rating
@@ -43,11 +43,11 @@ class PoemViewModel(
     fun saveOrUpdateReview(reviewId: String?, newReviewText: String, newRating: Float) = launchAndLoad {
         if (reviewId != null) {
             // Update Review
-            reviewRepository.updateReviewCr(reviewId, newReviewText, newRating)
+            reviewRepository.updateReview(reviewId, newReviewText, newRating)
         } else {
             // New Review
             //TODO: create a new Review does not update the layout
-            reviewRepository.createReviewCr(poemId, newReviewText, newRating)
+            reviewRepository.createReview(poemId, newReviewText, newRating)
         }
 
         getPoemAndAllDataCr()
@@ -55,7 +55,7 @@ class PoemViewModel(
 
     fun deleteReview(reviewId: String) = launchAndLoad {
         //TODO: deleting a Review does not update the layout
-        reviewRepository.deleteReviewCr(reviewId)
+        reviewRepository.deleteReview(reviewId)
     }
 
     fun resetRating() {

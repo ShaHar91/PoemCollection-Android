@@ -10,9 +10,7 @@ import be.appwise.core.ui.base.list.BaseViewHolder
 import com.shahar91.poems.data.models.ReviewWithUser
 import kotlinx.android.synthetic.main.list_item_review.view.*
 
-class PoemReviewsAdapter(
-    private val onReviewClicked: (review: ReviewWithUser) -> Unit
-): ListAdapter<ReviewWithUser, PoemReviewsAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
+class PoemReviewsAdapter : ListAdapter<ReviewWithUser, PoemReviewsAdapter.ReviewViewHolder>(ReviewDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         return ReviewViewHolder(ListItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -23,11 +21,11 @@ class PoemReviewsAdapter(
         holder.bind(item)
     }
 
-    inner class ReviewViewHolder(private val binding: ListItemReviewBinding) : BaseViewHolder<ReviewWithUser>(binding.root) {
+    inner class ReviewViewHolder(private val binding: ListItemReviewBinding) :
+        BaseViewHolder<ReviewWithUser>(binding.root) {
         override fun bind(item: ReviewWithUser) {
             binding.reviewWithUser = item
             itemView.ivReviewMenu.isGone = true
-            binding.root.setOnClickListener { onReviewClicked(item) }
         }
     }
 }

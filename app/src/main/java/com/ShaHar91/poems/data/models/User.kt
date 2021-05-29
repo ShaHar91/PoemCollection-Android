@@ -11,4 +11,9 @@ data class User(
     override val id: String = "",
     var email: String = "",
     var username: String = "",
-    var pictureUrl: String? = null) : BaseEntity()
+    var pictureUrl: String? = null
+) : BaseEntity() {
+    fun getPictureSomething(): String {
+        return pictureUrl ?: "https://i.pravatar.cc/150?u=$id"
+    }
+}

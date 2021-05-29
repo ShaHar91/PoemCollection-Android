@@ -78,4 +78,9 @@
         <item name="android:textColor">?android:textColorPrimary</item>
     </style>
     <!--</editor-fold>-->
+
+    <style name="Shape.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        5<item name="cornerSize">50%</item>
+    </style>
 </resources>

@@ -24,7 +24,7 @@ import com.shahar91.poems.utils.HawkUtils
 
 class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
     private val safeArgs: PoemFragmentArgs by navArgs()
-    private val poemReviewsAdapter = PoemReviewsAdapter {}
+    private val poemReviewsAdapter = PoemReviewsAdapter()
 
     override fun getLayout() = R.layout.fragment_poem
     override fun getToolbar() = mBinding.mergeToolbar.toolbar
@@ -60,7 +60,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
                             mViewModel.resetRating()
                         })
                 } else {
-                    showAddReviewDialog(delayedRating ?: 0F)
+                    showAddReviewDialog(delayedRating)
                 }
             }
         }

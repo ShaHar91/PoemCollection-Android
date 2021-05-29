@@ -1,6 +1,5 @@
 package com.shahar91.poems.data.models
 
-import android.content.Context
 import android.text.format.DateUtils
 import androidx.room.*
 import be.appwise.core.data.base.BaseEntity

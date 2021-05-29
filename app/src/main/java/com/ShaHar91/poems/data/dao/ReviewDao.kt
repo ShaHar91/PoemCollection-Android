@@ -8,7 +8,6 @@ import be.appwise.core.data.base.BaseRoomDao
 import com.shahar91.poems.data.DBConstants
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.data.models.ReviewWithUser
-import kotlinx.coroutines.runBlocking
 
 @Dao
 abstract class ReviewDao : BaseRoomDao<Review>(DBConstants.REVIEW_TABLE_NAME) {

@@ -8,7 +8,6 @@ import androidx.annotation.IdRes
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import be.appwise.core.ui.base.BaseBindingVMActivity
-import be.appwise.core.ui.base.BaseVMActivity
 import com.shahar91.poems.R
 
 /**

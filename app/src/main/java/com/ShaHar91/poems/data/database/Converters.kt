@@ -2,7 +2,6 @@ package com.shahar91.poems.data.database
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.shahar91.poems.data.models.User
 import java.util.*
 
 class Converters {
@@ -24,15 +23,5 @@ class Converters {
     @TypeConverter
     fun toDate(millis: Long): Date {
         return Date(millis * 1000L)
-    }
-
-    @TypeConverter
-    fun fromUser(user: User): String {
-        return Gson().toJson(user)
-    }
-
-    @TypeConverter
-    fun toUser(user: String): User {
-        return Gson().fromJson(user, User::class.java)
     }
 }

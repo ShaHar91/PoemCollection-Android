@@ -51,7 +51,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLoginGoogle"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/entry_button_height"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="12dp"
             android:text="@string/common_google"
@@ -66,7 +66,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLoginFacebook"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/entry_button_height"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/common_facebook"

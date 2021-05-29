@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="entry_text_input_layout_height">48dp</dimen>
-    <dimen name="entry_button_height">54dp</dimen>
 </resources>

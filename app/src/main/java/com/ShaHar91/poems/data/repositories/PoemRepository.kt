@@ -22,8 +22,8 @@ class PoemRepository(
     private val reviewDao = poemDatabase.reviewDao()
     private val poemCategoryCrossRefDao = poemDatabase.poemCategoryCrossRefDao()
 
-    fun getPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
-    fun getPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
+    fun findAllPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
+    fun findPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
 
     suspend fun getPoemsForCategory(categoryId: String) {
         doCall(unProtectedService.getPoemsForCategoryId(categoryId)).data?.let { poemResponseList ->
