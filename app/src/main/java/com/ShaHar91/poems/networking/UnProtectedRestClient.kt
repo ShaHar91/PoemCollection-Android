@@ -1,6 +1,6 @@
 package com.shahar91.poems.networking
 
-import be.appwise.core.networking.base.BaseRestClient
+import be.appwise.networking.base.BaseRestClient
 import com.shahar91.poems.BuildConfig
 
 object UnProtectedRestClient : BaseRestClient() {

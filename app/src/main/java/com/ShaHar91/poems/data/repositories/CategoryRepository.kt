@@ -1,13 +1,13 @@
 package com.shahar91.poems.data.repositories
 
-import be.appwise.core.data.base.BaseRepository
+import be.appwise.networking.base.BaseRepository
 import com.shahar91.poems.data.dao.CategoryDao
 import com.shahar91.poems.networking.NewApiManagerService
 
 class CategoryRepository(
     private val categoryDao: CategoryDao,
     private val unprotectedService: NewApiManagerService
-) : BaseRepository() {
+) : BaseRepository {
 
     fun findAllLive() = categoryDao.findAllLive()
 

@@ -1,9 +1,14 @@
 package com.shahar91.poems.data.models
 
-import androidx.room.*
-import be.appwise.core.data.base.BaseEntity
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.Junction
+import androidx.room.PrimaryKey
+import androidx.room.Relation
+import be.appwise.room.BaseEntity
 import com.shahar91.poems.data.DBConstants
-import java.util.*
+import java.util.Date
 
 @Entity(tableName = DBConstants.POEM_TABLE_NAME)
 data class Poem(
@@ -15,7 +20,8 @@ data class Poem(
     var userId: String = "",
     var averageRating: Float = 0f,
     var totalRatingCount: List<Int> = emptyList(),
-    var createdAt: Date? = null) : BaseEntity() {
+    var createdAt: Date? = null
+) : BaseEntity {
 
     fun getFiveStarRating(): Int {
         return if (!totalRatingCount.isNullOrEmpty()) {
@@ -70,7 +76,11 @@ data class PoemWithRelations(
     @Embedded var poem: Poem,
     @Relation(parentColumn = "userId", entityColumn = "id")
     var user: User,
-    @Relation(parentColumn = DBConstants.COLUMN_ID_POEM, entityColumn = DBConstants.COLUMN_ID_CATEGORY, associateBy = Junction(PoemCategoryCrossRef::class))
+    @Relation(
+        parentColumn = DBConstants.COLUMN_ID_POEM,
+        entityColumn = DBConstants.COLUMN_ID_CATEGORY,
+        associateBy = Junction(PoemCategoryCrossRef::class)
+    )
     var categories: List<Category>,
     @Relation(parentColumn = DBConstants.COLUMN_ID_POEM, entityColumn = DBConstants.COLUMN_ID_POEM)
     var shortReviewList: List<Review>

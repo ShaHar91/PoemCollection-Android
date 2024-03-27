@@ -1,7 +1,7 @@
 package com.shahar91.poems.data.repositories
 
 import androidx.room.withTransaction
-import be.appwise.core.data.base.BaseRepository
+import be.appwise.networking.base.BaseRepository
 import com.shahar91.poems.data.database.PoemDatabase
 import com.shahar91.poems.data.models.PoemCategoryCrossRef
 import com.shahar91.poems.networking.NewApiManagerService
@@ -15,7 +15,7 @@ class PoemRepository(
 //    private val reviewRepository: ReviewRepository,
     private val protectedService: NewApiManagerService,
     private val unProtectedService: NewApiManagerService
-) : BaseRepository() {
+) : BaseRepository {
     private val poemDao = poemDatabase.poemDao()
     private val categoryDao = poemDatabase.categoryDao()
     private val userDao = poemDatabase.userDao()

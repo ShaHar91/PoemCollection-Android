@@ -2,7 +2,7 @@ package com.shahar91.poems
 
 import android.app.Application
 import be.appwise.core.core.CoreApp
-import be.appwise.core.networking.Networking
+import be.appwise.networking.Networking
 import com.shahar91.poems.data.database.PoemDatabase
 import com.shahar91.poems.data.repositories.AuthRepository
 import com.shahar91.poems.data.repositories.CategoryRepository
@@ -30,7 +30,11 @@ class MyApp : Application() {
         }
 
         val poemRepository: PoemRepository by lazy {
-            PoemRepository(poemDatabase/*, userRepository, categoryRepository, reviewRepository*/, ProtectedRestClient.getService, UnProtectedRestClient.getService)
+            PoemRepository(
+                poemDatabase/*, userRepository, categoryRepository, reviewRepository*/,
+                ProtectedRestClient.getService,
+                UnProtectedRestClient.getService
+            )
         }
 
         val authRepository: AuthRepository by lazy {
@@ -46,7 +50,7 @@ class MyApp : Application() {
         super.onCreate()
         instance = this
 
-        Networking.Builder()
+        Networking.Builder(this)
             .setPackageName(packageName)
             .setAppName(getString(R.string.app_name))
             .setApiVersion("1")
@@ -60,7 +64,8 @@ class MyApp : Application() {
         CoreApp.init(this)
             .initializeLogger(getString(R.string.app_name), BuildConfig.DEBUG)
             .initializeErrorActivity(
-                BuildConfig.DEBUG || BuildConfig.FLAVOR === "dev" || BuildConfig.FLAVOR === "stg")
+                BuildConfig.DEBUG || BuildConfig.FLAVOR === "dev" || BuildConfig.FLAVOR === "stg"
+            )
             .build()
     }
 }

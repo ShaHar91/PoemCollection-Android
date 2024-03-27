@@ -66,9 +66,11 @@ class AddPoemActivity : PoemBaseActivity<ActivityAddPoemBinding>() {
     }
 
     private fun initViews() {
-        configureToolbar(mBinding.activityToolbar.toolbar, true, R.string.add_poem_toolbar_title, R.drawable.ic_close)
-        mBinding.activityToolbar.toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorWhite),
-            PorterDuff.Mode.SRC_IN)
+        configureToolbar(mBinding.activityToolbar.toolbar, R.string.add_poem_toolbar_title, true, R.drawable.ic_close)
+        mBinding.activityToolbar.toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(
+            ContextCompat.getColor(this, R.color.colorWhite),
+            PorterDuff.Mode.SRC_IN
+        )
 
         mBinding.btnSavePoem.setOnClickListener {
             checkToSavePoem()

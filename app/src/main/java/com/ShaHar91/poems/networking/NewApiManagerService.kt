@@ -1,7 +1,7 @@
 package com.shahar91.poems.networking
 
-import be.appwise.core.networking.NetworkConstants
-import be.appwise.core.networking.model.AccessToken
+import be.appwise.networking.NetworkConstants
+import be.appwise.networking.model.AccessToken
 import com.shahar91.poems.networking.models.CategoryResponse
 import com.shahar91.poems.networking.models.PoemResponse
 import com.shahar91.poems.networking.models.ReviewResponse

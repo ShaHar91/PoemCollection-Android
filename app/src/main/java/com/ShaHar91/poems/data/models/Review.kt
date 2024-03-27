@@ -1,10 +1,14 @@
 package com.shahar91.poems.data.models
 
 import android.text.format.DateUtils
-import androidx.room.*
-import be.appwise.core.data.base.BaseEntity
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Relation
+import be.appwise.room.BaseEntity
 import com.shahar91.poems.data.DBConstants
-import java.util.*
+import java.util.Date
 
 @Entity(tableName = DBConstants.REVIEW_TABLE_NAME)
 data class Review(
@@ -16,7 +20,7 @@ data class Review(
     var createdAt: Date? = null,
     var poemId: String = "",
     var userId: String = ""
-) : BaseEntity() {
+) : BaseEntity {
 
     fun getRelativeCreatedDate(): String {
         return DateUtils.getRelativeTimeSpanString(createdAt?.time ?: 0L).toString()

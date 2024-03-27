@@ -50,7 +50,7 @@
             app:refreshing="@{viewModel.isRefreshing}"
             tools:ignore="UnknownIdInLayout">
 
-            <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
+            <be.appwise.emptyRecyclerView.ViewStateRecyclerView
                 android:id="@+id/rvPoemsPerCategory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

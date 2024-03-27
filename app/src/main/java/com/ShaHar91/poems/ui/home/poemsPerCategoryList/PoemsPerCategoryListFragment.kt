@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
-import be.appwise.core.ui.custom.RecyclerViewEnum
+import be.appwise.emptyRecyclerView.RecyclerViewState
 import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentPoemsPerCategoryBinding
@@ -47,7 +47,7 @@ class PoemsPerCategoryListFragment : PoemBaseBindingVMFragment<FragmentPoemsPerC
                 emptyStateView = emptyView
                 loadingStateView = loadingView
                 adapter = poemsPerCategoryListAdapter
-                stateView = RecyclerViewEnum.LOADING
+                state = RecyclerViewState.LOADING
             }
 
             themeSwipeToRefresh(srlRefreshPoemsPerCategory)
@@ -55,23 +55,23 @@ class PoemsPerCategoryListFragment : PoemBaseBindingVMFragment<FragmentPoemsPerC
     }
 
     private fun initObservers() {
-        mViewModel.allPoemsForCategoryLive.observe(viewLifecycleOwner, {
+        mViewModel.allPoemsForCategoryLive.observe(viewLifecycleOwner) {
             val poems = it.poems.sortedBy { poem -> poem.poem.title }
 
-            mBinding.rvPoemsPerCategory.stateView = if (poems.isNotEmpty()) {
+            mBinding.rvPoemsPerCategory.state = if (poems.isNotEmpty()) {
                 poemsPerCategoryListAdapter.submitList(poems)
-                RecyclerViewEnum.NORMAL
+                RecyclerViewState.NORMAL
             } else {
-                RecyclerViewEnum.EMPTY_STATE
+                RecyclerViewState.EMPTY
             }
-        })
+        }
     }
 
     override fun onError(throwable: Throwable) {
         super.onError(throwable)
         mBinding.run {
-            if (rvPoemsPerCategory.stateView == RecyclerViewEnum.LOADING) {
-                rvPoemsPerCategory.stateView = RecyclerViewEnum.EMPTY_STATE
+            if (rvPoemsPerCategory.state == RecyclerViewState.LOADING) {
+                rvPoemsPerCategory.state = RecyclerViewState.EMPTY
             }
             mViewModel.setIsRefreshing(false)
         }

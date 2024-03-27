@@ -2,7 +2,7 @@ package com.shahar91.poems.ui.home.poem
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import be.appwise.core.extensions.viewmodel.tripleArgsViewModelFactory
 import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
@@ -19,11 +19,11 @@ class PoemViewModel(
     }
 
     var poemWithUser = poemRepository.findPoemByIdLive(poemId)
-    var ownReview = Transformations.switchMap(poemWithUser) {
+    var ownReview = poemWithUser.switchMap {
         reviewRepository.findOwnReviewForPoemLive(poemId)
     }
 
-    var shortReviewList = Transformations.switchMap(poemWithUser) {
+    var shortReviewList = poemWithUser.switchMap {
         reviewRepository.findReviewsForPoem(poemId)
     }
 

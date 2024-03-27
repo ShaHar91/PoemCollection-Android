@@ -6,10 +6,14 @@ import android.view.LayoutInflater
 import android.widget.RatingBar
 import com.google.android.material.card.MaterialCardView
 import com.shahar91.poems.R
-import kotlinx.android.synthetic.main.custom_no_review.view.*
+import me.zhanghai.android.materialratingbar.MaterialRatingBar
 
 class NoReview @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     MaterialCardView(context, attrs, defStyleAttr) {
+
+    private val rbNoReview by lazy {
+        findViewById<MaterialRatingBar>(R.id.rbNoReview)
+    }
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
-import be.appwise.core.ui.custom.RecyclerViewEnum
+import be.appwise.emptyRecyclerView.RecyclerViewState
 import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
@@ -44,7 +44,7 @@ class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() 
                 emptyStateView = emptyView
                 loadingStateView = loadingView
                 adapter = categoryAdapter
-                stateView = RecyclerViewEnum.LOADING
+                state = RecyclerViewState.LOADING
             }
 
             themeSwipeToRefresh(srlRefreshCategories)
@@ -52,19 +52,19 @@ class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() 
     }
 
     private fun initObservers() {
-        mViewModel.categoriesLive.observe(viewLifecycleOwner, {
+        mViewModel.categoriesLive.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)
             if (it.isNotEmpty()) {
-                mBinding.rvCategories.stateView = RecyclerViewEnum.NORMAL
+                mBinding.rvCategories.state = RecyclerViewState.NORMAL
             }
-        })
+        }
     }
 
     override fun onError(throwable: Throwable) {
         super.onError(throwable)
         mBinding.run {
-            if (rvCategories.stateView == RecyclerViewEnum.LOADING) {
-                rvCategories.stateView = RecyclerViewEnum.EMPTY_STATE
+            if (rvCategories.state == RecyclerViewState.LOADING) {
+                rvCategories.state = RecyclerViewState.EMPTY
             }
             mViewModel.setIsRefreshing(false)
         }

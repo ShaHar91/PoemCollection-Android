@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -16,10 +18,22 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.shahar91.poems.R
-import kotlinx.android.synthetic.main.custom_circular_profile_image.view.*
 
 // https://medium.com/@Zielony/guide-to-android-custom-views-constructors-df47476e334c
 class CircularInitialsImageView : ConstraintLayout {
+
+    private val tvInitials by lazy {
+        findViewById<TextView>(R.id.tvInitials)
+    }
+
+    private val ivCircle by lazy {
+        findViewById<ImageView>(R.id.ivCircle)
+    }
+
+    private val ivImage by lazy {
+        findViewById<ImageView>(R.id.ivImage)
+    }
+
     constructor(context: Context) : super(context) {
         init(context, null)
     }

@@ -1,15 +1,15 @@
 package com.shahar91.poems.data.repositories
 
-import be.appwise.core.data.base.BaseRepository
-import be.appwise.core.networking.Networking
-import be.appwise.core.networking.model.AccessToken
+import be.appwise.networking.Networking
+import be.appwise.networking.base.BaseRepository
+import be.appwise.networking.model.AccessToken
 import com.shahar91.poems.Constants
 import com.shahar91.poems.networking.NewApiManagerService
 
 class AuthRepository(
     private val unprotectedService: NewApiManagerService,
     private val userRepository: UserRepository
-) : BaseRepository() {
+) : BaseRepository {
     suspend fun loginUser(email: String, password: String) {
         saveAccessTokenAndGetCurrentUser(doCall(unprotectedService.loginUser(email, password)))
     }
