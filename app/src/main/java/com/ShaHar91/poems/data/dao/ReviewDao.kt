@@ -1,34 +1,31 @@
 package com.shahar91.poems.data.dao
 
-import be.appwise.core.data.base.BaseDao
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
+import be.appwise.room.BaseRoomDao
+import com.shahar91.poems.data.DBConstants
 import com.shahar91.poems.data.models.Review
-import com.shahar91.poems.data.models.ReviewFields
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import com.shahar91.poems.data.models.ReviewWithUser
 
-class ReviewDao(db: Realm) : BaseDao<Review>(db) {
-    private fun where(): RealmQuery<Review> {
-        return db.where()
+@Dao
+abstract class ReviewDao : BaseRoomDao<Review>(DBConstants.REVIEW_TABLE_NAME) {
+
+    @Query("SELECT * FROM ${DBConstants.REVIEW_TABLE_NAME} WHERE ${DBConstants.COLUMN_ID_POEM} = :poemId AND userId != :userId")
+    abstract fun findAllReviewsForPoem(poemId: String, userId: String): LiveData<List<ReviewWithUser>>
+
+    @Transaction
+    open suspend fun findAndDeleteReviewForPoemByUserId(poemId: String, userId: String?) {
+        val reviewWithUser = findOwnReviewForPoem(poemId, userId)
+        if (reviewWithUser != null) {
+            delete(reviewWithUser.review)
+        }
     }
 
-    fun findAll(): List<Review> {
-        return where().findAll()
-    }
+    @Query("SELECT * FROM ${DBConstants.REVIEW_TABLE_NAME} WHERE ${DBConstants.COLUMN_ID_POEM} = :poemId AND userId = :userId")
+    abstract fun findOwnReviewForPoemLive(poemId: String, userId: String?): LiveData<ReviewWithUser?>
 
-    fun findAllReviewsForPoem(poemId: String): List<Review> {
-        return where().equalTo(ReviewFields.POEM._ID, poemId).findAll()
-    }
-
-    fun findReviewForPoemByUserId(poemId: String, userId: String?): Review? {
-        return where().equalTo(ReviewFields.POEM._ID, poemId).and().equalTo(ReviewFields.USER._ID, userId).findFirst()
-    }
-
-    fun findAndDeleteReviewById(reviewId: String) {
-        where().equalTo(ReviewFields._ID, reviewId).findFirst()?.apply { delete(this) }
-    }
-
-    fun findAndDeleteReviewForPoemByUserId(poemId: String, userId: String?) {
-        findReviewForPoemByUserId(poemId, userId)?.apply { delete(this) }
-    }
+    @Query("SELECT * FROM ${DBConstants.REVIEW_TABLE_NAME} WHERE ${DBConstants.COLUMN_ID_POEM} = :poemId AND userId = :userId")
+    abstract suspend fun findOwnReviewForPoem(poemId: String, userId: String?): ReviewWithUser?
 }

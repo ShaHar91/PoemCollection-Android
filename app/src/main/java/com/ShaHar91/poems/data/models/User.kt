@@ -1,11 +1,19 @@
 package com.shahar91.poems.data.models
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import be.appwise.room.BaseEntity
+import com.shahar91.poems.data.DBConstants
 
-open class User(
+@Entity(tableName = DBConstants.USER_TABLE_NAME)
+data class User(
     @PrimaryKey
-    var _id: String = "",
+    override var id: String = "",
     var email: String = "",
     var username: String = "",
-    var pictureUrl: String? = null) : RealmObject()
+    var pictureUrl: String? = null
+) : BaseEntity {
+    fun getPictureSomething(): String {
+        return pictureUrl ?: "https://i.pravatar.cc/150?u=$id"
+    }
+}

@@ -1,184 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="14dp"
-    android:layout_marginTop="12dp"
-    android:layout_marginEnd="14dp"
-    android:layout_marginBottom="12dp"
-    tools:context=".ui.home.poem.PoemFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="averageRating"
+            type="Float" />
+
+        <variable
+            name="totalRating"
+            type="Integer" />
+
+        <variable
+            name="fiveStarRating"
+            type="Integer" />
+
+        <variable
+            name="fourStarRating"
+            type="Integer" />
+
+        <variable
+            name="threeStarRating"
+            type="Integer" />
+
+        <variable
+            name="twoStarRating"
+            type="Integer" />
+
+        <variable
+            name="oneStarRating"
+            type="Integer" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="12dp">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginVertical="12dp"
+        tools:context=".ui.home.poem.PoemFragment">
 
-        <TextView
-            android:id="@+id/tvAverageRating"
-            android:layout_width="84dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
-            android:textColor="@color/colorBlack_1000"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="4.5" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp">
 
-        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-            android:id="@+id/rbTotalRating"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="12dp"
-            app:layout_constraintEnd_toEndOf="@id/tvAverageRating"
-            app:layout_constraintStart_toStartOf="@id/tvAverageRating"
-            app:layout_constraintTop_toBottomOf="@id/tvAverageRating"
-            app:layout_constraintVertical_bias="0.333" />
+            <TextView
+                android:id="@+id/tvAverageRating"
+                android:layout_width="84dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text='@{String.format("%.1f", averageRating)}'
+                android:textAppearance="?attr/textAppearanceHeadline3"
+                android:textColor="@color/colorBlack_1000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="4.5" />
 
-        <TextView
-            android:id="@+id/tvTotalReviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/rbTotalRating"
-            app:layout_constraintStart_toStartOf="@id/rbTotalRating"
-            app:layout_constraintTop_toBottomOf="@id/rbTotalRating"
-            tools:text="27.227" />
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/rbTotalRating"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:rating="@{averageRating}"
+                app:layout_constraintEnd_toEndOf="@id/tvAverageRating"
+                app:layout_constraintStart_toStartOf="@id/tvAverageRating"
+                app:layout_constraintTop_toBottomOf="@id/tvAverageRating" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.35" />
+            <TextView
+                android:id="@+id/tvTotalReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{totalRating.toString()}"
+                android:textAppearance="?attr/textAppearanceCaption"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/rbTotalRating"
+                app:layout_constraintStart_toStartOf="@id/rbTotalRating"
+                app:layout_constraintTop_toBottomOf="@id/rbTotalRating"
+                tools:text="27.227" />
 
-        <TextView
-            android:id="@+id/tvFiveStarRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="9dp"
-            android:text="@string/global_rating_label_five"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toBottomOf="@id/pbFiveStarRating"
-            app:layout_constraintEnd_toStartOf="@id/pbFiveStarRating"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="@id/pbFiveStarRating" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.35" />
 
-        <ProgressBar
-            android:id="@+id/pbFiveStarRating"
-            style="@style/MyProgressBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintBottom_toTopOf="@id/pbFourStarRating"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvFiveStarRating"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:progress="80" />
+            <TextView
+                android:id="@+id/tvFiveStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global.Label"
+                android:text="@string/global_rating_label_five"
+                app:layout_constraintBottom_toBottomOf="@id/pbFiveStarRating"
+                app:layout_constraintEnd_toStartOf="@id/pbFiveStarRating"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/pbFiveStarRating" />
 
-        <TextView
-            android:id="@+id/tvFourStarRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="9dp"
-            android:layout_marginStart="20dp"
-            android:text="@string/global_rating_label_four"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toBottomOf="@id/pbFourStarRating"
-            app:layout_constraintEnd_toStartOf="@id/pbFourStarRating"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="@id/pbFourStarRating" />
+            <ProgressBar
+                android:id="@+id/pbFiveStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global"
+                android:max="@{totalRating}"
+                android:progress="@{fiveStarRating}"
+                app:layout_constraintBottom_toTopOf="@id/pbFourStarRating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvFiveStarRating"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:progress="80" />
 
-        <ProgressBar
-            android:id="@+id/pbFourStarRating"
-            style="@style/MyProgressBar"
-            app:layout_constraintStart_toEndOf="@id/tvFourStarRating"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintBottom_toTopOf="@id/pbThreeStarRating"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbFiveStarRating"
-            tools:progress="60" />
+            <TextView
+                android:id="@+id/tvFourStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global.Label"
+                android:text="@string/global_rating_label_four"
+                app:layout_constraintBottom_toBottomOf="@id/pbFourStarRating"
+                app:layout_constraintEnd_toStartOf="@id/pbFourStarRating"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/pbFourStarRating" />
 
-        <TextView
-            android:id="@+id/tvThreeStarRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="9dp"
-            android:text="@string/global_rating_label_three"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toBottomOf="@id/pbThreeStarRating"
-            app:layout_constraintEnd_toStartOf="@id/pbThreeStarRating"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="@id/pbThreeStarRating" />
+            <ProgressBar
+                android:id="@+id/pbFourStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global"
+                android:max="@{totalRating}"
+                android:progress="@{fourStarRating}"
+                app:layout_constraintBottom_toTopOf="@id/pbThreeStarRating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvFourStarRating"
+                app:layout_constraintTop_toBottomOf="@id/pbFiveStarRating"
+                tools:progress="60" />
 
-        <ProgressBar
-            android:id="@+id/pbThreeStarRating"
-            style="@style/MyProgressBar"
-            app:layout_constraintStart_toEndOf="@id/tvThreeStarRating"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintBottom_toTopOf="@id/pbTwoStarRating"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbFourStarRating"
-            tools:progress="30" />
+            <TextView
+                android:id="@+id/tvThreeStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global.Label"
+                android:text="@string/global_rating_label_three"
+                app:layout_constraintBottom_toBottomOf="@id/pbThreeStarRating"
+                app:layout_constraintEnd_toStartOf="@id/pbThreeStarRating"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/pbThreeStarRating" />
 
-        <TextView
-            android:id="@+id/tvTwoStarRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="9dp"
-            android:layout_marginStart="20dp"
-            android:text="@string/global_rating_label_two"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toBottomOf="@id/pbTwoStarRating"
-            app:layout_constraintEnd_toStartOf="@id/pbTwoStarRating"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="@id/pbTwoStarRating" />
+            <ProgressBar
+                android:id="@+id/pbThreeStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global"
+                android:max="@{totalRating}"
+                android:progress="@{threeStarRating}"
+                app:layout_constraintBottom_toTopOf="@id/pbTwoStarRating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvThreeStarRating"
+                app:layout_constraintTop_toBottomOf="@id/pbFourStarRating"
+                tools:progress="30" />
 
-        <ProgressBar
-            android:id="@+id/pbTwoStarRating"
-            style="@style/MyProgressBar"
-            app:layout_constraintStart_toEndOf="@id/tvTwoStarRating"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintBottom_toTopOf="@id/pbOneStarRating"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbThreeStarRating"
-            tools:progress="40" />
+            <TextView
+                android:id="@+id/tvTwoStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global.Label"
+                android:text="@string/global_rating_label_two"
+                app:layout_constraintBottom_toBottomOf="@id/pbTwoStarRating"
+                app:layout_constraintEnd_toStartOf="@id/pbTwoStarRating"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/pbTwoStarRating" />
 
-        <TextView
-            android:id="@+id/tvOneStarRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="9dp"
-            android:layout_marginStart="20dp"
-            android:text="@string/global_rating_label_one"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-            app:layout_constraintBottom_toBottomOf="@id/pbOneStarRating"
-            app:layout_constraintEnd_toStartOf="@id/pbOneStarRating"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="@id/pbOneStarRating" />
+            <ProgressBar
+                android:id="@+id/pbTwoStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global"
+                android:max="@{totalRating}"
+                android:progress="@{twoStarRating}"
+                app:layout_constraintBottom_toTopOf="@id/pbOneStarRating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvTwoStarRating"
+                app:layout_constraintTop_toBottomOf="@id/pbThreeStarRating"
+                tools:progress="40" />
 
-        <ProgressBar
-            android:id="@+id/pbOneStarRating"
-            style="@style/MyProgressBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/tvOneStarRating"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbTwoStarRating"
-            tools:progress="10" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/tvOneStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global.Label"
+                android:text="@string/global_rating_label_one"
+                app:layout_constraintBottom_toBottomOf="@id/pbOneStarRating"
+                app:layout_constraintEnd_toStartOf="@id/pbOneStarRating"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/pbOneStarRating" />
+
+            <ProgressBar
+                android:id="@+id/pbOneStarRating"
+                style="@style/ProgressBar.Horizontal.Rating.Global"
+                android:max="@{totalRating}"
+                android:progress="@{oneStarRating}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvOneStarRating"
+                app:layout_constraintTop_toBottomOf="@id/pbTwoStarRating"
+                tools:progress="10" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

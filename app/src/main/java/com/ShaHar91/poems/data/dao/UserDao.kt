@@ -1,18 +1,15 @@
 package com.shahar91.poems.data.dao
 
-import be.appwise.core.data.base.BaseDao
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Query
+import be.appwise.room.BaseRoomDao
+import com.shahar91.poems.data.DBConstants
 import com.shahar91.poems.data.models.User
-import com.shahar91.poems.data.models.UserFields
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
 
-class UserDao(db: Realm) : BaseDao<User>(db) {
-    private fun where(): RealmQuery<User> {
-        return db.where()
-    }
+@Dao
+abstract class UserDao : BaseRoomDao<User>(DBConstants.USER_TABLE_NAME) {
 
-    fun findFirstById(userId: String?): User? {
-        return where().equalTo(UserFields._ID, userId).findFirst()
-    }
+    @Query("SELECT * FROM ${DBConstants.USER_TABLE_NAME} WHERE id == :userId")
+    abstract fun findFirstById(userId: String): LiveData<User>
 }

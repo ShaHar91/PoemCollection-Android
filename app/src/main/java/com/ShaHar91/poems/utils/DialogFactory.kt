@@ -1,18 +1,17 @@
 package com.shahar91.poems.utils
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import be.appwise.core.extensions.activity.snackBar
+import be.appwise.core.extensions.activity.showSnackbar
 import be.appwise.core.extensions.view.optionalCallbacks
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.data.models.Review
-import com.wajahatkarim3.easyvalidation.core.view_ktx.textEqualTo
-import kotlinx.android.synthetic.main.custom_dialog_add_review.view.*
+import me.zhanghai.android.materialratingbar.MaterialRatingBar
 
 object DialogFactory {
     @JvmStatic
@@ -44,8 +43,8 @@ object DialogFactory {
         val dialogView: View = inflater.inflate(R.layout.custom_dialog_add_review, null)
 
         // get views
-        val dialogRatingBar = dialogView.rbReviewDialog
-        val dialogReviewEditText = dialogView.tilReviewBody.editText
+        val dialogRatingBar = dialogView.findViewById<MaterialRatingBar>(R.id.rbReviewDialog)
+        val dialogReviewEditText = dialogView.findViewById<TextInputLayout>(R.id.tilReviewBody).editText
 
         // fill in starting values
         dialogRatingBar.rating = review?.rating ?: (rating ?: 0f)
@@ -70,7 +69,7 @@ object DialogFactory {
                 val newReviewText = dialogReviewEditText?.text?.toString() ?: ""
 
                 // No need for to make a call to the backend when both new values are unchanged
-                if (review != null && newReviewText.textEqualTo(review.text) && dialogRatingBar.rating.equals(
+                if (review != null && newReviewText == review.text && dialogRatingBar.rating.equals(
                         review.rating)
                 ) {
                     dialog.dismiss()
@@ -78,11 +77,11 @@ object DialogFactory {
                 }
 
                 if (dialogRatingBar.rating < 1) {
-                    activity.snackBar("At least a rating of 1 is required")
+                    activity.showSnackbar("At least a rating of 1 is required")
                     return@setOnClickListener
                 }
 
-                saveReviewCallback(review?._id, newReviewText, dialogRatingBar.rating)
+                saveReviewCallback(review?.id, newReviewText, dialogRatingBar.rating)
                 dialog.dismiss()
             }
         }
@@ -92,7 +91,7 @@ object DialogFactory {
         }
 
         dialogReviewEditText?.optionalCallbacks { s ->
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = !s.isBlank()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = s.isNotBlank()
         }
     }
 

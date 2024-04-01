@@ -8,4 +8,5 @@ object Constants {
     val PASSWORD_PATTERN : Pattern = Pattern.compile("[a-zA-Z0-9\\!\\@\\#\\$]{6,24}")
 
     const val ACTIVITY_RESPONSE_RATING_KEY = "rating"
+    const val NETWORK_BEARER = "Bearer"
 }

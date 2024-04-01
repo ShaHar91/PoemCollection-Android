@@ -5,8 +5,9 @@ import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.annotation.IdRes
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import be.appwise.core.ui.base.BaseActivity
+import be.appwise.core.ui.base.BaseBindingVMActivity
 import com.shahar91.poems.R
 
 /**
@@ -14,7 +15,7 @@ import com.shahar91.poems.R
  *
  * @param <VM> The ViewModel working with the Activity
 </VM> */
-abstract class PoemBaseActivity<VM : PoemBaseViewModel> : BaseActivity<VM>() {
+abstract class PoemBaseActivity<B : ViewDataBinding> : BaseBindingVMActivity<B>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!isTablet) {

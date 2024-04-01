@@ -1,80 +1,49 @@
 package com.shahar91.poems.data.repositories
 
-import be.appwise.core.data.base.BaseRepository
-import be.appwise.core.extensions.logging.logd
+import androidx.lifecycle.LiveData
+import be.appwise.networking.base.BaseRepository
 import com.shahar91.poems.data.dao.ReviewDao
-import com.shahar91.poems.data.models.Review
-import com.shahar91.poems.networking.ApiCallsManager
+import com.shahar91.poems.data.models.ReviewWithUser
+import com.shahar91.poems.networking.NewApiManagerService
 import com.shahar91.poems.utils.HawkUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
 
-object ReviewRepository : BaseRepository() {
-    private val reviewDao = ReviewDao(realm)
+class ReviewRepository(
+    private val reviewDao: ReviewDao,
+    private val protectedService: NewApiManagerService
+) : BaseRepository {
 
-    @JvmStatic
-    fun getReviews(poemId: String, onSuccess: (List<Review>) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getAllReviewsForPoem(poemId).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null) {
-                reviewDao.createOrUpdateAllFromJson(Review::class.java, it.data!!.toString())
-            }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(reviewDao.findAllReviewsForPoem(poemId))
-        }))
-    }
+    fun findOwnReviewForPoemLive(poemId: String) = reviewDao.findOwnReviewForPoemLive(poemId, HawkUtils.hawkCurrentUserId)
+    fun findReviewsForPoem(poemId: String) = reviewDao.findAllReviewsForPoem(poemId, HawkUtils.hawkCurrentUserId ?: "")
 
-    @JvmStatic
-    fun getOwnReviewForPoem(poemId: String, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getOwnReviewForPoem(poemId, HawkUtils.hawkCurrentUserId).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null && it.data?.size()?.equals(0) == false) {
-                reviewDao.createOrUpdateAllFromJson(Review::class.java, it.data!!.toString())
+    suspend fun getOwnReviewForPoem(poemId: String) {
+        doCall(protectedService.getOwnReviewForPoem(poemId, HawkUtils.hawkCurrentUserId)).data?.let { reviewResponseList ->
+            if (reviewResponseList.isNotEmpty()) {
+                reviewDao.insertMany(reviewResponseList.map { it.getAsEntity() })
             } else {
+                // In case the user's review has not been returned, we should the delete the one we have in Room
+                // maybe the user deleted it on another device, or an admin deleted the review
                 reviewDao.findAndDeleteReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId)
             }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(reviewDao.findReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId))
-        }))
+        }
     }
 
-    @JvmStatic
-    fun createReview(poemId: String, reviewText: String, reviewRating: Float, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.createReview(poemId, reviewText, reviewRating).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null) {
-                reviewDao.createOrUpdateObjectFromJson(Review::class.java, it.data!!.toString())
-            }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(reviewDao.findReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId))
-        }))
+    suspend fun createReview(poemId: String, reviewText: String, reviewRating: Float) {
+        doCall(protectedService.createReview(poemId, reviewText, reviewRating)).data?.let {
+            reviewDao.insert(it.getAsEntity())
+        }
     }
 
-    @JvmStatic
-    fun updateReview(poemId: String, reviewId: String, reviewText: String, reviewRating: Float, onSuccess: (Review?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.editReview(reviewId, reviewText, reviewRating).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it.data != null) {
-                reviewDao.createOrUpdateObjectFromJson(Review::class.java, it.data!!.toString())
-            }
-        }, {
-            onError(it)
-        }, {
-            onSuccess(reviewDao.findReviewForPoemByUserId(poemId, HawkUtils.hawkCurrentUserId))
-        }))
+    suspend fun updateReview(reviewId: String, reviewText: String, reviewRating: Float) {
+        doCall(protectedService.editReview(reviewId, reviewText, reviewRating)).data?.let {
+            reviewDao.insert(it.getAsEntity())
+        }
     }
 
-    @JvmStatic
-    fun deleteReview(reviewId: String, onSuccess: () -> Unit, onError:(Throwable) -> Unit) {
-        addCall(ApiCallsManager.deleteReview(reviewId).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            if (it?.success == true){
-                reviewDao.findAndDeleteReviewById(reviewId)
+    suspend fun deleteReview(reviewId: String) {
+        doCall(protectedService.deleteReview(reviewId)).let {
+            if (it.success) {
+                reviewDao.deleteById(reviewId)
             }
-        }, {
-            onError(it)
-        }, {
-            onSuccess()
-        }))
+        }
     }
 }

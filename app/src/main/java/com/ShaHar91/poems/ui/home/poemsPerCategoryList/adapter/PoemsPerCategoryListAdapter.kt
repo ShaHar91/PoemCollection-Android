@@ -1,33 +1,42 @@
 package com.shahar91.poems.ui.home.poemsPerCategoryList.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.shahar91.poems.data.models.Poem
-import com.shahar91.poems.databinding.ListItemPoemPerCategoryBinding
-import be.appwise.core.ui.base.list.BaseAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import be.appwise.core.ui.base.list.BaseViewHolder
-import com.shahar91.poems.ui.home.poemsPerCategoryList.adapter.PoemsPerCategoryListAdapter.PoemsPerCategoryListInteractionListener
+import com.shahar91.poems.data.models.PoemWithUser
+import com.shahar91.poems.databinding.ListItemPoemPerCategoryBinding
 
-class PoemsPerCategoryListAdapter(context: Context, listener: PoemsPerCategoryListInteractionListener) :
-    BaseAdapter<Poem, PoemsPerCategoryListInteractionListener, BaseViewHolder<Poem, PoemsPerCategoryListInteractionListener>>(
-        context, listener) {
-
-    interface PoemsPerCategoryListInteractionListener {
-        fun onPoemClicked(poemId: String)
-    }
+class PoemsPerCategoryListAdapter(
+    private val onPoemClicked: (poemId: String) -> Unit
+) : ListAdapter<PoemWithUser, PoemsPerCategoryListAdapter.PoemsPerCategoryListViewHolder>(PoemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoemsPerCategoryListViewHolder {
         return PoemsPerCategoryListViewHolder(
             ListItemPoemPerCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    class PoemsPerCategoryListViewHolder(private val binding: ListItemPoemPerCategoryBinding) :
-        BaseViewHolder<Poem, PoemsPerCategoryListInteractionListener>(binding.root) {
+    override fun onBindViewHolder(holder: PoemsPerCategoryListViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
 
-        override fun bind(position: Int, item: Poem, listener: PoemsPerCategoryListInteractionListener) {
-            binding.poem = item
-            binding.root.setOnClickListener { listener.onPoemClicked(item._id) }
+    inner class PoemsPerCategoryListViewHolder(private val binding: ListItemPoemPerCategoryBinding) :
+        BaseViewHolder<PoemWithUser>(binding.root) {
+
+        override fun bind(item: PoemWithUser) {
+            binding.poemWithUser = item
+            binding.root.setOnClickListener { onPoemClicked(item.poem.id) }
         }
+    }
+}
+
+class PoemDiffCallback : DiffUtil.ItemCallback<PoemWithUser>() {
+    override fun areItemsTheSame(oldItem: PoemWithUser, newItem: PoemWithUser): Boolean {
+        return oldItem.poem.id == newItem.poem.id
+    }
+
+    override fun areContentsTheSame(oldItem: PoemWithUser, newItem: PoemWithUser): Boolean {
+        return oldItem == newItem
     }
 }

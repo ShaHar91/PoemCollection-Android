@@ -1,26 +1,96 @@
 package com.shahar91.poems.data.models
 
-import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
-import java.util.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.Junction
+import androidx.room.PrimaryKey
+import androidx.room.Relation
+import be.appwise.room.BaseEntity
+import com.shahar91.poems.data.DBConstants
+import java.util.Date
 
-open class Poem(
+@Entity(tableName = DBConstants.POEM_TABLE_NAME)
+data class Poem(
     @PrimaryKey
-    var _id: String = "",
+    @ColumnInfo(name = DBConstants.COLUMN_ID_POEM)
+    override var id: String = "",
     var title: String = "",
     var body: String = "",
-    var user: User? = null,
-    var categories: RealmList<Category> = RealmList(),
+    var userId: String = "",
     var averageRating: Float = 0f,
-    var totalRatingCount: RealmList<Int> = RealmList(),
-    var shortReviewList: RealmList<Review> = RealmList(),
-    var createdAt: Date? = null) : RealmObject() {
+    var totalRatingCount: List<Int> = emptyList(),
+    var createdAt: Date? = null
+) : BaseEntity {
 
-    companion object {
-        fun createNewPoem(poem: Poem): Poem {
-            return Poem(poem._id, poem.title, poem.body, poem.user, poem.categories,
-                poem.averageRating, poem.totalRatingCount, poem.shortReviewList, poem.createdAt)
+    fun getFiveStarRating(): Int {
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[4]
+        } else {
+            0
         }
     }
+
+    fun getFourStarRating(): Int {
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[3]
+        } else {
+            0
+        }
+    }
+
+    fun getThreeStarRating(): Int {
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[2]
+        } else {
+            0
+        }
+    }
+
+    fun getTwoStarRating(): Int {
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[1]
+        } else {
+            0
+        }
+    }
+
+    fun getOneStarRating(): Int {
+        return if (!totalRatingCount.isNullOrEmpty()) {
+            totalRatingCount[0]
+        } else {
+            0
+        }
+    }
+
+    fun getTotal(): Int {
+        var total = 0
+        totalRatingCount.forEach { ratingCount ->
+            total += ratingCount
+        }
+        return total
+    }
 }
+
+data class PoemWithRelations(
+    @Embedded var poem: Poem,
+    @Relation(parentColumn = "userId", entityColumn = "id")
+    var user: User,
+    @Relation(
+        parentColumn = DBConstants.COLUMN_ID_POEM,
+        entityColumn = DBConstants.COLUMN_ID_CATEGORY,
+        associateBy = Junction(PoemCategoryCrossRef::class)
+    )
+    var categories: List<Category>,
+    @Relation(parentColumn = DBConstants.COLUMN_ID_POEM, entityColumn = DBConstants.COLUMN_ID_POEM)
+    var shortReviewList: List<Review>
+
+    //https://medium.com/androiddevelopers/database-relations-with-room-544ab95e4542
+)
+
+
+data class PoemWithUser(
+    @Embedded var poem: Poem,
+    @Relation(parentColumn = "userId", entityColumn = "id")
+    var user: User
+)

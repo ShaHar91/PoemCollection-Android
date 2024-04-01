@@ -1,84 +1,72 @@
 package com.shahar91.poems.ui.home.categories
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
-import be.appwise.core.ui.custom.RecyclerViewEnum
+import be.appwise.emptyRecyclerView.RecyclerViewState
+import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
-import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
-import com.shahar91.poems.ui.base.PoemBaseFragment
+import com.shahar91.poems.ui.base.PoemBaseBindingVMFragment
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
-import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter.CategoryInteractionListener
 
-class CategoryFragment : PoemBaseFragment<CategoryViewModel>() {
-    private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var mDataBinding: FragmentCategoriesBinding
+class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() {
 
-    private val categoryAdapterListener = object : CategoryInteractionListener {
-        override fun onCategoryClicked(category: Category) {
-            findNavController().navigate(
-                CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(category._id,
-                    category.name))
-        }
+    private val categoryAdapter = CategoryAdapter {
+        CategoryFragmentDirections.actionCategoryFragmentToPoemsPerCategoryListFragment(it.id, it.name)
+            .run(findNavController()::navigate)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mDataBinding = DataBindingUtil.inflate<FragmentCategoriesBinding>(inflater, R.layout.fragment_categories,
-            container, false)
-            .apply {
-                lifecycleOwner = viewLifecycleOwner
-                viewModel = ViewModelProvider(this@CategoryFragment).get(CategoryViewModel::class.java)
-                    .apply {
-                        mViewModel = this
-                        setDefaultExceptionHandler(::onError)
-                        getAllCategoriesCr()
-                    }
+    override fun getLayout() = R.layout.fragment_categories
+    override fun getToolbar() = mBinding.mergeToolbar.toolbar
+    override val mViewModel: CategoryViewModel by viewModels { getViewModelFactory() }
+    override fun getViewModelFactory() = CategoryViewModel.FACTORY(MyApp.categoryRepository)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mBinding.run {
+            viewModel = mViewModel.apply {
+                getAllCategories()
             }
+        }
 
         initViews()
-
-        return mDataBinding.root
+        initObservers()
     }
 
     private fun initViews() {
-        categoryAdapter = CategoryAdapter(requireActivity(), categoryAdapterListener)
-
-        mDataBinding.apply {
-            rvCategories.apply {
+        mBinding.run {
+            rvCategories.run {
                 setupRecyclerView(null)
                 emptyStateView = emptyView
                 loadingStateView = loadingView
                 adapter = categoryAdapter
-                stateView = RecyclerViewEnum.LOADING
+                state = RecyclerViewState.LOADING
             }
 
-            srlRefreshCategories.apply {
-                setOnRefreshListener { viewModel?.getAllCategoriesCr() }
-                setColorSchemeResources(R.color.colorWhite)
-                setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
-            }
+            themeSwipeToRefresh(srlRefreshCategories)
+        }
+    }
 
-            viewModel?.categoriesLive?.observe(viewLifecycleOwner, Observer {
-                srlRefreshCategories.isRefreshing = false
-                categoryAdapter.setItems(it)
-            })
+    private fun initObservers() {
+        mViewModel.categoriesLive.observe(viewLifecycleOwner) {
+            categoryAdapter.submitList(it)
+            if (it.isNotEmpty()) {
+                mBinding.rvCategories.state = RecyclerViewState.NORMAL
+            }
         }
     }
 
     override fun onError(throwable: Throwable) {
         super.onError(throwable)
-        mDataBinding.apply {
-            if (rvCategories.stateView == RecyclerViewEnum.LOADING) {
-                rvCategories.stateView = RecyclerViewEnum.EMPTY_STATE
+        mBinding.run {
+            if (rvCategories.state == RecyclerViewState.LOADING) {
+                rvCategories.state = RecyclerViewState.EMPTY
             }
-            srlRefreshCategories.isRefreshing = false
+            mViewModel.setIsRefreshing(false)
         }
     }
 }

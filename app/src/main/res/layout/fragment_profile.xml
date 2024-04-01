@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.shahar91.poems.ui.home.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.profile.ProfileFragment">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleGravity="center_vertical"
+                app:expandedTitleTextAppearance="@style/Material.Toolbar.Transparent.ExpandedTitleAppearance">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/tbProfile"
+                    android:layout_width="match_parent"
+                    style="?attr/toolbarStyle"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@android:color/transparent"
+                    android:elevation="0dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivProfileAvatar"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:src="@color/white_50"
+                        android:layout_marginTop="40dp"
+                        app:glideLoadUrl="@{viewModel.currentUser.pictureSomething}"
+                        app:layout_constraintBottom_toTopOf="@id/tvProfileName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearance="@style/Shape.Circle" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivEditImage"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white_50"
+                        android:padding="2dp"
+                        android:translationX="12dp"
+                        app:contentPadding="5dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintEnd_toEndOf="@id/ivProfileAvatar"
+                        app:layout_constraintTop_toTopOf="@id/ivProfileAvatar"
+                        app:shapeAppearance="@style/Shape.Circle"
+                        app:srcCompat="@drawable/ic_edit"
+                        app:strokeColor="?attr/colorPrimary"
+                        app:strokeWidth="3dp"
+                        app:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tvProfileName"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@{viewModel.currentUser.username}"
+                        android:textColor="@color/white_50"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ivProfileAvatar"
+                        android:layout_marginBottom="24dp"
+                        tools:text="Christiano Bolla" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            android:onClick="@{() -> viewModel.logout()}"
+            android:text="logout"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

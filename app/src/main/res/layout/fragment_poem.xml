@@ -11,25 +11,24 @@
             type="com.shahar91.poems.ui.home.poem.PoemViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.progressindicator.ProgressIndicator
-            android:id="@+id/loadingView"
-            style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="@{viewModel.poem == null ? View.VISIBLE : View.GONE }"
-            tools:visibility="gone" />
+        <include
+            android:id="@+id/mergeToolbar"
+            layout="@layout/toolbar" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/poemLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:background="@color/general_background"
-            android:visibility="@{viewModel.poem == null ? View.GONE : View.VISIBLE }"
+            android:fillViewport="true"
+            android:visibility="@{viewModel.poemWithUser == null ? View.GONE : View.VISIBLE }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            tools:ignore="UnknownIdInLayout"
             tools:visibility="visible">
 
             <LinearLayout
@@ -41,9 +40,9 @@
                 <include
                     android:id="@+id/poemDetail"
                     layout="@layout/reuse_poem_detail"
-                    app:author="@{viewModel.poem.user.username}"
-                    app:poem="@{viewModel.poem.body}"
-                    app:title="@{viewModel.poem.title}" />
+                    app:author="@{viewModel.poemWithUser.user.username}"
+                    app:poem="@{viewModel.poemWithUser.poem.body}"
+                    app:title="@{viewModel.poemWithUser.poem.title}" />
 
                 <com.shahar91.poems.ui.custom.NoReview
                     android:id="@+id/noReview"
@@ -53,7 +52,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginBottom="12dp"
-                    android:visibility="@{viewModel.ownReview == null ? View.VISIBLE : View.GONE }" />
+                    android:visibility="@{viewModel.ownReview.review == null ? View.VISIBLE : View.GONE }" />
 
                 <include
                     android:id="@+id/ownReviewLayout"
@@ -64,10 +63,20 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginBottom="12dp"
-                    android:visibility="@{viewModel.ownReview == null ? View.GONE : View.VISIBLE }"
+                    android:visibility="@{viewModel.ownReview.review == null ? View.GONE : View.VISIBLE }"
+                    app:reviewWithUser="@{viewModel.ownReview}"
                     tools:visibility="gone" />
 
-                <include layout="@layout/list_item_global_rating" />
+                <include
+                    android:id="@+id/globalRating"
+                    layout="@layout/list_item_global_rating"
+                    app:averageRating="@{viewModel.poemWithUser.poem.averageRating}"
+                    app:fiveStarRating="@{viewModel.poemWithUser.poem.getFiveStarRating()}"
+                    app:fourStarRating="@{viewModel.poemWithUser.poem.getFourStarRating()}"
+                    app:oneStarRating="@{viewModel.poemWithUser.poem.getOneStarRating()}"
+                    app:threeStarRating="@{viewModel.poemWithUser.poem.getThreeStarRating()}"
+                    app:totalRating="@{viewModel.poemWithUser.poem.getTotal()}"
+                    app:twoStarRating="@{viewModel.poemWithUser.poem.getTwoStarRating()}" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPoemReviews"
@@ -80,5 +89,5 @@
                     tools:listitem="@layout/list_item_review" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

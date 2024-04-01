@@ -3,47 +3,47 @@ package com.shahar91.poems.ui.home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import be.appwise.core.networking.Networking.isLoggedIn
+import be.appwise.core.ui.base.BaseActivity
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
+import com.shahar91.poems.databinding.ActivityHomeBinding
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
-import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.ui.entry.EntryActivity
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.toolbar.*
+import com.shahar91.poems.utils.HawkUtils
 
-class HomeActivity : PoemBaseActivity<HomeViewModel>() {
-    private lateinit var appBarConfiguration: AppBarConfiguration
+class HomeActivity : BaseActivity() {
+    private lateinit var mBinding: ActivityHomeBinding
+    private lateinit var host: NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // replace the startup 'Splash Theme' with the default AppTheme
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-        setSupportActionBar(toolbar)
 
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+        mBinding.lifecycleOwner = this
 
-        val host = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
-        val navController = host.navController
+        initViews()
+    }
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.categoryFragment))
-
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        fabAddPoem.setOnClickListener {
-            if (isLoggedIn()) {
+    private fun initViews() {
+        mBinding.fabAddPoem.setOnClickListener {
+            if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
                 startAddPoem()
             } else {
                 // start the EntryActivity to make sure the user gets logged in
-                startActivityForResult(EntryActivity.startWithIntent(this),
+                startActivityForResult(EntryActivity.newIntent(this),
                     Constants.REQUEST_CODE_NEW_USER)
+            }
+        }
+
+        host = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment
+        host.navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.profileFragment -> mBinding.fabAddPoem.hide()
+                else -> mBinding.fabAddPoem.show()
             }
         }
     }
@@ -64,16 +64,7 @@ class HomeActivity : PoemBaseActivity<HomeViewModel>() {
                     startAddPoem()
                 }
             }
-            Constants.REQUEST_CODE_ADD_POEM -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    // TODO: a new poem has been added successfully, work with a listener on the BaseActivity or BaseFragment to update the "active" pages
-                }
-            }
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return findNavController(R.id.my_nav_host_fragment).navigateUp(appBarConfiguration)
     }
 }

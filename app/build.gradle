@@ -1,10 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
-
-apply plugin: 'realm-android'
 
 // define build version
 def versionMajor = 0
@@ -13,11 +11,13 @@ def versionPatch = 0
 def versionBuild = 1
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion = 34
     defaultConfig {
         applicationId "com.shahar91.poems"
         minSdkVersion 21
         targetSdkVersion 29
+
+        ndkVersion '22.1.7171670' // Your downloaded NDK version
 
         // generate versionCode and versionName from defined major, minor, versionPatch, versionBuild
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
@@ -49,33 +49,57 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     dataBinding {
         enabled = true
     }
+    namespace 'com.shahar91.poems'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':core')
+//    implementation project(path: ':core')
+    implementation "com.github.appwise-labs.AndroidCore:core:1.4.5"
+    implementation "com.github.appwise-labs.AndroidCore:room:1.4.5"
+    implementation "com.github.appwise-labs.AndroidCore:networking:1.4.5"
+    implementation "com.github.appwise-labs.AndroidCore:emptyRecyclerView:1.4.5"
 
-    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
-
-    kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
 
     implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+//    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+//    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+
+//    constraints {
+//        implementation('androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1') {
+//            because 'insert explanation here'
+//        }
+//    }
+
+    // Room Database
+    implementation "androidx.room:room-runtime:2.6.1"
+    kapt "androidx.room:room-compiler:2.6.1"
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:2.6.1"
+
+    //passport
+    implementation 'com.github.deadpixelsociety.passport:core:2.1.1'
+    implementation 'com.github.deadpixelsociety.passport:design:2.1.1'
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //// Needed for Firebase Stuff
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    implementation 'com.google.firebase:firebase-core:17.2.3'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

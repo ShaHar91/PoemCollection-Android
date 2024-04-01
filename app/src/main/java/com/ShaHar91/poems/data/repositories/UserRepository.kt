@@ -1,28 +1,23 @@
 package com.shahar91.poems.data.repositories
 
-import be.appwise.core.data.base.BaseRepository
-import be.appwise.core.extensions.logging.logd
+import be.appwise.networking.base.BaseRepository
+import com.google.gson.Gson
 import com.shahar91.poems.data.dao.UserDao
 import com.shahar91.poems.data.models.User
-import com.shahar91.poems.networking.ApiCallsManager
-import com.shahar91.poems.utils.HawkUtils.hawkCurrentUserId
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.shahar91.poems.networking.NewApiManagerService
+import com.shahar91.poems.utils.HawkUtils
 
-object UserRepository : BaseRepository() {
-    private val userDao = UserDao(realm)
+class UserRepository(
+    private val userDao: UserDao,
+    private val protectedService: NewApiManagerService
+) : BaseRepository {
     
-    @JvmStatic
-    fun getCurrentUser(onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        addCall(ApiCallsManager.getCurrentUser().observeOn(AndroidSchedulers.mainThread()).subscribe({
-            logd(null,"refreshUserFlow call okay")
+    fun findCurrentUser() = userDao.findFirstById(HawkUtils.hawkCurrentUserId ?: "")
 
-            //Save current user id in Hawk
-            val currentUser = userDao.createOrUpdateObjectFromJson(User::class.java, it.data.toString())
-            hawkCurrentUserId = currentUser._id
-        }, {
-            onError(it)
-        }, {
-            onSuccess()
-        }))
+    suspend fun getCurrentUser() {
+        doCall(protectedService.getCurrentUser()).data?.let {
+            userDao.insert(it.getAsEntity())
+            HawkUtils.hawkCurrentUserId = it._id
+        }
     }
 }

@@ -1,21 +1,34 @@
 package com.shahar91.poems.data.models
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
-import java.util.*
+import android.text.format.DateUtils
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Relation
+import be.appwise.room.BaseEntity
+import com.shahar91.poems.data.DBConstants
+import java.util.Date
 
-open class Review(
+@Entity(tableName = DBConstants.REVIEW_TABLE_NAME)
+data class Review(
     @PrimaryKey
-    var _id: String = "",
+    @ColumnInfo(name = DBConstants.COLUMN_ID_REVIEW)
+    override var id: String = "",
     var text: String = "",
     var rating: Float = 0F,
     var createdAt: Date? = null,
-    var poem: Poem? = null,
-    var user: User? = null) : RealmObject() {
-    companion object {
-        fun createNewReview(review: Review): Review {
-            return Review(review._id, review.text, review.rating, review.createdAt, review.poem,
-                review.user)
-        }
+    var poemId: String = "",
+    var userId: String = ""
+) : BaseEntity {
+
+    fun getRelativeCreatedDate(): String {
+        return DateUtils.getRelativeTimeSpanString(createdAt?.time ?: 0L).toString()
     }
 }
+
+data class ReviewWithUser(
+    @Embedded var review: Review,
+    @Relation(parentColumn = "userId", entityColumn = "id")
+    var user: User
+)

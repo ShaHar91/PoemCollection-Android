@@ -1,94 +1,93 @@
 package com.shahar91.poems.ui.entry.register
 
+import android.app.Activity
 import android.os.Bundle
-import android.util.Patterns
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import be.appwise.core.extensions.fragment.hideKeyboard
 import be.appwise.core.extensions.fragment.snackBar
-import be.appwise.core.extensions.view.setErrorLayout
-import com.shahar91.poems.Constants
+import be.appwise.core.ui.base.BaseBindingVMFragment
 import com.shahar91.poems.R
-import com.shahar91.poems.ui.base.PoemBaseFragment
-import com.shahar91.poems.ui.entry.EntryActivity
-import com.shahar91.poems.ui.entry.EntryListeners
-import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.android.synthetic.main.reuse_entry_social_footer.*
+import com.shahar91.poems.databinding.FragmentRegisterBinding
+import com.shahar91.poems.ui.entry.EntryViewModel
+import com.thedeadpixelsociety.passport.Passport
+import com.thedeadpixelsociety.passport.TextInputLayoutValidator
+import com.thedeadpixelsociety.passport.passport
+import com.thedeadpixelsociety.passport.required
 
-class RegisterFragment : PoemBaseFragment<RegisterViewModel>() {
-    lateinit var listeners: EntryListeners
+class RegisterFragment : BaseBindingVMFragment<FragmentRegisterBinding>() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
-    }
+    override val mViewModel: EntryViewModel by activityViewModels()
+    override fun getLayout() = R.layout.fragment_register
+
+    private lateinit var validation: Passport
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
 
-        btnRegister.setOnClickListener { checkToRegister() }
-        btnLoginFacebook.setOnClickListener { listeners.onFacebookClicked() }
-        btnLoginGoogle.setOnClickListener { listeners.onGoogleClicked() }
-
-        tvLoginOrRegister.setOnClickListener {
-            requireActivity().onBackPressed()
+        mBinding.run {
+            viewModel = mViewModel.apply {
+                resetValues()
+            }
         }
 
-        (requireActivity() as EntryActivity).setHomeUpIcon(R.drawable.ic_navigation_back)
+        initValidation()
+        initViews()
+    }
+
+    private fun initValidation() {
+        validation = passport {
+            Passport.validatorFactory { TextInputLayoutValidator() }
+
+            rules<String>(mBinding.tilUsername) {
+                required(getString(R.string.entry_invalid_username))
+            }
+
+            rules<String>(mBinding.tilEmail) {
+                required(getString(R.string.entry_invalid_email))
+            }
+
+            rules<String>(mBinding.tilPassword) {
+                required(getString(R.string.entry_invalid_password))
+            }
+
+            rules<String>(mBinding.tilReEnterPassword) {
+                required(getString(R.string.entry_invalid_re_enter_password))
+            }
+        }
+    }
+
+    private fun initViews() {
+        mBinding.run {
+            btnRegister.setOnClickListener { checkToRegister() }
+            socialFooter.btnLoginFacebook.setOnClickListener { mViewModel.facebookLoginClicked.postValue(true) }
+            socialFooter.btnLoginGoogle.setOnClickListener { mViewModel.googleLoginClicked.postValue(true) }
+
+            tvLoginOrRegister.setOnClickListener {
+                findNavController().popBackStack()
+            }
+        }
     }
 
     private fun checkToRegister() {
-        // Reset all input fields
-        tilEmail.setErrorLayout(null)
-        tilUsername.setErrorLayout(null)
-        tilPassword.setErrorLayout(null)
-        tilReEnterPassword.setErrorLayout(null)
+        if (validation.validate(requireActivity())) {
+            hideKeyboard()
 
-        var isValid = true
-        val usernameText = tilUsername.editText?.text?.toString() ?: ""
-        val emailText = tilEmail.editText?.text?.toString() ?: ""
-        val passwordText = tilPassword.editText?.text?.toString() ?: ""
-        val reEnterPasswordText = tilReEnterPassword.editText?.text?.toString() ?: ""
-
-        if (usernameText.isBlank()) {
-            tilUsername.setErrorLayout(getString(R.string.entry_invalid_username))
-            isValid = false
-        }
-
-        if (mViewModel.checkDataValidity(emailText, Patterns.EMAIL_ADDRESS)) {
-            tilEmail.setErrorLayout(getString(R.string.entry_invalid_email))
-            isValid = false
-        }
-
-        if (mViewModel.checkDataValidity(passwordText, Constants.PASSWORD_PATTERN)) {
-            tilPassword.setErrorLayout(getString(R.string.entry_invalid_password))
-            isValid = false
-        }
-
-        if (passwordText != reEnterPasswordText) {
-            tilReEnterPassword.setErrorLayout(getString(R.string.entry_invalid_re_enter_password))
-            isValid = false
-        }
-
-        if (isValid) {
-            mViewModel.registerUser(usernameText, emailText, passwordText,
-                {
-                    listeners.onRegisterSuccessful()
-                }, {
-                    it.message?.let { message -> snackBar(message) }
-                })
+            mViewModel.registerUser(
+                mViewModel.username.value!!,
+                mViewModel.email.value!!,
+                mViewModel.password.value!!
+            ) {
+                requireActivity().run {
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+            }
         }
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(showBackIcon: Boolean) =
-            RegisterFragment().apply {
-                arguments = Bundle().apply {
-                    putBoolean(SHOW_BACK_ICON, showBackIcon)
-                }
-            }
+    override fun onError(throwable: Throwable) {
+        super.onError(throwable)
+        snackBar(throwable.message ?: "Something went wrong.")
     }
 }

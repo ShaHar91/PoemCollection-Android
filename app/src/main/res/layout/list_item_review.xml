@@ -4,56 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="review"
-            type="com.shahar91.poems.data.models.Review" />
+            name="reviewWithUser"
+            type="com.shahar91.poems.data.models.ReviewWithUser" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
+        android:layout_marginHorizontal="14dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="14dp"
-        android:orientation="vertical"
-        app:cardBackgroundColor="@color/colorWhite">
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp">
+            android:layout_margin="12dp"
+            android:orientation="vertical">
 
             <com.shahar91.poems.ui.custom.ReviewHeader
                 android:id="@+id/rhUserHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:rating="@{reviewWithUser.review.rating}"
+                app:reviewTimestamp="@{reviewWithUser.review.getRelativeCreatedDate()}"
+                app:userName="@{reviewWithUser.user.username}"
+                app:imageUrl="@{reviewWithUser.user.pictureSomething}"/>
 
             <TextView
                 android:id="@+id/tvReviewBody"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{review.text}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rhUserHeader"
+                android:text="@{reviewWithUser.review.text}"
                 tools:text="No idea. Just do what I do: hold tight and pretend it's a plan. Yes, well, it's a brilliant noise. I love that noise. There are fixed points throughout time where things must stay exactly the way they are. This ..." />
+        </LinearLayout>
 
-            <ImageView
-                android:id="@+id/ivReviewMenu"
-                android:layout_width="28dp"
-                android:layout_height="34dp"
-                android:background="?android:selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="0dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_overflow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/ivReviewMenu"
+            android:layout_width="28dp"
+            android:layout_height="34dp"
+            android:layout_gravity="end|top"
+            android:padding="0dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_overflow" />
     </com.google.android.material.card.MaterialCardView>
 </layout>

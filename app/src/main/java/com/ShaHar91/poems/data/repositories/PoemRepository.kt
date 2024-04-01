@@ -1,69 +1,70 @@
 package com.shahar91.poems.data.repositories
 
-import be.appwise.core.data.base.BaseRepository
-import com.shahar91.poems.data.dao.PoemDao
-import com.shahar91.poems.data.models.Poem
-import com.shahar91.poems.networking.ApiCallsManager
+import androidx.room.withTransaction
+import be.appwise.networking.base.BaseRepository
+import com.shahar91.poems.data.database.PoemDatabase
+import com.shahar91.poems.data.models.PoemCategoryCrossRef
+import com.shahar91.poems.networking.NewApiManagerService
+import com.shahar91.poems.networking.models.PoemResponse
 import com.shahar91.poems.utils.HawkUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
 
-object PoemRepository : BaseRepository() {
-    private val poemDao = PoemDao(realm)
+class PoemRepository(
+    private val poemDatabase: PoemDatabase,
+//    private val userRepository: UserRepository,
+//    private val categoryRepository: CategoryRepository,
+//    private val reviewRepository: ReviewRepository,
+    private val protectedService: NewApiManagerService,
+    private val unProtectedService: NewApiManagerService
+) : BaseRepository {
+    private val poemDao = poemDatabase.poemDao()
+    private val categoryDao = poemDatabase.categoryDao()
+    private val userDao = poemDatabase.userDao()
+    private val reviewDao = poemDatabase.reviewDao()
+    private val poemCategoryCrossRefDao = poemDatabase.poemCategoryCrossRefDao()
 
-    @JvmStatic
-    fun getPoems(categoryId: String, onSuccess: (List<Poem>) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(
-            ApiCallsManager.getAllPoems(categoryId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    it.data?.let { data ->
-                        poemDao.createOrUpdateAllFromJson(Poem::class.java, data.toString())
-                    }
-                }, {
-                    onError(it)
-                }, {
-                    onSuccess(poemDao.findAllPoemsByCategoryId(categoryId))
-                }))
+    fun findAllPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
+    fun findPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
+
+    suspend fun getPoemsForCategory(categoryId: String) {
+        doCall(unProtectedService.getPoemsForCategoryId(categoryId)).data?.let { poemResponseList ->
+            poemDatabase.withTransaction {
+                poemResponseList.forEach {
+                    //TODO: delete other poems/reviews/poemCategoryCrossRef that are saved in Room but did not came with the Response
+                    savePoem(it)
+                }
+            }
+        }
     }
 
-    @JvmStatic
-    fun getPoemById(poemId: String, onSuccess: (Poem?) -> Unit, onError: (Throwable) -> Unit) {
-        addCall(
-            ApiCallsManager.getPoemById(poemId, HawkUtils.hawkCurrentUserId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    it.data?.let { data ->
-                        poemDao.copyOrUpdate(data)
-                    }
-                }, {
-                    onError(it)
-                }, {
-                    onSuccess(poemDao.findPoemById(poemId))
-                }))
+    suspend fun getPoemById(poemId: String) {
+        doCall(unProtectedService.getPoemById(poemId, HawkUtils.hawkCurrentUserId)).data?.let { poemResponse ->
+            poemDatabase.withTransaction {
+                savePoem(poemResponse)
+            }
+        }
     }
 
-    @JvmStatic
-    fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>, onSuccess: () -> Unit,
-        onError: (Throwable) -> Unit) {
-        addCall(
-            ApiCallsManager.createPoem(poemTitle, poemBody, categoryList)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    it.data?.let { data ->
-                        poemDao.copyOrUpdate(data)
-                    }
-                }, {
-                    onError(it)
-                }, {
-                    onSuccess()
-                }))
+    suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) {
+        doCall(protectedService.createPoem(poemTitle, poemBody, categoryList)).data?.let { poemResponse ->
+            poemDatabase.withTransaction {
+                savePoem(poemResponse)
+            }
+        }
     }
 
-    fun getPoemsForCategoryLive(categoryId: String) = poemDao.getPoemsForCategoryLive(categoryId)
+    suspend fun savePoem(poemResponse: PoemResponse) {
+        poemDatabase.withTransaction {
+            poemDao.insert(poemResponse.getAsEntity())
+            userDao.insert(poemResponse.getUserAsEntity())
+            categoryDao.insertMany(poemResponse.getCategoriesAsEntities())
+            reviewDao.insertMany(poemResponse.getReviewsAsEntities())
+            userDao.insertMany(poemResponse.shortReviewList.map { it.getUserAsEntity() })
 
-    suspend fun getPoemsForCategoryCr(categoryId: String) {
-        ApiCallsManager.getPoemsForCategoryCr(categoryId)?.data?.let {
-            poemDao.createOrUpdateAllFromJson(Poem::class.java, it.toString())
+            val list = poemResponse.categories.map {
+                PoemCategoryCrossRef(poemResponse._id, it._id)
+            }
+
+            poemCategoryCrossRefDao.insertManyPoemCategoryCrossRef(list)
         }
     }
 }

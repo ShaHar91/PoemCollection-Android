@@ -1,24 +1,23 @@
 package com.shahar91.poems.ui.add
 
-import be.appwise.core.extensions.logging.loge
+import androidx.lifecycle.MutableLiveData
+import com.shahar91.poems.MyApp
 import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.data.repositories.CategoryRepository
-import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
 class AddPoemViewModel : PoemBaseViewModel() {
     var checkedCategories: List<Category> = emptyList()
+    var categoriesLive = MyApp.categoryRepository.findAllLive()
 
-    fun getAllCategories(onSuccess: (List<Category>) -> Unit) {
-        CategoryRepository.getCategories({
-            onSuccess(it)
-        }, {
-            loge(null, it, "")
-        })
+    val poemTitle = MutableLiveData("")
+    val poemBody = MutableLiveData("")
+
+    fun getAllCategoriesCr() = launchAndLoad {
+        MyApp.categoryRepository.getCategories()
     }
 
-    fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit,
-        onError: (Throwable) -> Unit) {
-        PoemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it._id }, onSuccess, onError)
+    fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit) = launchAndLoad {
+        MyApp.poemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it.id })
+        onSuccess()
     }
 }

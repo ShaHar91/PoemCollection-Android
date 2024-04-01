@@ -8,28 +8,21 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.Spanned
 import android.text.style.ImageSpan
-import android.widget.ArrayAdapter
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import be.appwise.core.extensions.activity.snackBar
-import be.appwise.core.extensions.view.optionalCallbacks
-import be.appwise.core.extensions.view.setErrorLayout
 import com.google.android.material.chip.ChipDrawable
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Category
+import com.shahar91.poems.databinding.ActivityAddPoemBinding
 import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.utils.DialogFactory
-import kotlinx.android.synthetic.main.activity_add_poem.*
-import kotlinx.android.synthetic.main.toolbar.*
+import com.thedeadpixelsociety.passport.Passport
+import com.thedeadpixelsociety.passport.TextInputLayoutValidator
+import com.thedeadpixelsociety.passport.passport
+import com.thedeadpixelsociety.passport.required
 
-class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
-    lateinit var adapter: ArrayAdapter<String>
-
+class AddPoemActivity : PoemBaseActivity<ActivityAddPoemBinding>() {
     companion object {
-        @JvmStatic
-        fun start(context: Context) {
-            context.startActivity(Intent(context, AddPoemActivity::class.java))
-        }
 
         @JvmStatic
         fun startWithIntent(context: Context): Intent {
@@ -37,32 +30,59 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
         }
     }
 
+    override val mViewModel: AddPoemViewModel by viewModels()
+    override fun getLayout() = R.layout.activity_add_poem
+
+    private lateinit var validation: Passport
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_poem)
 
-        viewModel = ViewModelProvider(this).get(AddPoemViewModel::class.java)
+        mBinding.viewModel = mViewModel.apply {
+            mViewModel.getAllCategoriesCr()
+        }
 
+        initValidation()
         initViews()
+        initObservers()
+    }
+
+    private fun initValidation() {
+        validation = passport {
+            Passport.validatorFactory { TextInputLayoutValidator() }
+
+            rules<String>(mBinding.tilPoemTitle) {
+                required(getString(R.string.add_poem_required_title))
+            }
+
+            rules<String>(mBinding.tilPoemBody) {
+                required(getString(R.string.add_poem_required_title))
+            }
+
+            rules<String>(mBinding.tilPoemCategory) {
+                required("At least 1 Category should be added")
+            }
+        }
     }
 
     private fun initViews() {
-        configureToolbar(toolbar, true, R.string.add_poem_toolbar_title, R.drawable.ic_close)
-        toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorWhite), PorterDuff.Mode.SRC_IN)
+        configureToolbar(mBinding.activityToolbar.toolbar, R.string.add_poem_toolbar_title, true, R.drawable.ic_close)
+        mBinding.activityToolbar.toolbar.navigationIcon?.colorFilter = PorterDuffColorFilter(
+            ContextCompat.getColor(this, R.color.colorWhite),
+            PorterDuff.Mode.SRC_IN
+        )
 
-        tilPoemTitle.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
-        tilPoemBody.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
-        tilPoemCategory.editText?.optionalCallbacks(beforeTextChanged = { _, _, _, _ -> resetErrorLayouts() })
-
-        btnSavePoem.setOnClickListener {
+        mBinding.btnSavePoem.setOnClickListener {
             checkToSavePoem()
         }
+    }
 
-        viewModel.getAllCategories { categories ->
-            tilPoemCategory.editText?.setOnClickListener {
-                DialogFactory.showDialogToAddCategories(this, categories, viewModel.checkedCategories) {
-                    viewModel.checkedCategories = it
-                    atvCategory.text = null
+    private fun initObservers() {
+        mViewModel.categoriesLive.observe(this) { categories ->
+            mBinding.tilPoemCategory.editText?.setOnClickListener {
+                DialogFactory.showDialogToAddCategories(this, categories, mViewModel.checkedCategories) {
+                    mViewModel.checkedCategories = it
+                    mBinding.atvCategory.text = null
                     it.forEach { category -> addChip(category) }
                 }
             }
@@ -71,8 +91,8 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
 
     private fun addChip(category: Category) {
         val span = ImageSpan(createChip(category))
-        atvCategory.text = atvCategory.text?.append("${category.name}, ")
-        val text = atvCategory.text
+        mBinding.atvCategory.text = mBinding.atvCategory.text?.append("${category.name}, ")
+        val text = mBinding.atvCategory.text
         text?.setSpan(span, text.length - (category.name.length + 2), text.length - 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
     }
 
@@ -86,42 +106,12 @@ class AddPoemActivity : PoemBaseActivity<AddPoemViewModel>() {
         return chip
     }
 
-    private fun resetErrorLayouts() {
-        tilPoemTitle.setErrorLayout(null)
-        tilPoemBody.setErrorLayout(null)
-        tilPoemCategory.setErrorLayout(null)
-    }
-
-    //TODO: when poem is added, refresh the pages the user is on...
     private fun checkToSavePoem() {
-        resetErrorLayouts()
 
-        var isValid = true
-        val poemTitle = tilPoemTitle.editText?.text?.toString() ?: ""
-        val poemBody = tilPoemBody.editText?.text?.toString() ?: ""
-        val poemCategories = tilPoemCategory.editText?.text?.toString() ?: ""
-
-        if (poemTitle.isBlank()) {
-            tilPoemTitle.setErrorLayout(getString(R.string.add_poem_required_title))
-            isValid = false
-        }
-
-        if (poemBody.isBlank()) {
-            tilPoemBody.setErrorLayout(getString(R.string.add_poem_required_body))
-            isValid = false
-        }
-
-        if (poemCategories.isBlank()) {
-            tilPoemCategory.setErrorLayout("Add at least one Category")
-            isValid = false
-        }
-
-        if (isValid) {
-            viewModel.addNewPoem(poemTitle, poemBody, {
+        if (validation.validate(this)) {
+            mViewModel.addNewPoem(mViewModel.poemTitle.value!!, mViewModel.poemBody.value!!) {
                 finishThisActivity(Activity.RESULT_OK)
-            }, {
-                snackBar(it.message ?: "")
-            })
+            }
         }
     }
 }

@@ -13,21 +13,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/general_background"
-        android:gravity="center"
-        android:orientation="vertical"
         tools:context=".ui.home.poemsPerCategoryList.PoemsPerCategoryListFragment">
 
-        <com.google.android.material.progressindicator.ProgressIndicator
+        <include
+            android:id="@+id/mergeToolbar"
+            layout="@layout/toolbar" />
+
+        <include
             android:id="@+id/loadingView"
-            style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Indeterminate"
+            layout="@layout/reuse_circular_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/srlRefreshPoemsPerCategory"
+            app:layout_constraintEnd_toEndOf="@id/srlRefreshPoemsPerCategory"
+            app:layout_constraintStart_toStartOf="@id/srlRefreshPoemsPerCategory"
+            app:layout_constraintTop_toTopOf="@id/srlRefreshPoemsPerCategory" />
 
         <TextView
             android:id="@+id/emptyView"
@@ -35,21 +35,22 @@
             android:layout_height="wrap_content"
             android:text="No poems could be loaded for this category"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/srlRefreshPoemsPerCategory"
+            app:layout_constraintEnd_toEndOf="@id/srlRefreshPoemsPerCategory"
+            app:layout_constraintStart_toStartOf="@id/srlRefreshPoemsPerCategory"
+            app:layout_constraintTop_toTopOf="@id/srlRefreshPoemsPerCategory" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srlRefreshPoemsPerCategory"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:onRefreshListener="@{() -> viewModel.getAllPoemsForCategoryId()}"
+            app:refreshing="@{viewModel.isRefreshing}"
+            tools:ignore="UnknownIdInLayout">
 
-            <be.appwise.core.ui.custom.RecyclerViewEmptyLoadingSupport
+            <be.appwise.emptyRecyclerView.ViewStateRecyclerView
                 android:id="@+id/rvPoemsPerCategory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

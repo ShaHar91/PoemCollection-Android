@@ -13,8 +13,26 @@
 
     <color name="entry_divider_line">#979797</color>
 
+    <color name="blue_700">#0288D1</color>
+    <color name="blue_800">#0277BD</color>
+
+    <color name="red_200">#cf6679</color> <!--Color error (dark)-->
+    <color name="red_600">#b00020</color> <!--Color error (light)-->
+
+    <color name="not_quite_white">#F6FFFE</color>
+
+    <!--Color surface (light), color on error (light), -->
+    <!--color on surface (dark), color on surface (dark)-->
+    <color name="white_50">#ffffff</color>
+
+    <color name="black_800">#121212</color> <!--Color surface (dark)-->
+    <!--Color on secondary (light), color on background (light),-->
+    <!--color on surface (light)-->
+    <color name="black_900">#000000</color>
+
     <color name="buttonDisableOverlay">#99ffffff</color>
     <color name="buttonPressOverlay">#10000000</color>
+
     <color name="colorAmber_100">#FFECB3</color>
     <color name="colorAmber_200">#FFE082</color>
     <color name="colorAmber_300">#FFD54F</color>

@@ -1,25 +1,20 @@
 package com.shahar91.poems.data.dao
 
-import be.appwise.core.data.base.BaseDao
-import be.appwise.core.data.realmLiveData.RealmResultsLiveData
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Query
+import be.appwise.room.BaseRoomDao
+import com.shahar91.poems.data.DBConstants
 import com.shahar91.poems.data.models.Poem
-import com.shahar91.poems.data.models.PoemFields
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
+import com.shahar91.poems.data.models.PoemWithUser
 
-class PoemDao(db: Realm) : BaseDao<Poem>(db) {
-    private fun where(): RealmQuery<Poem> {
-        return db.where()
-    }
+@Dao
+abstract class PoemDao : BaseRoomDao<Poem>(DBConstants.POEM_TABLE_NAME) {
+    override val idColumnInfo = DBConstants.COLUMN_ID_POEM
 
-    fun findAllPoemsByCategoryId(categoryId: String):  List<Poem>{
-        return where().equalTo(PoemFields.CATEGORIES._ID, categoryId).findAll()
-    }
+    @Query("SELECT * FROM ${DBConstants.POEM_TABLE_NAME}")
+    abstract fun getPoemsForCategoryLive(): LiveData<List<Poem>>
 
-    fun findPoemById(poemId: String): Poem? {
-        return where().equalTo(PoemFields._ID, poemId).findFirst()
-    }
-
-    fun getPoemsForCategoryLive(categoryId: String) = RealmResultsLiveData(where().equalTo(PoemFields.CATEGORIES._ID, categoryId).findAllAsync())
+    @Query("SELECT * FROM ${DBConstants.POEM_TABLE_NAME} WHERE ${DBConstants.COLUMN_ID_POEM} = :poemId")
+    abstract fun getPoemByIdLive(poemId: String): LiveData<PoemWithUser>
 }

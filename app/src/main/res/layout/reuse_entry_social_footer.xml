@@ -1,73 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <View
-        android:id="@+id/viewDividerStart"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:visibility="gone"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/entry_divider_line"
-        app:layout_constraintBottom_toBottomOf="@id/tvDividerContent"
-        app:layout_constraintEnd_toStartOf="@id/tvDividerContent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvDividerContent" />
+    <data>
 
-    <TextView
-        android:id="@+id/tvDividerContent"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/common_or"
-        app:layout_constraintEnd_toStartOf="@id/viewDividerEnd"
-        app:layout_constraintStart_toEndOf="@id/viewDividerStart"
-        app:layout_constraintTop_toBottomOf="@+id/tvLoginOrRegister" />
+    </data>
 
-    <View
-        android:id="@+id/viewDividerEnd"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:visibility="gone"
-        android:layout_marginEnd="16dp"
-        android:background="@color/entry_divider_line"
-        app:layout_constraintBottom_toBottomOf="@id/tvDividerContent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvDividerContent"
-        app:layout_constraintTop_toTopOf="@id/tvDividerContent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLoginGoogle"
-        style="@style/Widget.MaterialComponents.Button.General"
-        android:visibility="gone"
+    <merge
         android:layout_width="match_parent"
-        android:layout_height="@dimen/entry_button_height"
-        android:layout_marginTop="12dp"
-        android:text="@string/common_google"
-        android:textColor="@color/colorBlack_1000"
-        app:backgroundTint="@color/colorWhite"
-        app:icon="@drawable/ic_google"
-        app:iconPadding="0dp"
-        app:iconTintMode="multiply"
-        app:layout_constraintTop_toBottomOf="@id/tvDividerContent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLoginFacebook"
-        style="@style/Widget.MaterialComponents.Button.General"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/entry_button_height"
-        android:visibility="gone"
-        android:layout_marginTop="8dp"
-        android:text="@string/common_facebook"
-        app:backgroundTint="#4868AD"
-        app:icon="@drawable/ic_facebook"
-        app:layout_constraintTop_toBottomOf="@id/btnLoginGoogle" />
-</merge>
+        <View
+            android:id="@+id/viewDividerStart"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="@color/entry_divider_line"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tvDividerContent"
+            app:layout_constraintEnd_toStartOf="@id/tvDividerContent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvDividerContent" />
+
+        <TextView
+            android:id="@+id/tvDividerContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/common_or"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/viewDividerEnd"
+            app:layout_constraintStart_toEndOf="@id/viewDividerStart"
+            app:layout_constraintTop_toBottomOf="@+id/tvLoginOrRegister" />
+
+        <View
+            android:id="@+id/viewDividerEnd"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="@color/entry_divider_line"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tvDividerContent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvDividerContent"
+            app:layout_constraintTop_toTopOf="@id/tvDividerContent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLoginGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/common_google"
+            android:textColor="@color/colorBlack_1000"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorWhite"
+            app:icon="@drawable/ic_google"
+            app:iconPadding="0dp"
+            app:iconTintMode="multiply"
+            app:layout_constraintTop_toBottomOf="@id/tvDividerContent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLoginFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/common_facebook"
+            android:visibility="gone"
+            app:backgroundTint="#4868AD"
+            app:icon="@drawable/ic_facebook"
+            app:layout_constraintTop_toBottomOf="@id/btnLoginGoogle" />
+    </merge>
+</layout>
