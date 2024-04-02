@@ -2,7 +2,7 @@ package com.shahar91.poems.ui.home.poemsPerCategoryList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.shahar91.poems.data.repositories.IPoemRepository
+import com.shahar91.poems.domain.repository.IPoemRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
 class PoemsPerCategoryListViewModel(

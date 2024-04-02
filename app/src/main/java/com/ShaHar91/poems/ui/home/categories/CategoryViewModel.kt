@@ -2,7 +2,7 @@ package com.shahar91.poems.ui.home.categories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.shahar91.poems.data.repositories.ICategoryRepository
+import com.shahar91.poems.domain.repository.ICategoryRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
 class CategoryViewModel(
@@ -22,7 +22,7 @@ class CategoryViewModel(
     }
 
     fun getAllCategories() = launchAndLoad {
-        categoryRepository.getCategories()
+        categoryRepository.fetchCategories()
         setIsRefreshing(false)
     }
 }

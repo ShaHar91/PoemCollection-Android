@@ -9,8 +9,8 @@ import be.appwise.core.extensions.view.optionalCallbacks
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.shahar91.poems.R
-import com.shahar91.poems.data.models.Category
-import com.shahar91.poems.data.models.Review
+import com.shahar91.poems.domain.model.Category
+import com.shahar91.poems.domain.model.Review
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 
 object DialogFactory {
@@ -20,24 +20,30 @@ object DialogFactory {
             .setTitle(title)
             .setMessage(body)
             .setPositiveButton(android.R.string.ok) { _, _ -> ok() }
-            .setNegativeButton(android.R.string.cancel) { _, _ -> cancel()}
+            .setNegativeButton(android.R.string.cancel) { _, _ -> cancel() }
             .show()
     }
 
     @JvmStatic
-    fun showDialogToEditReview(activity: Activity, review: Review,
-        saveReviewCallback: (reviewId: String?, reviewText: String, rating: Float) -> Unit) {
+    fun showDialogToEditReview(
+        activity: Activity, review: Review,
+        saveReviewCallback: (reviewId: String?, reviewText: String, rating: Float) -> Unit
+    ) {
         showDialogToAddOrEditReview(activity, review = review, saveReviewCallback = saveReviewCallback)
     }
 
     @JvmStatic
-    fun showDialogToAddReview(activity: Activity, rating: Float,
-        saveReviewCallback: (reviewId: String?, reviewText: String, rating: Float) -> Unit) {
+    fun showDialogToAddReview(
+        activity: Activity, rating: Float,
+        saveReviewCallback: (reviewId: String?, reviewText: String, rating: Float) -> Unit
+    ) {
         showDialogToAddOrEditReview(activity, rating = rating, saveReviewCallback = saveReviewCallback)
     }
 
-    private fun showDialogToAddOrEditReview(activity: Activity, review: Review? = null, rating: Float? = null,
-        saveReviewCallback: (reviewId: String?, reviewText: String, rating: Float) -> Unit) {
+    private fun showDialogToAddOrEditReview(
+        activity: Activity, review: Review? = null, rating: Float? = null,
+        saveReviewCallback: (reviewId: String?, reviewText: String, rating: Float) -> Unit
+    ) {
         // inflate custom view
         val inflater: LayoutInflater = activity.layoutInflater
         val dialogView: View = inflater.inflate(R.layout.custom_dialog_add_review, null)
@@ -53,8 +59,11 @@ object DialogFactory {
         // instantiate the dialog
         val dialog = MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialog_Review)
             .setView(dialogView)
-            .setTitle(if (review != null) activity.getString(R.string.dialog_review_title_edit) else activity.getString(
-                R.string.dialog_review_title_create))
+            .setTitle(
+                if (review != null) activity.getString(R.string.dialog_review_title_edit) else activity.getString(
+                    R.string.dialog_review_title_create
+                )
+            )
             .setCancelable(false)
             .setPositiveButton(activity.getString(R.string.common_ok), null)
             .setNegativeButton(activity.getString(R.string.common_cancel), null)
@@ -70,7 +79,8 @@ object DialogFactory {
 
                 // No need for to make a call to the backend when both new values are unchanged
                 if (review != null && newReviewText == review.text && dialogRatingBar.rating.equals(
-                        review.rating)
+                        review.rating
+                    )
                 ) {
                     dialog.dismiss()
                     return@setOnClickListener
@@ -96,8 +106,10 @@ object DialogFactory {
     }
 
     @JvmStatic
-    fun showDialogToAddCategories(activity: Activity, categories: List<Category>, checkedItems: List<Category>,
-        onResult: (resultItems: List<Category>) -> Unit) {
+    fun showDialogToAddCategories(
+        activity: Activity, categories: List<Category>, checkedItems: List<Category>,
+        onResult: (resultItems: List<Category>) -> Unit
+    ) {
         var resultItems = checkedItems
 
         // instantiate the dialog

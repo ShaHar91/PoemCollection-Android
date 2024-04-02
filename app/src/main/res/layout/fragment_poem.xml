@@ -25,7 +25,7 @@
             android:layout_height="0dp"
             android:background="@color/general_background"
             android:fillViewport="true"
-            android:visibility="@{viewModel.poemWithUser == null ? View.GONE : View.VISIBLE }"
+            goneUnless="@{viewModel.poemWithUser != null}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             tools:ignore="UnknownIdInLayout"
@@ -52,7 +52,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginBottom="12dp"
-                    android:visibility="@{viewModel.ownReview.review == null ? View.VISIBLE : View.GONE }" />
+                    app:goneUnless="@{viewModel.ownReview == null}" />
 
                 <include
                     android:id="@+id/ownReviewLayout"
@@ -63,20 +63,20 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginBottom="12dp"
-                    android:visibility="@{viewModel.ownReview.review == null ? View.GONE : View.VISIBLE }"
-                    app:reviewWithUser="@{viewModel.ownReview}"
+                    app:goneUnless="@{viewModel.ownReview != null}"
+                    app:review="@{viewModel.ownReview}"
                     tools:visibility="gone" />
 
                 <include
                     android:id="@+id/globalRating"
                     layout="@layout/list_item_global_rating"
                     app:averageRating="@{viewModel.poemWithUser.poem.averageRating}"
-                    app:fiveStarRating="@{viewModel.poemWithUser.poem.getFiveStarRating()}"
-                    app:fourStarRating="@{viewModel.poemWithUser.poem.getFourStarRating()}"
-                    app:oneStarRating="@{viewModel.poemWithUser.poem.getOneStarRating()}"
-                    app:threeStarRating="@{viewModel.poemWithUser.poem.getThreeStarRating()}"
-                    app:totalRating="@{viewModel.poemWithUser.poem.getTotal()}"
-                    app:twoStarRating="@{viewModel.poemWithUser.poem.getTwoStarRating()}" />
+                    app:fiveStarRating="@{viewModel.poemWithUser.poem.fiveStarRating}"
+                    app:fourStarRating="@{viewModel.poemWithUser.poem.fourStarRating}"
+                    app:oneStarRating="@{viewModel.poemWithUser.poem.oneStarRating}"
+                    app:threeStarRating="@{viewModel.poemWithUser.poem.threeStarRating}"
+                    app:totalRating="@{viewModel.poemWithUser.poem.total}"
+                    app:twoStarRating="@{viewModel.poemWithUser.poem.twoStarRating}" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPoemReviews"

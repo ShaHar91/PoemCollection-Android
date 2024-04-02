@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="reviewWithUser"
-            type="com.shahar91.poems.data.models.ReviewWithUser" />
+            name="review"
+            type="com.shahar91.poems.domain.model.Review" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -28,17 +28,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:rating="@{reviewWithUser.review.rating}"
-                app:reviewTimestamp="@{reviewWithUser.review.getRelativeCreatedDate()}"
-                app:userName="@{reviewWithUser.user.username}"
-                app:imageUrl="@{reviewWithUser.user.pictureSomething}"/>
+                app:rating="@{review.rating}"
+                app:reviewTimestamp="@{review.getRelativeCreatedDate()}"
+                app:userName="@{review.user.username}"
+                app:imageUrl="@{review.user.pictureSomething}"/>
 
             <TextView
                 android:id="@+id/tvReviewBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{reviewWithUser.review.text}"
+                android:text="@{review.text}"
                 tools:text="No idea. Just do what I do: hold tight and pretend it's a plan. Yes, well, it's a brilliant noise. I love that noise. There are fixed points throughout time where things must stay exactly the way they are. This ..." />
         </LinearLayout>
 
@@ -46,6 +46,7 @@
             android:id="@+id/ivReviewMenu"
             android:layout_width="28dp"
             android:layout_height="34dp"
+            android:background="?selectableItemBackgroundBorderless"
             android:layout_gravity="end|top"
             android:padding="0dp"
             android:scaleType="center"

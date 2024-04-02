@@ -1,34 +1,17 @@
 package com.shahar91.poems.data.repositories
 
-import androidx.lifecycle.LiveData
-import androidx.room.withTransaction
 import be.appwise.networking.base.BaseRepository
-import com.shahar91.poems.data.dao.CategoryDao
-import com.shahar91.poems.data.dao.PoemCategoryCrossRefDao
-import com.shahar91.poems.data.dao.PoemDao
-import com.shahar91.poems.data.dao.ReviewDao
-import com.shahar91.poems.data.dao.UserDao
-import com.shahar91.poems.data.database.PoemDatabase
-import com.shahar91.poems.data.database.TransactionProvider
-import com.shahar91.poems.data.models.CategoryWithPoems
-import com.shahar91.poems.data.models.PoemCategoryCrossRef
-import com.shahar91.poems.data.models.PoemWithUser
-import com.shahar91.poems.networking.models.PoemResponse
-import com.shahar91.poems.networking.services.PoemService
+import com.shahar91.poems.data.local.TransactionProvider
+import com.shahar91.poems.data.local.dao.CategoryDao
+import com.shahar91.poems.data.local.dao.PoemCategoryCrossRefDao
+import com.shahar91.poems.data.local.dao.PoemDao
+import com.shahar91.poems.data.local.dao.ReviewDao
+import com.shahar91.poems.data.local.dao.UserDao
+import com.shahar91.poems.data.local.entities.PoemCategoryCrossRef
+import com.shahar91.poems.data.remote.models.PoemResponse
+import com.shahar91.poems.data.remote.services.PoemService
+import com.shahar91.poems.domain.repository.IPoemRepository
 import com.shahar91.poems.utils.HawkManager
-
-interface IPoemRepository {
-    fun findAllPoemsForCategoryLive(categoryId: String): LiveData<CategoryWithPoems>
-    fun findPoemByIdLive(poemId: String): LiveData<PoemWithUser>
-
-    suspend fun getPoemsForCategory(categoryId: String)
-
-    suspend fun getPoemById(poemId: String)
-
-    suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>)
-
-    suspend fun savePoem(poemResponse: PoemResponse)
-}
 
 class PoemRepository(
     private val poemDao: PoemDao,

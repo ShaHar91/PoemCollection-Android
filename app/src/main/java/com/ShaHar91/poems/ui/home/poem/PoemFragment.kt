@@ -10,8 +10,8 @@ import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
-import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.databinding.FragmentPoemBinding
+import com.shahar91.poems.domain.model.Review
 import com.shahar91.poems.ui.base.PoemBaseBindingVMFragment
 import com.shahar91.poems.ui.entry.EntryActivity.Companion.newIntent
 import com.shahar91.poems.ui.home.poem.adapter.PoemReviewsAdapter
@@ -48,7 +48,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
                 if (mViewModel.ownReview.value != null) {
                     showDialogOkCancel(requireActivity(), "Review already exists",
                         "You already have an existing review for this poem, do you want to edit the previous one?", {
-                            mViewModel.ownReview.value?.review?.let { showEditReviewDialog(it) }
+                            mViewModel.ownReview.value?.let { showEditReviewDialog(it) }
                         }, {
                             mViewModel.resetRating()
                         })
@@ -72,13 +72,13 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
                             R.id.review_edit -> {
-                                mViewModel.ownReview.value?.review?.let { review ->
+                                mViewModel.ownReview.value?.let { review ->
                                     showEditReviewDialog(review)
                                 }
                             }
 
                             R.id.review_delete -> {
-                                mViewModel.ownReview.value?.review?.let { review ->
+                                mViewModel.ownReview.value?.let { review ->
                                     mViewModel.deleteReview(review.id)
                                 }
                             }

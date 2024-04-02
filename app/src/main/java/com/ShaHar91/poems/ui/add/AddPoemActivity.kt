@@ -11,8 +11,8 @@ import android.text.style.ImageSpan
 import androidx.core.content.ContextCompat
 import com.google.android.material.chip.ChipDrawable
 import com.shahar91.poems.R
-import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.ActivityAddPoemBinding
+import com.shahar91.poems.domain.model.Category
 import com.shahar91.poems.ui.base.PoemBaseActivity
 import com.shahar91.poems.utils.DialogFactory
 import com.thedeadpixelsociety.passport.Passport

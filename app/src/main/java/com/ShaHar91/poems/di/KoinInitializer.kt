@@ -2,21 +2,20 @@ package com.shahar91.poems.di
 
 import android.content.Context
 import androidx.room.Room
-import com.shahar91.poems.data.DBConstants
-import com.shahar91.poems.data.database.PoemDatabase
-import com.shahar91.poems.data.database.TransactionProvider
+import com.shahar91.poems.data.local.PoemDatabase
+import com.shahar91.poems.data.local.TransactionProvider
 import com.shahar91.poems.data.repositories.AuthRepository
 import com.shahar91.poems.data.repositories.CategoryRepository
-import com.shahar91.poems.data.repositories.IAuthRepository
-import com.shahar91.poems.data.repositories.ICategoryRepository
-import com.shahar91.poems.data.repositories.IPoemRepository
-import com.shahar91.poems.data.repositories.IReviewRepository
-import com.shahar91.poems.data.repositories.IUserRepository
+import com.shahar91.poems.domain.repository.IAuthRepository
+import com.shahar91.poems.domain.repository.ICategoryRepository
+import com.shahar91.poems.domain.repository.IPoemRepository
+import com.shahar91.poems.domain.repository.IReviewRepository
+import com.shahar91.poems.domain.repository.IUserRepository
 import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
 import com.shahar91.poems.data.repositories.UserRepository
-import com.shahar91.poems.networking.ProtectedRestClient
-import com.shahar91.poems.networking.UnProtectedRestClient
+import com.shahar91.poems.data.remote.ProtectedRestClient
+import com.shahar91.poems.data.remote.UnProtectedRestClient
 import com.shahar91.poems.ui.add.AddPoemViewModel
 import com.shahar91.poems.ui.entry.EntryViewModel
 import com.shahar91.poems.ui.home.categories.CategoryViewModel
@@ -51,7 +50,7 @@ val appModule = module {
             .databaseBuilder(
                 androidContext(),
                 PoemDatabase::class.java,
-                DBConstants.DATABASE_NAME
+                PoemDatabase.DATABASE_NAME
             )
             .fallbackToDestructiveMigration()
             .build()

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import be.appwise.core.ui.base.list.BaseViewHolder
-import com.shahar91.poems.data.models.PoemWithUser
+import com.shahar91.poems.data.local.entities.PoemWithUser
 import com.shahar91.poems.databinding.ListItemPoemPerCategoryBinding
 
 class PoemsPerCategoryListAdapter(

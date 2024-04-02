@@ -7,7 +7,7 @@
 
         <variable
             name="category"
-            type="com.shahar91.poems.data.models.Category" />
+            type="com.shahar91.poems.domain.model.Category" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

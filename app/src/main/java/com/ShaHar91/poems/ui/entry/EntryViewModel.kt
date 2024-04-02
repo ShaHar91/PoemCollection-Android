@@ -2,8 +2,7 @@ package com.shahar91.poems.ui.entry
 
 import androidx.lifecycle.MutableLiveData
 import be.appwise.core.util.SingleLiveEvent
-import com.shahar91.poems.MyApp
-import com.shahar91.poems.data.repositories.IAuthRepository
+import com.shahar91.poems.domain.repository.IAuthRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
 // Using a "sharedViewModel", followed this 'tutorial'

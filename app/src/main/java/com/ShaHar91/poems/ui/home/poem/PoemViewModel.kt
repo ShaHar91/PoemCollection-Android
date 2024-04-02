@@ -3,8 +3,8 @@ package com.shahar91.poems.ui.home.poem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
-import com.shahar91.poems.data.repositories.IPoemRepository
-import com.shahar91.poems.data.repositories.IReviewRepository
+import com.shahar91.poems.domain.repository.IPoemRepository
+import com.shahar91.poems.domain.repository.IReviewRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 import com.shahar91.poems.utils.HawkManager
 
@@ -34,7 +34,7 @@ class PoemViewModel(
         poemRepository.getPoemById(poemId)
 
         if (HawkManager.currentUserId?.isNotEmpty() == true) {
-            reviewRepository.getOwnReviewForPoem(poemId)
+            reviewRepository.fetchOwnReviewForPoem(poemId)
         }
 
         _delayedRating.value = rating

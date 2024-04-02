@@ -7,7 +7,7 @@
 
         <variable
             name="poemWithUser"
-            type="com.shahar91.poems.data.models.PoemWithUser" />
+            type="com.shahar91.poems.data.local.entities.PoemWithUser" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
