@@ -3,21 +3,26 @@ package com.shahar91.poems.ui.add
 import androidx.lifecycle.MutableLiveData
 import com.shahar91.poems.MyApp
 import com.shahar91.poems.data.models.Category
+import com.shahar91.poems.data.repositories.ICategoryRepository
+import com.shahar91.poems.data.repositories.IPoemRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
-class AddPoemViewModel : PoemBaseViewModel() {
+class AddPoemViewModel(
+    private val categoryRepository: ICategoryRepository,
+    private val poemRepository: IPoemRepository
+) : PoemBaseViewModel() {
     var checkedCategories: List<Category> = emptyList()
-    var categoriesLive = MyApp.categoryRepository.findAllLive()
+    var categoriesLive = categoryRepository.findAllLive()
 
     val poemTitle = MutableLiveData("")
     val poemBody = MutableLiveData("")
 
     fun getAllCategoriesCr() = launchAndLoad {
-        MyApp.categoryRepository.getCategories()
+        categoryRepository.getCategories()
     }
 
     fun addNewPoem(poemTitle: String, poemBody: String, onSuccess: () -> Unit) = launchAndLoad {
-        MyApp.poemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it.id })
+        poemRepository.createPoem(poemTitle, poemBody, checkedCategories.map { it.id })
         onSuccess()
     }
 }

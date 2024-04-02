@@ -29,7 +29,7 @@ android {
     productFlavors {
         dev {
             //TODO: to test with emulator on local device "10.0.2.2:${PortNumber}"
-            buildConfigField "String", "API_HOST", "\"http://192.168.0.245:5000/api/v1/\""
+            buildConfigField "String", "API_HOST", "\"http://10.0.2.2:5001/api/v1/\""
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
         }
@@ -91,6 +91,12 @@ dependencies {
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.6.1"
+
+    // Koin Android features
+    implementation(platform("io.insert-koin:koin-bom:3.5.3"))
+    implementation("io.insert-koin:koin-core")
+    implementation("io.insert-koin:koin-android")
+    implementation("io.insert-koin:koin-androidx-navigation")
 
     //passport
     implementation 'com.github.deadpixelsociety.passport:core:2.1.1'

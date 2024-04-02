@@ -11,6 +11,7 @@ import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
 import com.shahar91.poems.ui.base.PoemBaseBindingVMFragment
 import com.shahar91.poems.ui.home.categories.adapter.CategoryAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() {
 
@@ -21,8 +22,7 @@ class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() 
 
     override fun getLayout() = R.layout.fragment_categories
     override fun getToolbar() = mBinding.mergeToolbar.toolbar
-    override val mViewModel: CategoryViewModel by viewModels { getViewModelFactory() }
-    override fun getViewModelFactory() = CategoryViewModel.FACTORY(MyApp.categoryRepository)
+    override val mViewModel: CategoryViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -8,7 +8,6 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.text.Spanned
 import android.text.style.ImageSpan
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.google.android.material.chip.ChipDrawable
 import com.shahar91.poems.R
@@ -20,6 +19,7 @@ import com.thedeadpixelsociety.passport.Passport
 import com.thedeadpixelsociety.passport.TextInputLayoutValidator
 import com.thedeadpixelsociety.passport.passport
 import com.thedeadpixelsociety.passport.required
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddPoemActivity : PoemBaseActivity<ActivityAddPoemBinding>() {
     companion object {
@@ -30,7 +30,7 @@ class AddPoemActivity : PoemBaseActivity<ActivityAddPoemBinding>() {
         }
     }
 
-    override val mViewModel: AddPoemViewModel by viewModels()
+    override val mViewModel: AddPoemViewModel by viewModel()
     override fun getLayout() = R.layout.activity_add_poem
 
     private lateinit var validation: Passport

@@ -11,7 +11,7 @@ import com.shahar91.poems.R
 import com.shahar91.poems.databinding.ActivityHomeBinding
 import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
 import com.shahar91.poems.ui.entry.EntryActivity
-import com.shahar91.poems.utils.HawkUtils
+import com.shahar91.poems.utils.HawkManager
 
 class HomeActivity : BaseActivity() {
     private lateinit var mBinding: ActivityHomeBinding
@@ -30,12 +30,14 @@ class HomeActivity : BaseActivity() {
 
     private fun initViews() {
         mBinding.fabAddPoem.setOnClickListener {
-            if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
+            if (!HawkManager.currentUserId.isNullOrBlank()) {
                 startAddPoem()
             } else {
                 // start the EntryActivity to make sure the user gets logged in
-                startActivityForResult(EntryActivity.newIntent(this),
-                    Constants.REQUEST_CODE_NEW_USER)
+                startActivityForResult(
+                    EntryActivity.newIntent(this),
+                    Constants.REQUEST_CODE_NEW_USER
+                )
             }
         }
 
@@ -52,8 +54,10 @@ class HomeActivity : BaseActivity() {
      * This may only be called when the user successfully logged in or already was logged in
      */
     private fun startAddPoem() {
-        startActivityForResult(startWithIntent(this),
-            Constants.REQUEST_CODE_ADD_POEM)
+        startActivityForResult(
+            startWithIntent(this),
+            Constants.REQUEST_CODE_ADD_POEM
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

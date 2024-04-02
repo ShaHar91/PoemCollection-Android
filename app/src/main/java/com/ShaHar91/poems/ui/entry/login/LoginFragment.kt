@@ -2,7 +2,6 @@ package com.shahar91.poems.ui.entry.login
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.fragment.hideKeyboard
 import be.appwise.core.extensions.fragment.snackBar
@@ -14,10 +13,11 @@ import com.thedeadpixelsociety.passport.Passport
 import com.thedeadpixelsociety.passport.TextInputLayoutValidator
 import com.thedeadpixelsociety.passport.passport
 import com.thedeadpixelsociety.passport.required
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class LoginFragment : BaseBindingVMFragment<FragmentLoginBinding>() {
 
-    override val mViewModel: EntryViewModel by activityViewModels()
+    override val mViewModel: EntryViewModel by activityViewModel()
     override fun getLayout() = R.layout.fragment_login
 
     private lateinit var validation: Passport

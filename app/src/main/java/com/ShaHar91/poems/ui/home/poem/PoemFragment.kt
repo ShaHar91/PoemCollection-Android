@@ -20,7 +20,9 @@ import com.shahar91.poems.ui.home.poem.adapter.PoemReviewsAdapter
 import com.shahar91.poems.utils.DialogFactory.showDialogOkCancel
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
-import com.shahar91.poems.utils.HawkUtils
+import com.shahar91.poems.utils.HawkManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
     private val safeArgs: PoemFragmentArgs by navArgs()
@@ -28,10 +30,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
 
     override fun getLayout() = R.layout.fragment_poem
     override fun getToolbar() = mBinding.mergeToolbar.toolbar
-    override val mViewModel: PoemViewModel by viewModels { getViewModelFactory() }
-    override fun getViewModelFactory() =
-        PoemViewModel.FACTORY(safeArgs.poemId, MyApp.poemRepository, MyApp.reviewRepository)
-
+    override val mViewModel: PoemViewModel by viewModel { parametersOf(safeArgs.poemId) }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -97,7 +96,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
 
             noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
                 if (fromUser) {
-                    if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
+                    if (!HawkManager.currentUserId.isNullOrBlank()) {
                         showAddReviewDialog(rating)
                     } else {
                         // start the EntryActivity to make sure the user gets logged in

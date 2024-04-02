@@ -15,7 +15,7 @@ import be.appwise.core.ui.base.BaseBindingVMFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.shahar91.poems.NavGraphMainDirections
 import com.shahar91.poems.R
-import com.shahar91.poems.utils.HawkUtils
+import com.shahar91.poems.utils.HawkManager
 
 abstract class PoemBaseBindingVMFragment<B : ViewDataBinding> : BaseBindingVMFragment<B>() {
     protected abstract fun getToolbar(): MaterialToolbar
@@ -39,7 +39,7 @@ abstract class PoemBaseBindingVMFragment<B : ViewDataBinding> : BaseBindingVMFra
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.action_profile).isVisible = (HawkUtils.hawkCurrentUserId != null)
+        menu.findItem(R.id.action_profile).isVisible = (HawkManager.currentUserId != null)
 
         super.onPrepareOptionsMenu(menu)
     }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
@@ -17,6 +16,7 @@ import be.appwise.core.ui.base.BaseVMActivity
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.ActivityEntryBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EntryActivity : BaseVMActivity() {
     companion object {
@@ -32,7 +32,7 @@ class EntryActivity : BaseVMActivity() {
 
     private lateinit var mBinding: ActivityEntryBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
-    override val mViewModel: EntryViewModel by viewModels()
+    override val mViewModel: EntryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
