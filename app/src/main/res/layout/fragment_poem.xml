@@ -41,8 +41,8 @@
                     android:id="@+id/poemDetail"
                     layout="@layout/reuse_poem_detail"
                     app:author="@{viewModel.poemWithUser.user.username}"
-                    app:poem="@{viewModel.poemWithUser.poem.body}"
-                    app:title="@{viewModel.poemWithUser.poem.title}" />
+                    app:poem="@{viewModel.poemWithUser.body}"
+                    app:title="@{viewModel.poemWithUser.title}" />
 
                 <com.shahar91.poems.ui.custom.NoReview
                     android:id="@+id/noReview"
@@ -70,13 +70,13 @@
                 <include
                     android:id="@+id/globalRating"
                     layout="@layout/list_item_global_rating"
-                    app:averageRating="@{viewModel.poemWithUser.poem.averageRating}"
-                    app:fiveStarRating="@{viewModel.poemWithUser.poem.fiveStarRating}"
-                    app:fourStarRating="@{viewModel.poemWithUser.poem.fourStarRating}"
-                    app:oneStarRating="@{viewModel.poemWithUser.poem.oneStarRating}"
-                    app:threeStarRating="@{viewModel.poemWithUser.poem.threeStarRating}"
-                    app:totalRating="@{viewModel.poemWithUser.poem.total}"
-                    app:twoStarRating="@{viewModel.poemWithUser.poem.twoStarRating}" />
+                    app:averageRating="@{viewModel.poemWithUser.averageRating}"
+                    app:fiveStarRating="@{viewModel.poemWithUser.fiveStarRating}"
+                    app:fourStarRating="@{viewModel.poemWithUser.fourStarRating}"
+                    app:oneStarRating="@{viewModel.poemWithUser.oneStarRating}"
+                    app:threeStarRating="@{viewModel.poemWithUser.threeStarRating}"
+                    app:totalRating="@{viewModel.poemWithUser.total}"
+                    app:twoStarRating="@{viewModel.poemWithUser.twoStarRating}" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPoemReviews"

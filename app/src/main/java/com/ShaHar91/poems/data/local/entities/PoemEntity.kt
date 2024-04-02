@@ -21,20 +21,7 @@ data class PoemEntity(
     var averageRating: Float = 0f,
     var totalRatingCount: List<Int> = emptyList(),
     var createdAt: Date? = null
-) : BaseEntity {
-
-    val fiveStarRating get(): Int = totalRatingCount.getOrElse(4) { 0 }
-
-    val fourStarRating get(): Int = totalRatingCount.getOrElse(3) { 0 }
-
-    val threeStarRating get(): Int = totalRatingCount.getOrElse(2) { 0 }
-
-    val twoStarRating get(): Int = totalRatingCount.getOrElse(1) { 0 }
-
-    val oneStarRating get(): Int = totalRatingCount.getOrElse(0) { 0 }
-
-    val total get(): Int = totalRatingCount.sum()
-}
+) : BaseEntity
 
 data class PoemWithRelations(
     @Embedded var poem: PoemEntity,

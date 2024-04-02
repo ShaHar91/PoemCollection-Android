@@ -1,19 +1,18 @@
 package com.shahar91.poems.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.shahar91.poems.data.local.entities.CategoryWithPoems
-import com.shahar91.poems.data.local.entities.PoemWithUser
-import com.shahar91.poems.data.remote.models.PoemResponse
+import com.shahar91.poems.data.remote.models.PoemDto
+import com.shahar91.poems.domain.model.Poem
 
 interface IPoemRepository {
-    fun findAllPoemsForCategoryLive(categoryId: String): LiveData<CategoryWithPoems>
-    fun findPoemByIdLive(poemId: String): LiveData<PoemWithUser>
+    fun findAllPoemsForCategoryLive(categoryId: String): LiveData<List<Poem>>
+    fun findPoemByIdLive(poemId: String): LiveData<Poem>
 
-    suspend fun getPoemsForCategory(categoryId: String)
+    suspend fun fetchPoemsForCategory(categoryId: String)
 
-    suspend fun getPoemById(poemId: String)
+    suspend fun fetchPoemById(poemId: String)
 
     suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>)
 
-    suspend fun savePoem(poemResponse: PoemResponse)
+    suspend fun savePoem(poemResponse: PoemDto)
 }

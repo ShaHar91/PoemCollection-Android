@@ -4,6 +4,7 @@ import androidx.lifecycle.map
 import be.appwise.networking.base.BaseRepository
 import com.shahar91.poems.data.local.dao.CategoryDao
 import com.shahar91.poems.data.mapper.toCategories
+import com.shahar91.poems.data.mapper.toEntities
 import com.shahar91.poems.data.remote.services.CategoryService
 import com.shahar91.poems.domain.repository.ICategoryRepository
 
@@ -15,9 +16,8 @@ class CategoryRepository(
     override fun findAllLive() = categoryDao.findAllLive().map { it.toCategories() }
 
     override suspend fun fetchCategories() {
-        doCall(categoryService.fetchCategories()).data?.let { categoryResponseList ->
-            categoryDao.insertManyDeleteOthers(categoryResponseList.map { it.getAsEntity() })
-        }
+        val categoryResponseList = doCall(categoryService.fetchCategories()).data ?: return
+        categoryDao.insertManyDeleteOthers(categoryResponseList.toEntities())
     }
 }
 

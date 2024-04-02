@@ -25,4 +25,3 @@ class AuthRepository(
         userRepository.fetchCurrentUser()
     }
 }
-

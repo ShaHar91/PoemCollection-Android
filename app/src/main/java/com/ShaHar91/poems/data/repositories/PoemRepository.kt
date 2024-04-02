@@ -1,5 +1,6 @@
 package com.shahar91.poems.data.repositories
 
+import androidx.lifecycle.map
 import be.appwise.networking.base.BaseRepository
 import com.shahar91.poems.data.local.TransactionProvider
 import com.shahar91.poems.data.local.dao.CategoryDao
@@ -8,7 +9,12 @@ import com.shahar91.poems.data.local.dao.PoemDao
 import com.shahar91.poems.data.local.dao.ReviewDao
 import com.shahar91.poems.data.local.dao.UserDao
 import com.shahar91.poems.data.local.entities.PoemCategoryCrossRef
-import com.shahar91.poems.data.remote.models.PoemResponse
+import com.shahar91.poems.data.local.entities.ReviewEntity
+import com.shahar91.poems.data.mapper.toEntities
+import com.shahar91.poems.data.mapper.toEntity
+import com.shahar91.poems.data.mapper.toPoem
+import com.shahar91.poems.data.mapper.toPoems
+import com.shahar91.poems.data.remote.models.PoemDto
 import com.shahar91.poems.data.remote.services.PoemService
 import com.shahar91.poems.domain.repository.IPoemRepository
 import com.shahar91.poems.utils.HawkManager
@@ -24,46 +30,38 @@ class PoemRepository(
     private val unProtectedPoemService: PoemService
 ) : BaseRepository, IPoemRepository {
 
-    override fun findAllPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
-    override fun findPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
+    override fun findAllPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId).map { it.poems.toPoems() }
+    override fun findPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId).map { it.toPoem() }
 
-    override suspend fun getPoemsForCategory(categoryId: String) {
-        doCall(unProtectedPoemService.getPoemsForCategoryId(categoryId)).data?.let { poemResponseList ->
-            transactionProvider.runAsTransaction {
-                poemResponseList.forEach {
-                    //TODO: delete other poems/reviews/poemCategoryCrossRef that are saved in Room but did not came with the Response
-                    savePoem(it)
-                }
-            }
+    override suspend fun fetchPoemsForCategory(categoryId: String) {
+        val poemResponseList = doCall(unProtectedPoemService.fetchPoemsForCategoryId(categoryId)).data ?: return
+        // TODO: instead of this forEach, save everything in bulk!!
+        poemResponseList.forEach {
+            //TODO: delete other poems/reviews/poemCategoryCrossRef that are saved in Room but did not came with the Response
+            savePoem(it)
         }
     }
 
-    override suspend fun getPoemById(poemId: String) {
-        doCall(unProtectedPoemService.getPoemById(poemId, HawkManager.currentUserId)).data?.let { poemResponse ->
-            transactionProvider.runAsTransaction {
-                savePoem(poemResponse)
-            }
-        }
+    override suspend fun fetchPoemById(poemId: String) {
+        val poemResponse = doCall(unProtectedPoemService.fetchPoemById(poemId, HawkManager.currentUserId)).data ?: return
+        savePoem(poemResponse)
     }
 
     override suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) {
-        doCall(protectedPoemService.createPoem(poemTitle, poemBody, categoryList)).data?.let { poemResponse ->
-            transactionProvider.runAsTransaction {
-                savePoem(poemResponse)
-            }
-        }
+        val poemResponse = doCall(protectedPoemService.createPoem(poemTitle, poemBody, categoryList)).data ?: return
+        savePoem(poemResponse)
     }
 
-    override suspend fun savePoem(poemResponse: PoemResponse) {
+    override suspend fun savePoem(poemResponse: PoemDto) {
         transactionProvider.runAsTransaction {
-            poemDao.insert(poemResponse.getAsEntity())
-            userDao.insert(poemResponse.getUserAsEntity())
-            categoryDao.insertMany(poemResponse.getCategoriesAsEntities())
-            reviewDao.insertMany(poemResponse.getReviewsAsEntities())
-            userDao.insertMany(poemResponse.shortReviewList.map { it.getUserAsEntity() })
+            poemDao.insert(poemResponse.toEntity())
+            userDao.insert(poemResponse.user.toEntity())
+            categoryDao.insertMany(poemResponse.categories.toEntities())
+            reviewDao.insertMany(poemResponse.shortReviewList.map { it.toEntity(poemResponse.id)})
+            userDao.insertMany(poemResponse.shortReviewList.map { it.user.toEntity() })
 
             val list = poemResponse.categories.map {
-                PoemCategoryCrossRef(poemResponse._id, it._id)
+                PoemCategoryCrossRef(poemResponse.id, it.id)
             }
 
             poemCategoryCrossRefDao.insertManyPoemCategoryCrossRef(list)

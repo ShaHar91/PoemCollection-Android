@@ -2,7 +2,6 @@ package com.shahar91.poems.ui.home.poem
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
 import com.shahar91.poems.domain.repository.IPoemRepository
 import com.shahar91.poems.domain.repository.IReviewRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
@@ -15,13 +14,8 @@ class PoemViewModel(
 ) : PoemBaseViewModel() {
 
     var poemWithUser = poemRepository.findPoemByIdLive(poemId)
-    var ownReview = poemWithUser.switchMap {
-        reviewRepository.findOwnReviewForPoemLive(poemId)
-    }
-
-    var shortReviewList = poemWithUser.switchMap {
-        reviewRepository.findReviewsForPoem(poemId)
-    }
+    var ownReview = reviewRepository.findOwnReviewForPoemLive(poemId)
+    var shortReviewList = reviewRepository.findReviewsForPoem(poemId)
 
     private val _delayedRating = MutableLiveData<Float?>(null)
     val delayedRating: LiveData<Float?> get() = _delayedRating
@@ -31,7 +25,7 @@ class PoemViewModel(
     }
 
     fun getPoemAndAllData(rating: Float? = null) = launchAndLoad {
-        poemRepository.getPoemById(poemId)
+        poemRepository.fetchPoemById(poemId)
 
         if (HawkManager.currentUserId?.isNotEmpty() == true) {
             reviewRepository.fetchOwnReviewForPoem(poemId)

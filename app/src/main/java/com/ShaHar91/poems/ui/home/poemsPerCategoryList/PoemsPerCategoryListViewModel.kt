@@ -23,7 +23,7 @@ class PoemsPerCategoryListViewModel(
     }
 
     fun getAllPoemsForCategoryId() = launchAndLoad {
-        poemRepository.getPoemsForCategory(categoryId)
+        poemRepository.fetchPoemsForCategory(categoryId)
         setIsRefreshing(false)
     }
 }

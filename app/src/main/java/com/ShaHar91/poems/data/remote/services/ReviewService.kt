@@ -2,7 +2,7 @@ package com.shahar91.poems.data.remote.services
 
 import be.appwise.networking.base.BaseService
 import com.shahar91.poems.data.remote.NetworkResponse
-import com.shahar91.poems.data.remote.models.ReviewResponse
+import com.shahar91.poems.data.remote.models.ReviewDto
 import retrofit2.Call
 import retrofit2.http.DELETE
 import retrofit2.http.Field
@@ -17,16 +17,16 @@ interface ReviewService: BaseService {
 
     // TODO: this will be used to retrieve the complete list (paged) of reviews for a poem
     @GET("reviews")
-    fun getReviewsByPoemId(
+    fun fetchReviewsByPoemId(
         @Query("poem") poemId: String/*,
         @Query("limit") limit: Int*/
-    ): Call<NetworkResponse<List<ReviewResponse>>>
+    ): Call<NetworkResponse<List<ReviewDto>>>
 
     @GET("reviews")
     fun fetchOwnReviewForPoem(
         @Query("poem") poemId: String,
         @Query("user") userId: String?
-    ): Call<NetworkResponse<List<ReviewResponse>>>
+    ): Call<NetworkResponse<List<ReviewDto>>>
 
     @FormUrlEncoded
     @POST("poems/{id}/reviews")
@@ -34,7 +34,7 @@ interface ReviewService: BaseService {
         @Path("id") poemId: String,
         @Field("text") reviewText: String,
         @Field("rating") reviewRating: Float
-    ): Call<NetworkResponse<ReviewResponse>>
+    ): Call<NetworkResponse<ReviewDto>>
 
     @FormUrlEncoded
     @PUT("reviews/{id}")
@@ -42,10 +42,10 @@ interface ReviewService: BaseService {
         @Path("id") reviewId: String,
         @Field("text") reviewText: String,
         @Field("rating") reviewRating: Float
-    ): Call<NetworkResponse<ReviewResponse>>
+    ): Call<NetworkResponse<ReviewDto>>
 
     @DELETE("reviews/{id}")
     fun deleteReview(
         @Path("id") reviewId: String
-    ): Call<NetworkResponse<ReviewResponse>>
+    ): Call<NetworkResponse<ReviewDto>>
 }
