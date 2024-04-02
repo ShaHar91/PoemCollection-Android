@@ -9,7 +9,6 @@ import com.shahar91.poems.data.local.dao.PoemDao
 import com.shahar91.poems.data.local.dao.ReviewDao
 import com.shahar91.poems.data.local.dao.UserDao
 import com.shahar91.poems.data.local.entities.PoemCategoryCrossRef
-import com.shahar91.poems.data.local.entities.ReviewEntity
 import com.shahar91.poems.data.mapper.toEntities
 import com.shahar91.poems.data.mapper.toEntity
 import com.shahar91.poems.data.mapper.toPoem

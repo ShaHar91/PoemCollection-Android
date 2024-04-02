@@ -1,8 +1,6 @@
 package com.shahar91.poems.data.remote.models
 
 import com.google.gson.annotations.SerializedName
-import com.shahar91.poems.data.local.entities.ReviewEntity
-import com.shahar91.poems.data.mapper.toEntity
 import java.util.*
 
 data class ReviewDto(

@@ -1,7 +1,6 @@
 package com.shahar91.poems.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.shahar91.poems.data.local.entities.ReviewWithUser
 import com.shahar91.poems.domain.model.Review
 
 interface IReviewRepository {
