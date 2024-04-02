@@ -38,9 +38,7 @@ class AddPoemActivity : PoemBaseActivity<ActivityAddPoemBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding.viewModel = mViewModel.apply {
-            mViewModel.getAllCategoriesCr()
-        }
+        mBinding.viewModel = mViewModel
 
         initValidation()
         initViews()

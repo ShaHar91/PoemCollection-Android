@@ -2,12 +2,10 @@ package com.shahar91.poems.ui.home.poemsPerCategoryList
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.emptyRecyclerView.RecyclerViewState
-import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentPoemsPerCategoryBinding
 import com.shahar91.poems.ui.base.PoemBaseBindingVMFragment
@@ -31,11 +29,7 @@ class PoemsPerCategoryListFragment : PoemBaseBindingVMFragment<FragmentPoemsPerC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.run {
-            viewModel = mViewModel.apply {
-                getAllPoemsForCategoryId()
-            }
-        }
+        mBinding.viewModel = mViewModel
 
         initViews()
         initObservers()

@@ -2,8 +2,6 @@ package com.shahar91.poems.ui.home.categories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import be.appwise.core.extensions.viewmodel.singleArgViewModelFactory
-import com.shahar91.poems.data.repositories.CategoryRepository
 import com.shahar91.poems.data.repositories.ICategoryRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
 
@@ -18,6 +16,10 @@ class CategoryViewModel(
     }
 
     var categoriesLive = categoryRepository.findAllLive()
+
+    init {
+        getAllCategories()
+    }
 
     fun getAllCategories() = launchAndLoad {
         categoryRepository.getCategories()

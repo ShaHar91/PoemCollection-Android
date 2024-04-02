@@ -2,11 +2,9 @@ package com.shahar91.poems.ui.home.categories
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.view.setupRecyclerView
 import be.appwise.emptyRecyclerView.RecyclerViewState
-import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentCategoriesBinding
 import com.shahar91.poems.ui.base.PoemBaseBindingVMFragment
@@ -27,11 +25,7 @@ class CategoryFragment : PoemBaseBindingVMFragment<FragmentCategoriesBinding>() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.run {
-            viewModel = mViewModel.apply {
-                getAllCategories()
-            }
-        }
+        mBinding.viewModel = mViewModel
 
         initViews()
         initObservers()
