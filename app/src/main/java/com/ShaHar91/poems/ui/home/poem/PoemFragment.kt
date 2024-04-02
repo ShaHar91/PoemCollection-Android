@@ -6,11 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import be.appwise.core.extensions.view.setupRecyclerView
 import com.shahar91.poems.Constants
-import com.shahar91.poems.MyApp
 import com.shahar91.poems.R
 import com.shahar91.poems.data.models.Review
 import com.shahar91.poems.databinding.FragmentPoemBinding
@@ -20,7 +18,9 @@ import com.shahar91.poems.ui.home.poem.adapter.PoemReviewsAdapter
 import com.shahar91.poems.utils.DialogFactory.showDialogOkCancel
 import com.shahar91.poems.utils.DialogFactory.showDialogToAddReview
 import com.shahar91.poems.utils.DialogFactory.showDialogToEditReview
-import com.shahar91.poems.utils.HawkUtils
+import com.shahar91.poems.utils.HawkManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
     private val safeArgs: PoemFragmentArgs by navArgs()
@@ -28,18 +28,11 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
 
     override fun getLayout() = R.layout.fragment_poem
     override fun getToolbar() = mBinding.mergeToolbar.toolbar
-    override val mViewModel: PoemViewModel by viewModels { getViewModelFactory() }
-    override fun getViewModelFactory() =
-        PoemViewModel.FACTORY(safeArgs.poemId, MyApp.poemRepository, MyApp.reviewRepository)
-
+    override val mViewModel: PoemViewModel by viewModel { parametersOf(safeArgs.poemId) }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.apply {
-            viewModel = mViewModel.apply {
-                getPoemAndAllDataCr()
-            }
-        }
+        mBinding.viewModel = mViewModel
 
         initViews()
         initObservers()
@@ -83,6 +76,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
                                     showEditReviewDialog(review)
                                 }
                             }
+
                             R.id.review_delete -> {
                                 mViewModel.ownReview.value?.review?.let { review ->
                                     mViewModel.deleteReview(review.id)
@@ -97,7 +91,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
 
             noReview.setOnRatingChangedListener { ratingBar, rating, fromUser ->
                 if (fromUser) {
-                    if (!HawkUtils.hawkCurrentUserId.isNullOrBlank()) {
+                    if (!HawkManager.currentUserId.isNullOrBlank()) {
                         showAddReviewDialog(rating)
                     } else {
                         // start the EntryActivity to make sure the user gets logged in
@@ -139,7 +133,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
             if (resultCode == Activity.RESULT_OK) {
                 // A user has been logged in successfully
                 // Refresh the poem and all reviews (as the user's review may have been in the preview list)
-                mViewModel.getPoemAndAllDataCr(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
+                mViewModel.getPoemAndAllData(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

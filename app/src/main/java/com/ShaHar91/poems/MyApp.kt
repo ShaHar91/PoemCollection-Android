@@ -9,6 +9,7 @@ import com.shahar91.poems.data.repositories.CategoryRepository
 import com.shahar91.poems.data.repositories.PoemRepository
 import com.shahar91.poems.data.repositories.ReviewRepository
 import com.shahar91.poems.data.repositories.UserRepository
+import com.shahar91.poems.di.KoinInitializer
 import com.shahar91.poems.networking.ProtectedRestClient
 import com.shahar91.poems.networking.UnProtectedRestClient
 
@@ -16,34 +17,6 @@ class MyApp : Application() {
     companion object {
         lateinit var instance: MyApp
             private set
-
-        private val poemDatabase: PoemDatabase by lazy {
-            PoemDatabase.getDatabase(instance.applicationContext)
-        }
-
-        val categoryRepository: CategoryRepository by lazy {
-            CategoryRepository(poemDatabase.categoryDao(), UnProtectedRestClient.getService)
-        }
-
-        val userRepository: UserRepository by lazy {
-            UserRepository(poemDatabase.userDao(), ProtectedRestClient.getService)
-        }
-
-        val poemRepository: PoemRepository by lazy {
-            PoemRepository(
-                poemDatabase/*, userRepository, categoryRepository, reviewRepository*/,
-                ProtectedRestClient.getService,
-                UnProtectedRestClient.getService
-            )
-        }
-
-        val authRepository: AuthRepository by lazy {
-            AuthRepository(UnProtectedRestClient.getService, userRepository)
-        }
-
-        val reviewRepository: ReviewRepository by lazy {
-            ReviewRepository(poemDatabase.reviewDao(), ProtectedRestClient.getService)
-        }
     }
 
     override fun onCreate() {
@@ -58,7 +31,6 @@ class MyApp : Application() {
             .setVersionName(BuildConfig.VERSION_NAME)
             .setClientIdValue("")
             .setClientSecretValue("")
-            .registerBagelService(this)
             .build()
 
         CoreApp.init(this)
@@ -67,5 +39,7 @@ class MyApp : Application() {
                 BuildConfig.DEBUG || BuildConfig.FLAVOR === "dev" || BuildConfig.FLAVOR === "stg"
             )
             .build()
+
+        KoinInitializer.init(this)
     }
 }

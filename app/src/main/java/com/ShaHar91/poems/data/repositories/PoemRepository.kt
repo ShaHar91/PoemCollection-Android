@@ -1,33 +1,52 @@
 package com.shahar91.poems.data.repositories
 
+import androidx.lifecycle.LiveData
 import androidx.room.withTransaction
 import be.appwise.networking.base.BaseRepository
+import com.shahar91.poems.data.dao.CategoryDao
+import com.shahar91.poems.data.dao.PoemCategoryCrossRefDao
+import com.shahar91.poems.data.dao.PoemDao
+import com.shahar91.poems.data.dao.ReviewDao
+import com.shahar91.poems.data.dao.UserDao
 import com.shahar91.poems.data.database.PoemDatabase
+import com.shahar91.poems.data.database.TransactionProvider
+import com.shahar91.poems.data.models.CategoryWithPoems
 import com.shahar91.poems.data.models.PoemCategoryCrossRef
-import com.shahar91.poems.networking.NewApiManagerService
+import com.shahar91.poems.data.models.PoemWithUser
 import com.shahar91.poems.networking.models.PoemResponse
-import com.shahar91.poems.utils.HawkUtils
+import com.shahar91.poems.networking.services.PoemService
+import com.shahar91.poems.utils.HawkManager
+
+interface IPoemRepository {
+    fun findAllPoemsForCategoryLive(categoryId: String): LiveData<CategoryWithPoems>
+    fun findPoemByIdLive(poemId: String): LiveData<PoemWithUser>
+
+    suspend fun getPoemsForCategory(categoryId: String)
+
+    suspend fun getPoemById(poemId: String)
+
+    suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>)
+
+    suspend fun savePoem(poemResponse: PoemResponse)
+}
 
 class PoemRepository(
-    private val poemDatabase: PoemDatabase,
-//    private val userRepository: UserRepository,
-//    private val categoryRepository: CategoryRepository,
-//    private val reviewRepository: ReviewRepository,
-    private val protectedService: NewApiManagerService,
-    private val unProtectedService: NewApiManagerService
-) : BaseRepository {
-    private val poemDao = poemDatabase.poemDao()
-    private val categoryDao = poemDatabase.categoryDao()
-    private val userDao = poemDatabase.userDao()
-    private val reviewDao = poemDatabase.reviewDao()
-    private val poemCategoryCrossRefDao = poemDatabase.poemCategoryCrossRefDao()
+    private val poemDao: PoemDao,
+    private val categoryDao: CategoryDao,
+    private val userDao: UserDao,
+    private val reviewDao: ReviewDao,
+    private val poemCategoryCrossRefDao: PoemCategoryCrossRefDao,
+    private val transactionProvider: TransactionProvider,
+    private val protectedPoemService: PoemService,
+    private val unProtectedPoemService: PoemService
+) : BaseRepository, IPoemRepository {
 
-    fun findAllPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
-    fun findPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
+    override fun findAllPoemsForCategoryLive(categoryId: String) = poemCategoryCrossRefDao.findAllPoemsByCategoryId(categoryId)
+    override fun findPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId)
 
-    suspend fun getPoemsForCategory(categoryId: String) {
-        doCall(unProtectedService.getPoemsForCategoryId(categoryId)).data?.let { poemResponseList ->
-            poemDatabase.withTransaction {
+    override suspend fun getPoemsForCategory(categoryId: String) {
+        doCall(unProtectedPoemService.getPoemsForCategoryId(categoryId)).data?.let { poemResponseList ->
+            transactionProvider.runAsTransaction {
                 poemResponseList.forEach {
                     //TODO: delete other poems/reviews/poemCategoryCrossRef that are saved in Room but did not came with the Response
                     savePoem(it)
@@ -36,24 +55,24 @@ class PoemRepository(
         }
     }
 
-    suspend fun getPoemById(poemId: String) {
-        doCall(unProtectedService.getPoemById(poemId, HawkUtils.hawkCurrentUserId)).data?.let { poemResponse ->
-            poemDatabase.withTransaction {
+    override suspend fun getPoemById(poemId: String) {
+        doCall(unProtectedPoemService.getPoemById(poemId, HawkManager.currentUserId)).data?.let { poemResponse ->
+            transactionProvider.runAsTransaction {
                 savePoem(poemResponse)
             }
         }
     }
 
-    suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) {
-        doCall(protectedService.createPoem(poemTitle, poemBody, categoryList)).data?.let { poemResponse ->
-            poemDatabase.withTransaction {
+    override suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) {
+        doCall(protectedPoemService.createPoem(poemTitle, poemBody, categoryList)).data?.let { poemResponse ->
+            transactionProvider.runAsTransaction {
                 savePoem(poemResponse)
             }
         }
     }
 
-    suspend fun savePoem(poemResponse: PoemResponse) {
-        poemDatabase.withTransaction {
+    override suspend fun savePoem(poemResponse: PoemResponse) {
+        transactionProvider.runAsTransaction {
             poemDao.insert(poemResponse.getAsEntity())
             userDao.insert(poemResponse.getUserAsEntity())
             categoryDao.insertMany(poemResponse.getCategoriesAsEntities())

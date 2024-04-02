@@ -3,20 +3,16 @@ package com.shahar91.poems.ui.home.poem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
-import be.appwise.core.extensions.viewmodel.tripleArgsViewModelFactory
-import com.shahar91.poems.data.repositories.PoemRepository
-import com.shahar91.poems.data.repositories.ReviewRepository
+import com.shahar91.poems.data.repositories.IPoemRepository
+import com.shahar91.poems.data.repositories.IReviewRepository
 import com.shahar91.poems.ui.base.PoemBaseViewModel
-import com.shahar91.poems.utils.HawkUtils
+import com.shahar91.poems.utils.HawkManager
 
 class PoemViewModel(
     private val poemId: String,
-    private val poemRepository: PoemRepository,
-    private val reviewRepository: ReviewRepository
+    private val poemRepository: IPoemRepository,
+    private val reviewRepository: IReviewRepository
 ) : PoemBaseViewModel() {
-    companion object {
-        val FACTORY = tripleArgsViewModelFactory(::PoemViewModel)
-    }
 
     var poemWithUser = poemRepository.findPoemByIdLive(poemId)
     var ownReview = poemWithUser.switchMap {
@@ -30,10 +26,14 @@ class PoemViewModel(
     private val _delayedRating = MutableLiveData<Float?>(null)
     val delayedRating: LiveData<Float?> get() = _delayedRating
 
-    fun getPoemAndAllDataCr(rating: Float? = null) = launchAndLoad {
+    init {
+        getPoemAndAllData()
+    }
+
+    fun getPoemAndAllData(rating: Float? = null) = launchAndLoad {
         poemRepository.getPoemById(poemId)
 
-        if (HawkUtils.hawkCurrentUserId?.isNotEmpty() == true) {
+        if (HawkManager.currentUserId?.isNotEmpty() == true) {
             reviewRepository.getOwnReviewForPoem(poemId)
         }
 
@@ -50,7 +50,7 @@ class PoemViewModel(
             reviewRepository.createReview(poemId, newReviewText, newRating)
         }
 
-        getPoemAndAllDataCr()
+        getPoemAndAllData()
     }
 
     fun deleteReview(reviewId: String) = launchAndLoad {
