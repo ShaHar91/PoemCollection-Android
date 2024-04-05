@@ -17,9 +17,8 @@ class UserRepository(
     override fun findCurrentUser() = userDao.findFirstById(HawkManager.currentUserId ?: "").map { it.toUser() }
 
     override suspend fun fetchCurrentUser() {
-        doCall(protectedService.fetchCurrentUser()).data?.let {
-            userDao.insert(it.toEntity())
-            HawkManager.currentUserId = it.id
-        }
+        val user = doCall(protectedService.fetchCurrentUser())
+        userDao.insert(user.toEntity())
+        HawkManager.currentUserId = user.id
     }
 }

@@ -33,7 +33,7 @@ class PoemRepository(
     override fun findPoemByIdLive(poemId: String) = poemDao.getPoemByIdLive(poemId).map { it.toPoem() }
 
     override suspend fun fetchPoemsForCategory(categoryId: String) {
-        val poemResponseList = doCall(unProtectedPoemService.fetchPoemsForCategoryId(categoryId)).data ?: return
+        val poemResponseList = doCall(unProtectedPoemService.fetchPoemsForCategoryId(categoryId))
         // TODO: instead of this forEach, save everything in bulk!!
         poemResponseList.forEach {
             //TODO: delete other poems/reviews/poemCategoryCrossRef that are saved in Room but did not came with the Response
@@ -42,12 +42,12 @@ class PoemRepository(
     }
 
     override suspend fun fetchPoemById(poemId: String) {
-        val poemResponse = doCall(unProtectedPoemService.fetchPoemById(poemId, HawkManager.currentUserId)).data ?: return
+        val poemResponse = doCall(unProtectedPoemService.fetchPoemById(poemId, HawkManager.currentUserId))
         savePoem(poemResponse)
     }
 
     override suspend fun createPoem(poemTitle: String, poemBody: String, categoryList: List<String>) {
-        val poemResponse = doCall(protectedPoemService.createPoem(poemTitle, poemBody, categoryList)).data ?: return
+        val poemResponse = doCall(protectedPoemService.createPoem(poemTitle, poemBody, categoryList))
         savePoem(poemResponse)
     }
 

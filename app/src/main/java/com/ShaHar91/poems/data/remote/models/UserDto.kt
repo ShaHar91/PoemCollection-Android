@@ -5,7 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class UserDto(
     @SerializedName("_id", alternate = ["id"])
     val id: String = "",
-    var email: String = "",
-    var username: String = "",
-    var pictureUrl: String? = null
+    val email: String = "",
+    val username: String = "",
+    val pictureUrl: String? = null,
+    @SerializedName("created_at")
+    val createdAt: String? = null
 )

@@ -1,17 +1,18 @@
 package com.shahar91.poems.data.remote.models
 
 import com.google.gson.annotations.SerializedName
-import java.util.Date
 
 data class PoemDto(
     @SerializedName("_id", alternate = ["id"])
-    var id: String = "",
-    var title: String = "",
-    var body: String = "",
-    var user: UserDto = UserDto(),
-    var categories: List<CategoryDto> = emptyList(),
-    var averageRating: Float = 0f,
-    var totalRatingCount: List<Int> = emptyList(),
-    var shortReviewList: List<ReviewDto> = emptyList(),
-    var createdAt: Date? = null
+    val id: String = "",
+    val title: String = "",
+    val body: String = "",
+    @SerializedName("user", alternate = ["writer"])
+    val user: UserDto = UserDto(),
+    val categories: List<CategoryDto> = emptyList(),
+    val averageRating: Float = 0f,
+    val totalRatingCount: List<Int> = emptyList(),
+    val shortReviewList: List<ReviewDto> = emptyList(),
+    @SerializedName("created_at")
+    val createdAt: String? = null
 )

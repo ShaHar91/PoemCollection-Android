@@ -3,7 +3,6 @@ package com.shahar91.poems.data.remote.services
 import be.appwise.networking.NetworkConstants
 import be.appwise.networking.base.BaseService
 import be.appwise.networking.model.AccessToken
-import com.shahar91.poems.data.remote.NetworkResponse
 import com.shahar91.poems.data.remote.models.UserDto
 import retrofit2.Call
 import retrofit2.http.Field
@@ -35,5 +34,5 @@ interface AuthService: BaseService {
     ): Call<AccessToken>
 
     @GET("auth/me")
-    fun fetchCurrentUser(): Call<NetworkResponse<UserDto>>
+    fun fetchCurrentUser(): Call<UserDto>
 }

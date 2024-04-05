@@ -2,6 +2,7 @@ package com.shahar91.poems.data.local.utils
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
 import java.util.*
 
 class Converters {
@@ -16,12 +17,12 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromDate(date: Date): Long {
-        return date.time / 1000L
+    fun fromDate(date: Date?): String {
+        return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault()).format(date ?: Date())
     }
 
     @TypeConverter
-    fun toDate(millis: Long): Date {
-        return Date(millis * 1000L)
+    fun toDate(millis: String): Date {
+        return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault()).parse(millis) ?: Date()
     }
 }

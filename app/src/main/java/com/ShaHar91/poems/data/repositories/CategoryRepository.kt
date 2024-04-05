@@ -16,7 +16,7 @@ class CategoryRepository(
     override fun findAllLive() = categoryDao.findAllLive().map { it.toCategories() }
 
     override suspend fun fetchCategories() {
-        val categoryResponseList = doCall(categoryService.fetchCategories()).data ?: return
+        val categoryResponseList = doCall(categoryService.fetchCategories())
         categoryDao.insertManyDeleteOthers(categoryResponseList.toEntities())
     }
 }

@@ -1,7 +1,6 @@
 package com.shahar91.poems.data.remote.services
 
 import be.appwise.networking.base.BaseService
-import com.shahar91.poems.data.remote.NetworkResponse
 import com.shahar91.poems.data.remote.models.ReviewDto
 import retrofit2.Call
 import retrofit2.http.DELETE
@@ -20,13 +19,13 @@ interface ReviewService: BaseService {
     fun fetchReviewsByPoemId(
         @Query("poem") poemId: String/*,
         @Query("limit") limit: Int*/
-    ): Call<NetworkResponse<List<ReviewDto>>>
+    ): Call<List<ReviewDto>>
 
     @GET("reviews")
     fun fetchOwnReviewForPoem(
         @Query("poem") poemId: String,
         @Query("user") userId: String?
-    ): Call<NetworkResponse<List<ReviewDto>>>
+    ): Call<List<ReviewDto>>
 
     @FormUrlEncoded
     @POST("poems/{id}/reviews")
@@ -34,7 +33,7 @@ interface ReviewService: BaseService {
         @Path("id") poemId: String,
         @Field("text") reviewText: String,
         @Field("rating") reviewRating: Float
-    ): Call<NetworkResponse<ReviewDto>>
+    ): Call<ReviewDto>
 
     @FormUrlEncoded
     @PUT("reviews/{id}")
@@ -42,10 +41,10 @@ interface ReviewService: BaseService {
         @Path("id") reviewId: String,
         @Field("text") reviewText: String,
         @Field("rating") reviewRating: Float
-    ): Call<NetworkResponse<ReviewDto>>
+    ): Call<ReviewDto>
 
     @DELETE("reviews/{id}")
     fun deleteReview(
         @Path("id") reviewId: String
-    ): Call<NetworkResponse<ReviewDto>>
+    ): Call<ReviewDto>
 }
