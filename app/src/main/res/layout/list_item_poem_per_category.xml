@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="poemWithUser"
-            type="com.shahar91.poems.data.models.PoemWithUser" />
+            name="poem"
+            type="com.shahar91.poems.domain.model.Poem" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{poemWithUser.poem.title}"
+                android:text="@{poem.title}"
                 android:textAppearance="?attr/textAppearanceSubtitle1"
                 tools:text="@sample/poems.json/data/title" />
 
@@ -45,7 +45,7 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body3"
                 android:textColor="?android:textColorSecondary"
-                android:text="@{poemWithUser.user.username}"
+                android:text="@{poem.user.username}"
                 tools:text="@sample/poems.json/data/writer" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

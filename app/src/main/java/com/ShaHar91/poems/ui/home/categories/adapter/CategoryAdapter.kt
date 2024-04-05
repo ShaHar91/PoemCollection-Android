@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import be.appwise.core.ui.base.list.BaseViewHolder
-import com.shahar91.poems.data.models.Category
 import com.shahar91.poems.databinding.ListItemCategoryBinding
+import com.shahar91.poems.domain.model.Category
 
 class CategoryAdapter(
     private val onCategoryClicked: (category: Category) -> Unit

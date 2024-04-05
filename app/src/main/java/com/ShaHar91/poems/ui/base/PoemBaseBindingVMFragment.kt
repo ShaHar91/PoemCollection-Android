@@ -1,5 +1,7 @@
 package com.shahar91.poems.ui.base
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,8 +15,10 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import be.appwise.core.ui.base.BaseBindingVMFragment
 import com.google.android.material.appbar.MaterialToolbar
+import com.shahar91.poems.Constants
 import com.shahar91.poems.NavGraphMainDirections
 import com.shahar91.poems.R
+import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.utils.HawkManager
 
 abstract class PoemBaseBindingVMFragment<B : ViewDataBinding> : BaseBindingVMFragment<B>() {
@@ -38,18 +42,21 @@ abstract class PoemBaseBindingVMFragment<B : ViewDataBinding> : BaseBindingVMFra
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.action_profile).isVisible = (HawkManager.currentUserId != null)
-
-        super.onPrepareOptionsMenu(menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             R.id.action_profile -> {
-                NavGraphMainDirections.actionGlobalProfileFragment().run(findNavController()::navigate)
+                if (HawkManager.currentUserId != null) {
+                    NavGraphMainDirections.actionGlobalProfileFragment().run(findNavController()::navigate)
+                } else {
+                    // start the EntryActivity to make sure the user gets logged in
+                    startActivityForResult(
+                        EntryActivity.newIntent(requireContext()),
+                        Constants.REQUEST_CODE_PROFILE
+                    )
+                }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -65,5 +72,13 @@ abstract class PoemBaseBindingVMFragment<B : ViewDataBinding> : BaseBindingVMFra
             setColorSchemeResources(R.color.colorWhite)
             setProgressBackgroundColorSchemeResource(R.color.colorPrimary)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == Constants.REQUEST_CODE_PROFILE && resultCode == Activity.RESULT_OK) {
+            // A user has been logged in successfully
+            NavGraphMainDirections.actionGlobalProfileFragment().run(findNavController()::navigate)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

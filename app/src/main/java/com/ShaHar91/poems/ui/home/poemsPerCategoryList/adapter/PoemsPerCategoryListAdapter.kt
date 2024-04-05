@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import be.appwise.core.ui.base.list.BaseViewHolder
-import com.shahar91.poems.data.models.PoemWithUser
 import com.shahar91.poems.databinding.ListItemPoemPerCategoryBinding
+import com.shahar91.poems.domain.model.Poem
 
 class PoemsPerCategoryListAdapter(
     private val onPoemClicked: (poemId: String) -> Unit
-) : ListAdapter<PoemWithUser, PoemsPerCategoryListAdapter.PoemsPerCategoryListViewHolder>(PoemDiffCallback()) {
+) : ListAdapter<Poem, PoemsPerCategoryListAdapter.PoemsPerCategoryListViewHolder>(PoemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoemsPerCategoryListViewHolder {
         return PoemsPerCategoryListViewHolder(
@@ -22,21 +22,21 @@ class PoemsPerCategoryListAdapter(
     }
 
     inner class PoemsPerCategoryListViewHolder(private val binding: ListItemPoemPerCategoryBinding) :
-        BaseViewHolder<PoemWithUser>(binding.root) {
+        BaseViewHolder<Poem>(binding.root) {
 
-        override fun bind(item: PoemWithUser) {
-            binding.poemWithUser = item
-            binding.root.setOnClickListener { onPoemClicked(item.poem.id) }
+        override fun bind(item: Poem) {
+            binding.poem = item
+            binding.root.setOnClickListener { onPoemClicked(item.id) }
         }
     }
 }
 
-class PoemDiffCallback : DiffUtil.ItemCallback<PoemWithUser>() {
-    override fun areItemsTheSame(oldItem: PoemWithUser, newItem: PoemWithUser): Boolean {
-        return oldItem.poem.id == newItem.poem.id
+class PoemDiffCallback : DiffUtil.ItemCallback<Poem>() {
+    override fun areItemsTheSame(oldItem: Poem, newItem: Poem): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: PoemWithUser, newItem: PoemWithUser): Boolean {
+    override fun areContentsTheSame(oldItem: Poem, newItem: Poem): Boolean {
         return oldItem == newItem
     }
 }
