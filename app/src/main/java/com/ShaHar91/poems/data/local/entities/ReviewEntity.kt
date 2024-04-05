@@ -13,16 +13,16 @@ import java.util.Date
 data class ReviewEntity(
     @PrimaryKey
     @ColumnInfo(name = DBConstants.COLUMN_ID_REVIEW)
-    override var id: String = "",
-    var text: String = "",
-    var rating: Float = 0F,
-    var createdAt: Date? = null,
-    var poemId: String = "",
-    var userId: String = ""
+    override val id: String = "",
+    val text: String = "",
+    val rating: Float = 0F,
+    val createdAt: Date? = null,
+    val poemId: String = "",
+    val userId: String = ""
 ) : BaseEntity
 
 data class ReviewWithUser(
-    @Embedded var review: ReviewEntity,
+    @Embedded val review: ReviewEntity,
     @Relation(parentColumn = "userId", entityColumn = "id")
-    var user: UserEntity
+    val user: UserEntity
 )

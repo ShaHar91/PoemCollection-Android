@@ -78,10 +78,7 @@ object DialogFactory {
                 val newReviewText = dialogReviewEditText?.text?.toString() ?: ""
 
                 // No need for to make a call to the backend when both new values are unchanged
-                if (review != null && newReviewText == review.text && dialogRatingBar.rating.equals(
-                        review.rating
-                    )
-                ) {
+                if (review != null && newReviewText == review.text && dialogRatingBar.rating == review.rating) {
                     dialog.dismiss()
                     return@setOnClickListener
                 }

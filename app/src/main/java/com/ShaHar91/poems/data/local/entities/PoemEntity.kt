@@ -14,34 +14,34 @@ import java.util.Date
 data class PoemEntity(
     @PrimaryKey
     @ColumnInfo(name = DBConstants.COLUMN_ID_POEM)
-    override var id: String = "",
-    var title: String = "",
-    var body: String = "",
-    var userId: String = "",
-    var averageRating: Float = 0f,
-    var totalRatingCount: List<Int> = emptyList(),
-    var createdAt: Date? = null
+    override val id: String = "",
+    val title: String = "",
+    val body: String = "",
+    val userId: String = "",
+    val averageRating: Float = 0f,
+    val totalRatingCount: List<Int> = emptyList(),
+    val createdAt: Date? = null
 ) : BaseEntity
 
 data class PoemWithRelations(
-    @Embedded var poem: PoemEntity,
+    @Embedded val poem: PoemEntity,
     @Relation(parentColumn = "userId", entityColumn = "id")
-    var user: UserEntity,
+    val user: UserEntity,
     @Relation(
         parentColumn = DBConstants.COLUMN_ID_POEM,
         entityColumn = DBConstants.COLUMN_ID_CATEGORY,
         associateBy = Junction(PoemCategoryCrossRef::class)
     )
-    var categories: List<CategoryEntity>,
+    val categories: List<CategoryEntity>,
     @Relation(parentColumn = DBConstants.COLUMN_ID_POEM, entityColumn = DBConstants.COLUMN_ID_POEM)
-    var shortReviewList: List<ReviewEntity>
+    val shortReviewList: List<ReviewEntity>
 
     //https://medium.com/androiddevelopers/database-relations-with-room-544ab95e4542
 )
 
 
 data class PoemWithUser(
-    @Embedded var poem: PoemEntity,
+    @Embedded val poem: PoemEntity,
     @Relation(parentColumn = "userId", entityColumn = "id")
-    var user: UserEntity
+    val user: UserEntity
 )

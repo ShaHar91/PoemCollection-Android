@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.navigation.fragment.navArgs
@@ -101,7 +102,7 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
                         )
                     }
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         ratingBar.rating = 0f
                     }, 500)
                 }
@@ -129,12 +130,10 @@ class PoemFragment : PoemBaseBindingVMFragment<FragmentPoemBinding>() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == Constants.REQUEST_CODE_NEW_USER) {
-            if (resultCode == Activity.RESULT_OK) {
-                // A user has been logged in successfully
-                // Refresh the poem and all reviews (as the user's review may have been in the preview list)
-                mViewModel.getPoemAndAllData(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
-            }
+        if (requestCode == Constants.REQUEST_CODE_NEW_USER && resultCode == Activity.RESULT_OK) {
+            // A user has been logged in successfully
+            // Refresh the poem and all reviews (as the user's review may have been in the preview list)
+            mViewModel.getPoemAndAllData(data?.getFloatExtra(Constants.ACTIVITY_RESPONSE_RATING_KEY, -1f))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

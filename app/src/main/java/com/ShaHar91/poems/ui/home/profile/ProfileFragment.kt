@@ -3,6 +3,7 @@ package com.shahar91.poems.ui.home.profile
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import be.appwise.core.extensions.fragment.showSnackBar
 import be.appwise.core.extensions.fragment.snackBar
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.FragmentProfileBinding
@@ -27,7 +28,7 @@ class ProfileFragment : PoemBaseBindingVMFragment<FragmentProfileBinding>() {
     private fun initViews() {
         mBinding.run {
             ivEditImage.setOnClickListener {
-                snackBar("edit image!")
+                showSnackBar("edit image!")
             }
         }
     }

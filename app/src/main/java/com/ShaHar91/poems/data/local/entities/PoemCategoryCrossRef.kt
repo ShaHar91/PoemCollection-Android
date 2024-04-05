@@ -24,5 +24,5 @@ data class CategoryWithPoems(
             value = PoemCategoryCrossRef::class,
             parentColumn = "categoryId",
             entityColumn = "poemId"),)
-    var poems: List<PoemWithUser>
+    val poems: List<PoemWithUser>
 )

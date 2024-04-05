@@ -10,6 +10,6 @@ import com.shahar91.poems.data.local.utils.DBConstants
 data class CategoryEntity(
     @PrimaryKey
     @ColumnInfo(name = DBConstants.COLUMN_ID_CATEGORY)
-    override var id: String = "",
-    var name: String = ""
+    override val id: String = "",
+    val name: String = ""
 ) : BaseEntity

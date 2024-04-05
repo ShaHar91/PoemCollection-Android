@@ -2,8 +2,10 @@ package com.shahar91.poems.ui.entry.register
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.findNavController
 import be.appwise.core.extensions.fragment.hideKeyboard
+import be.appwise.core.extensions.fragment.showSnackBar
 import be.appwise.core.extensions.fragment.snackBar
 import be.appwise.core.ui.base.BaseBindingVMFragment
 import com.shahar91.poems.R
@@ -22,8 +24,8 @@ class RegisterFragment : BaseBindingVMFragment<FragmentRegisterBinding>() {
 
     private lateinit var validation: Passport
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
             viewModel = mViewModel.apply {
@@ -88,6 +90,6 @@ class RegisterFragment : BaseBindingVMFragment<FragmentRegisterBinding>() {
 
     override fun onError(throwable: Throwable) {
         super.onError(throwable)
-        snackBar(throwable.message ?: "Something went wrong.")
+        showSnackBar(throwable.message ?: "Something went wrong.")
     }
 }

@@ -8,8 +8,8 @@ import com.shahar91.poems.data.local.utils.DBConstants
 @Entity(tableName = DBConstants.USER_TABLE_NAME)
 data class UserEntity(
     @PrimaryKey
-    override var id: String = "",
-    var email: String = "",
-    var username: String = "",
-    var pictureUrl: String? = null
+    override val id: String = "",
+    val email: String = "",
+    val username: String = "",
+    val pictureUrl: String? = null
 ) : BaseEntity

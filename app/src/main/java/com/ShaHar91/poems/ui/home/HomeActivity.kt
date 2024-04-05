@@ -9,7 +9,7 @@ import be.appwise.core.ui.base.BaseActivity
 import com.shahar91.poems.Constants
 import com.shahar91.poems.R
 import com.shahar91.poems.databinding.ActivityHomeBinding
-import com.shahar91.poems.ui.add.AddPoemActivity.Companion.startWithIntent
+import com.shahar91.poems.ui.add.AddPoemActivity
 import com.shahar91.poems.ui.entry.EntryActivity
 import com.shahar91.poems.utils.HawkManager
 
@@ -55,7 +55,7 @@ class HomeActivity : BaseActivity() {
      */
     private fun startAddPoem() {
         startActivityForResult(
-            startWithIntent(this),
+            AddPoemActivity.startWithIntent(this),
             Constants.REQUEST_CODE_ADD_POEM
         )
     }
